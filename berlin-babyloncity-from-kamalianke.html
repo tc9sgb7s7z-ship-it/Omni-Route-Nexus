@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berlin 1929 → 2026 · 柏林城市 &amp; 巴比伦柏林打卡地图</title>
+<style>
+:root{
+  --bg:#f5f5f7;--card:#fff;--ink:#1d1d1f;--muted:#777;--line:#d8d8dc;
+  --red:#c91429;--gold:#d4a72c;--blue:#174ea6;--black:#111;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.55}
+a{text-decoration:none;color:inherit}
+.container{max-width:1220px;margin:auto;padding:34px 22px 70px}
+header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #111;padding-bottom:15px;margin-bottom:18px}
+h1{font-size:30px;line-height:1.15;margin:0;letter-spacing:-.7px}
+.subtitle{color:var(--muted);font-size:13px;margin-top:7px}
+.meta{text-align:right;color:#666;font-size:13px}
+.hero{background:#111;color:#fff;border-radius:16px;padding:24px 26px;margin:0 0 18px;display:flex;justify-content:space-between;gap:20px;align-items:center}
+.hero strong{font-size:21px}.hero p{margin:5px 0 0;color:#cfcfcf;font-size:13px}
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:8px;font-size:12px;font-weight:700;border:1px solid transparent;cursor:pointer}
+.btn-light{background:#fff;color:#111}.btn-red{background:var(--red);color:#fff}.btn-blue{background:#eaf0fc;color:var(--blue)}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.search{flex:1;min-width:220px;padding:12px 14px;border:1px solid var(--line);border-radius:9px;background:#fff;outline:none}
+.tabs{display:flex;gap:7px;flex-wrap:wrap}.tab{padding:10px 13px;border:1px solid var(--line);background:#fff;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer}.tab.active{background:#111;color:#fff;border-color:#111}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:13px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.045)}
+th{padding:15px 18px;text-align:left;font-size:12px;color:#777;background:#fcfcfc;border-bottom:1px solid var(--line)}
+td{padding:15px 18px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+.main-row{cursor:pointer}.main-row:hover{background:#fcfcfd}.main-row.active{background:#fafafd}
+.arrow{display:inline-block;width:18px;color:#999;transition:.2s}.main-row.active .arrow{transform:rotate(90deg);color:var(--red)}
+.badge{display:inline-block;padding:3px 7px;border-radius:5px;font-size:10px;font-weight:800;letter-spacing:.3px}
+.b-classic{background:#f0f4fb;color:#174ea6;border:1px solid #d7e1f4}
+.b-babylon{background:#fdf2f3;color:#c91429;border:1px solid #f1d1d5}
+.b-history{background:#fbf4df;color:#8a6900;border:1px solid #eadca9}
+.b-now{background:#eef7f1;color:#287b4d;border:1px solid #d4e8db}
+.drawer{display:none;background:#fafafa}.drawer.active{display:table-row}
+.drawer-content{padding:18px 22px;border-left:4px solid #ddd}
+.spots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.spot{background:#fff;border:1px solid #e1e1e5;border-radius:9px;padding:13px}
+.spot h4{margin:0 0 4px;font-size:13px;display:flex;justify-content:space-between;gap:8px}
+.spot p{margin:0;color:#777;font-size:11px}
+.spot .actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.nav{background:#eaf0fc;color:#174ea6;padding:6px 9px;border-radius:6px;font-size:11px;font-weight:700}
+.info{background:#fff;border:1px solid #e5e5e8;border-radius:10px;padding:13px 15px;margin-bottom:12px;font-size:12px}
+.warning{color:#b10f20;font-weight:700}
+.footer{margin-top:18px;color:#888;font-size:11px}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal-bg.show{display:flex}.modal{background:#fff;width:min(720px,96vw);max-height:88vh;overflow:auto;border-radius:15px;padding:24px;position:relative;box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.close{position:absolute;right:15px;top:13px;border:0;background:#f0f0f3;border-radius:50%;width:31px;height:31px;font-size:18px;cursor:pointer}
+.timeline{margin-top:18px}.node{display:flex;gap:12px}.dot{width:12px;height:12px;border:3px solid #111;border-radius:50%;margin-top:4px;flex:none}.dot.end{background:var(--red);border-color:var(--red)}.seg{border-left:2px solid #ddd;margin-left:5px;padding:7px 0 14px 23px}.seg.dashed{border-left-style:dashed;border-color:var(--red)}
+@media(max-width:800px){.spots{grid-template-columns:1fr}.hero{flex-direction:column;align-items:flex-start}header{display:block}.meta{text-align:left;margin-top:8px}th:nth-child(2),td:nth-child(2){display:none}}
+</style>
+
+<style>
+.planner{background:#fff;border:1px solid #dedee3;border-radius:13px;padding:18px;margin-bottom:18px;box-shadow:0 4px 24px rgba(0,0,0,.045)}
+.planner-head{display:flex;justify-content:space-between;gap:15px;align-items:center;border-bottom:1px solid #eee;padding-bottom:13px}
+.planner-head b{display:block;font-size:16px}.planner-head span{display:block;color:#777;font-size:11px;margin-top:3px}.count{font-weight:800;font-size:12px;color:#c91429}
+.planner-controls{display:flex;gap:9px;align-items:end;flex-wrap:wrap;padding:14px 0;border-bottom:1px solid #eee}
+.planner-controls label{font-size:11px;color:#777;font-weight:700}.planner-controls select{display:block;margin-top:4px;padding:10px 28px 10px 10px;border:1px solid #ddd;border-radius:7px;background:#fff;font-size:12px}
+.route-result{margin:14px 0}.route-placeholder{padding:14px;background:#fafafa;border:1px dashed #d5d5da;border-radius:9px;color:#777;font-size:12px}
+.route-summary{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#fafafa;border-radius:9px;padding:13px}.route-summary b{display:block}.route-summary span{display:block;color:#777;font-size:11px;margin-top:2px}
+.route-list{list-style:none;padding:0;margin:12px 0;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.route-list li{display:flex;gap:10px;padding:11px;border:1px solid #eee;border-radius:8px}.route-list small{display:block;color:#777;font-size:10px;margin-top:2px}.num{width:24px;height:24px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-weight:800;font-size:11px;flex:none}.route-note{font-size:11px;color:#777}
+.spot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.spot-card{border:1px solid #e1e1e5;border-radius:9px;padding:13px;background:#fff}.spot-card.selected{border-color:#c91429;box-shadow:0 0 0 1px #c91429}.spot-card label{display:flex;gap:10px;cursor:pointer}.spot-card input{width:18px;height:18px;accent-color:#c91429;margin-top:2px}.spot-card h3{margin:0;font-size:13px;line-height:1.35}.spot-card p{margin:6px 0 0;color:#777;font-size:11px}.chips{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}.chip{font-size:9px;padding:2px 6px;border-radius:4px;background:#f0f0f2;color:#666}.chip.red{background:#fdf0f2;color:#c91429}.card-actions{display:flex;gap:7px;margin-top:11px}.card-actions a{font-size:10px;font-weight:800;color:#174ea6;background:#eef3fb;padding:6px 8px;border-radius:5px}
+@media(max-width:900px){.spot-grid{grid-template-columns:repeat(2,1fr)}} @media(max-width:650px){.spot-grid,.route-list{grid-template-columns:1fr}.route-summary{align-items:flex-start;flex-direction:column}.planner-head{align-items:flex-start;flex-direction:column}}
+</style>
+
+<style>
+.route-board{border-top:1px solid #eee;padding-top:14px}
+.route-stats{display:flex;gap:6px;flex-wrap:wrap}.route-stats span{font-size:10px;background:#f0f0f2;border-radius:5px;padding:4px 7px;color:#666}
+.flow-title{font-weight:800;font-size:13px;margin:17px 0 10px}.flow-title small{font-weight:400;color:#888;margin-left:6px}
+.flowchart{max-width:820px;margin:auto;padding:4px 12px}
+.flow-node{display:flex;gap:12px;align-items:flex-start;background:#fff;border:1px solid #e1e1e5;border-radius:10px;padding:13px 15px}
+.flow-node.origin{border:2px solid #111;background:#fafafa}.flow-num{width:28px;height:28px;border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800;flex:none}.origin .flow-num{background:#c91429}
+.flow-node b{font-size:13px}.flow-node small{display:block;color:#777;font-size:10px;margin-top:2px}.flow-node em{color:#c91429;font-style:normal;font-weight:800}.flow-node p{margin:6px 0;color:#777;font-size:11px}.flow-node a{font-size:10px;color:#174ea6;font-weight:800}
+.flow-arrow{height:38px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#aaa}.flow-arrow span{font-size:17px;line-height:14px}.flow-arrow small{font-size:9px;color:#999}
+.mini-map-head{display:flex;justify-content:space-between;gap:8px;margin:20px 0 8px;font-size:12px}.mini-map-head span{font-size:10px;color:#888}.mini-map{border:1px solid #ddd;border-radius:12px;overflow:hidden;background:#f2f3f5}.mini-map svg{display:block;width:100%;height:auto}.map-bg{fill:#f4f4f1}.river{fill:none;stroke:#d8e7ee;stroke-width:22;stroke-linecap:round;opacity:.85}.route-line{fill:none;stroke:#c91429;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 5}.m-dot{fill:#111;stroke:#fff;stroke-width:3}.m-dot.start{fill:#c91429}.m-num{fill:#fff;font-size:9px;font-weight:800}.m-label{fill:#333;font-size:10px;font-weight:700;paint-order:stroke;stroke:#f4f4f1;stroke-width:4px;stroke-linejoin:round}
+.map-actions{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:10px;padding:12px;background:#fafafa;border-radius:9px}.map-actions span{display:block;color:#777;font-size:10px;margin-top:2px}
+@media(max-width:650px){.map-actions{align-items:flex-start;flex-direction:column}.mini-map-head{align-items:flex-start;flex-direction:column}}
+</style>
+<style>
+.origin-hint{font-size:10px;color:#888;align-self:center;margin:0 2px 8px 0}
+</style>
+
+<style>
+.ai-box{margin-top:18px;border:1px solid #dddde2;border-radius:11px;padding:15px;background:#fbfbfc}
+.ai-head b{display:block;font-size:13px}.ai-head span{display:block;color:#777;font-size:10px;margin-top:3px}
+.ai-question-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
+.ai-q{border:1px solid #ddd;background:#fff;border-radius:7px;padding:9px 8px;font-size:11px;font-weight:700;cursor:pointer;text-align:left}
+.ai-q.selected{border-color:#111;background:#111;color:#fff}
+.ai-actions{display:flex;gap:8px;margin-top:10px}.btn-ai{background:#111;color:#fff}.btn-gemini{background:#eaf0fc;color:#174ea6}
+.ai-hint{font-size:10px;color:#777;margin-top:8px}
+.node-ai{border:0;background:#f1f1f4;color:#555;border-radius:5px;padding:5px 7px;font-size:10px;font-weight:800;cursor:pointer;margin-left:5px}
+.node-ai:hover{background:#e8e8ec}
+@media(max-width:700px){.ai-question-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:430px){.ai-question-grid{grid-template-columns:1fr}.ai-actions{flex-wrap:wrap}}
+</style>
+<style>
+.btn-copy{background:#f0f0f2;color:#333;border:1px solid #ddd}
+</style>
+
+<style>
+.ai-edit-toolbar{display:flex;justify-content:space-between;align-items:center;gap:15px;background:#111;color:#fff;border-radius:12px;padding:13px 16px;margin:0 0 16px}
+.ai-edit-toolbar b{display:block;font-size:13px}.ai-edit-toolbar span{display:block;color:#bbb;font-size:10px;margin-top:3px}
+.ai-edit-actions{display:flex;gap:7px;flex-wrap:wrap}.ai-edit-toolbar .btn{font-size:10px;padding:8px 10px}
+.inline-ai{margin-top:9px;border-top:1px solid #eee;padding-top:8px}.inline-ai-toggle{border:0;background:#f0f0f2;color:#333;border-radius:6px;padding:6px 9px;font-size:10px;font-weight:800;cursor:pointer}
+.inline-ai-panel{display:none;margin-top:8px;padding:9px;background:#fafafa;border:1px solid #e5e5e8;border-radius:7px}.inline-ai-panel.show{display:block}
+.inline-ai-questions{display:flex;flex-wrap:wrap;gap:5px}.inline-ai-questions button{border:1px solid #ddd;background:#fff;border-radius:5px;padding:6px 7px;font-size:9px;cursor:pointer}.inline-ai-questions button.active{background:#111;color:#fff;border-color:#111}
+.inline-ai-actions{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap}.inline-ai-actions button{border:0;border-radius:5px;padding:6px 8px;font-size:9px;font-weight:800;cursor:pointer}.inline-copy{background:#eee;color:#333}.inline-open-chat{background:#111;color:#fff}.inline-open-gemini{background:#eaf0fc;color:#174ea6}
+.inline-ai-status{font-size:9px;color:#777;margin-top:6px}
+@media(max-width:720px){.ai-edit-toolbar{align-items:flex-start;flex-direction:column}.ai-edit-actions{width:100%}}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <div>
+    <h1>Berlin · 1929 → 2026</h1>
+    <div class="subtitle">经典柏林 ×《巴比伦柏林》取景地 · 一张页面完成收藏、路线与导航</div>
+  </div>
+  <div class="meta">📍 柏林 Berlin<br>主题：魏玛时代 / 城市经典 / 影视打卡</div>
+</header>
+
+<div class="ai-edit-toolbar">
+  <div>
+    <b>🛠 用 AI 继续编辑</b>
+    <span>一键生成当前 HTML 文件并复制编辑指令，然后可选择 ChatGPT App 或 Gemini。打开后上传刚下载的 HTML，直接粘贴指令即可继续修改。</span>
+  </div>
+  <div class="ai-edit-actions">
+    <button type="button" class="btn btn-ai" id="editChatGPT">🚀 准备文件 + 打开 ChatGPT App</button>
+    <button type="button" class="btn btn-gemini" id="editGemini">✨ 准备文件 + 打开 Gemini</button>
+    <button type="button" class="btn btn-copy" id="downloadHtml">下载 HTML</button>
+  </div>
+</div>
+
+<section class="hero">
+  <div>
+    <strong>走进 Gereon Rath 的柏林</strong>
+    <p>红色市政厅、亚历山大广场、Delphi、Hermannplatz……把剧中的1929年和今天的柏林串起来。</p>
+  </div>
+  <div class="hero-actions">
+    <a class="btn btn-light" target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rotes+Rathaus,+Rathausstraße+15,+Berlin">🚶 导航到红色市政厅</a>
+    <button class="btn btn-red" onclick="openRoute()">▶ 一键查看巴比伦路线</button>
+  </div>
+</section>
+
+<div class="toolbar">
+  <input id="search" class="search" placeholder="搜索景点、街区、巴比伦柏林取景地……" oninput="filterRows()">
+  <div class="tabs">
+    <button class="tab active" data-filter="all">全部</button>
+    <button class="tab" data-filter="classic">经典柏林</button>
+    <button class="tab" data-filter="babylon">巴比伦柏林</button>
+  </div>
+</div>
+
+<div class="planner">
+<div class="planner-head">
+  <div><b>选择景点 → 自动生成最佳游览顺序</b><span>不再把“经典”和“巴比伦柏林”拆成两套路线；每个地点只做标签标注。</span></div>
+  <div class="count" id="selectedCount">已选 0</div>
+</div>
+<div class="planner-controls">
+  <label>起点
+    <select id="origin">
+      <option value="alex">Alexanderplatz</option>
+      <option value="haupt">Berlin Hauptbahnhof</option>
+      <option value="brandenburg">Brandenburger Tor</option>
+      <option value="ostbahnhof">Berlin Ostbahnhof</option>
+      <option value="suedkreuz">Berlin Südkreuz</option>
+      <option value="zoo">Berlin Zoologischer Garten</option>
+      <option value="charlottenburg">Schloss Charlottenburg</option>
+      <option value="tempelhof">Tempelhofer Feld</option>
+    </select>
+  </label>
+  <div class="origin-hint">起点只决定路线从哪里开始，不会被当作需要再次游览的景点。</div><label>交通
+    <select id="mode"><option value="walk">步行优先</option><option value="transit">公共交通优先</option></select>
+  </label>
+  <button class="btn btn-red" id="planBtn">🧭 规划最佳路线</button>
+  <button class="btn btn-blue" id="clearBtn">清空选择</button>
+</div>
+<div id="routeResult" class="route-result">
+  <div class="route-placeholder">先搜索并勾选想去的地点，然后点击「规划最佳路线」。生成后会先展示路线流程图、每个景点的位置链接，最后再提供地图路线缩略图和导航入口。</div>
+</div>
+
+<div class="spot-grid" id="spotGrid"><article class="spot-card ">
+      <label><input type="checkbox" data-id="brandenburg">
+      <div><h3>勃兰登堡门 Brandenburg Gate</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">45m</span></div><p>柏林城市象征，适合与国会大厦、Tiergarten、纪念碑串联。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Brandenburg%20Gate%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Brandenburg%20Gate%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="brandenburg">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-brandenburg">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="brandenburg">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="brandenburg" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="brandenburg" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="reichstag">
+      <div><h3>国会大厦 Reichstag</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1.5h</span></div><p>玻璃穹顶是柏林最经典的城市观景点之一。穹顶需提前预约。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Reichstag%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Reichstag%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="reichstag">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-reichstag">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="reichstag">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="reichstag" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="reichstag" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="holocaust">
+      <div><h3>欧洲被害犹太人纪念碑</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">45m</span></div><p>勃兰登堡门南侧的城市记忆地标。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Memorial%20to%20the%20Murdered%20Jews%20of%20Europe%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Memorial%20to%20the%20Murdered%20Jews%20of%20Europe%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="holocaust">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-holocaust">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="holocaust">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="holocaust" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="holocaust" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="potsdamer">
+      <div><h3>波茨坦广场 Potsdamer Platz</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1h</span></div><p>现代柏林建筑群与城市更新的代表。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Potsdamer%20Platz%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Potsdamer%20Platz%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="potsdamer">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-potsdamer">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="potsdamer">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="potsdamer" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="potsdamer" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="checkpoint">
+      <div><h3>查理检查站 Checkpoint Charlie</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">45m</span></div><p>冷战时期最著名的过境点之一。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Checkpoint%20Charlie%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Checkpoint%20Charlie%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="checkpoint">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-checkpoint">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="checkpoint">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="checkpoint" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="checkpoint" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="topography">
+      <div><h3>恐怖地形图 Topography of Terror</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1.5h</span></div><p>纳粹统治历史展览，适合历史主题路线。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Topography%20of%20Terror%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Topography%20of%20Terror%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="topography">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-topography">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="topography">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="topography" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="topography" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="gendarmen">
+      <div><h3>御林广场 Gendarmenmarkt</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">45m</span></div><p>柏林最漂亮的历史广场之一。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Gendarmenmarkt%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Gendarmenmarkt%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="gendarmen">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-gendarmen">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="gendarmen">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="gendarmen" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="gendarmen" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="museum">
+      <div><h3>博物馆岛 Museumsinsel</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">2–5h</span></div><p>联合国教科文组织世界遗产；五座历史博物馆集中于此。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Museum%20Island%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Museum%20Island%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="museum">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-museum">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="museum">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="museum" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="museum" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="dom">
+      <div><h3>柏林大教堂 Berliner Dom</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1–1.5h</span></div><p>博物馆岛核心建筑，可登穹顶。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Berlin%20Cathedral">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Berlin%20Cathedral">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="dom">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-dom">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="dom">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="dom" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="dom" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="humboldt">
+      <div><h3>洪堡论坛 Humboldt Forum</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1.5–3h</span></div><p>重建的柏林宫城市地标与大型文化展览空间。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Humboldt%20Forum%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Humboldt%20Forum%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="humboldt">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-humboldt">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="humboldt">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="humboldt" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="humboldt" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="alex">
+      <div><h3>亚历山大广场 Alexanderplatz</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">1h</span></div><p>剧中重要城市场景；今天可做1929与现代柏林的今昔对照。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Alexanderplatz%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Alexanderplatz%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="alex">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-alex">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="alex">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="alex" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="alex" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="rathaus">
+      <div><h3>红色市政厅 Rotes Rathaus</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">45–60m</span></div><p>剧中替代“Rote Burg”警察总部的核心取景地。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Rotes%20Rathaus%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rotes%20Rathaus%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="rathaus">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-rathaus">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="rathaus">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="rathaus" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="rathaus" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="babyloncinema">
+      <div><h3>Kino Babylon / Rosa-Luxemburg-Platz</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">30–60m</span></div><p>现实中的巴比伦影院，也是官方路线相关集合区域。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Kino%20Babylon%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Kino%20Babylon%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="babyloncinema">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-babyloncinema">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="babyloncinema">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="babyloncinema" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="babyloncinema" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="schiff">
+      <div><h3>Theater am Schiffbauerdamm</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">45m</span></div><p>《三文钱的歌剧》相关剧中戏剧场景。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Theater%20am%20Schiffbauerdamm%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Theater%20am%20Schiffbauerdamm%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="schiff">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-schiff">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="schiff">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="schiff" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="schiff" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="delphi">
+      <div><h3>Theater im Delphi</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">1h</span></div><p>剧中 Moka Efti 内部的重要拍摄地。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Theater%20im%20Delphi%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Theater%20im%20Delphi%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="delphi">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-delphi">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="delphi">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="delphi" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="delphi" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="schoneberg">
+      <div><h3>Rathaus Schöneberg</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">45m</span></div><p>大厅、楼梯、Paternoster 等用于剧中警察总部内部场景。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Rathaus%20Sch%C3%B6neberg%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Rathaus%20Sch%C3%B6neberg%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="schoneberg">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-schoneberg">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="schoneberg">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="schoneberg" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="schoneberg" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="hermann">
+      <div><h3>Hermannplatz</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">45–60m</span></div><p>1929年街头冲突及地铁相关场景。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Hermannplatz%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Hermannplatz%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="hermann">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-hermann">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="hermann">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="hermann" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="hermann" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="immanuel">
+      <div><h3>Immanuelkirche</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">30–45m</span></div><p>Anno 与 Helga 婚礼相关场景；官方 Babylon Berlin Tour 集合点。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Immanuelkirche%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Immanuelkirche%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="immanuel">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-immanuel">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="immanuel">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="immanuel" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="immanuel" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="jewish">
+      <div><h3>Jüdischer Friedhof Weißensee</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">1–1.5h</span></div><p>官方取景地名单中的历史墓园，请遵守参观与摄影规定。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Jewish%20Cemetery%20Weissensee%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Jewish%20Cemetery%20Weissensee%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="jewish">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-jewish">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="jewish">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="jewish" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="jewish" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="koerner">
+      <div><h3>Körnerpark</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">45m</span></div><p>官方取景地名单中的南柏林公园。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=K%C3%B6rnerpark%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=K%C3%B6rnerpark%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="koerner">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-koerner">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="koerner">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="koerner" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="koerner" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="wannsee">
+      <div><h3>Strandbad Wannsee</h3><div class="chips"><span class="chip red">巴比伦柏林</span><span class="chip">1.5h</span></div><p>官方取景地名单中的经典柏林湖滨场景。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Strandbad%20Wannsee%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Strandbad%20Wannsee%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="wannsee">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-wannsee">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="wannsee">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="wannsee" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="wannsee" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="eastwall">
+      <div><h3>东边画廊 East Side Gallery</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1–1.5h</span></div><p>最长的柏林墙艺术画廊段，适合沿墙步行。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=East%20Side%20Gallery%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=East%20Side%20Gallery%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="eastwall">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-eastwall">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="eastwall">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="eastwall" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="eastwall" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="wallmem">
+      <div><h3>柏林墙纪念馆 Bernauer Straße</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1.5–2h</span></div><p>保存有原始边境设施与展览，是理解柏林墙历史的重要地点。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Berlin%20Wall%20Memorial%20Bernauer%20Strasse">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Berlin%20Wall%20Memorial%20Bernauer%20Strasse">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="wallmem">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-wallmem">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="wallmem">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="wallmem" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="wallmem" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="tv">
+      <div><h3>柏林电视塔 Fernsehturm</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1–2h</span></div><p>柏林最高城市观景点之一。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Berlin%20TV%20Tower">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Berlin%20TV%20Tower">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="tv">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-tv">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="tv">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="tv" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="tv" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="charlottenburg">
+      <div><h3>夏洛滕堡宫 Schloss Charlottenburg</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">2–3h</span></div><p>普鲁士宫殿与大公园。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Charlottenburg%20Palace%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Charlottenburg%20Palace%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="charlottenburg">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-charlottenburg">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="charlottenburg">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="charlottenburg" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="charlottenburg" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="kudamm">
+      <div><h3>Kurfürstendamm / KaDeWe</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1.5–3h</span></div><p>西柏林经典商业街区。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Kurf%C3%BCrstendamm%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Kurf%C3%BCrstendamm%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="kudamm">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-kudamm">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="kudamm">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="kudamm" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="kudamm" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="zoo">
+      <div><h3>柏林动物园 Zoo Berlin</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">2–4h</span></div><p>欧洲最著名城市动物园之一。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Zoo%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Zoo%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="zoo">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-zoo">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="zoo">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="zoo" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="zoo" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="victory">
+      <div><h3>胜利纪念柱 Siegessäule</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">45–60m</span></div><p>Tiergarten 中心地标，可与国会大厦、勃兰登堡门串联。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Siegess%C3%A4ule%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Siegess%C3%A4ule%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="victory">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-victory">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="victory">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="victory" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="victory" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="teufelsberg">
+      <div><h3>Teufelsberg</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">2–3h</span></div><p>冷战监听站遗址与城市全景，适合喜欢工业遗迹的人。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Teufelsberg%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Teufelsberg%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="teufelsberg">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-teufelsberg">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="teufelsberg">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="teufelsberg" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="teufelsberg" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="tempelhof">
+      <div><h3>Tempelhofer Feld</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1.5–3h</span></div><p>废弃机场跑道形成的超大型城市开放空间。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Tempelhofer%20Feld%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Tempelhofer%20Feld%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="tempelhof">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-tempelhof">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="tempelhof">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="tempelhof" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="tempelhof" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="olympia">
+      <div><h3>柏林奥林匹克体育场 Olympiastadion</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1.5–2.5h</span></div><p>1936年奥运会遗产与现代体育场。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Olympiastadion%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Olympiastadion%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="olympia">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-olympia">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="olympia">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="olympia" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="olympia" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="soviet">
+      <div><h3>苏维埃战争纪念碑 Treptower Park</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1–1.5h</span></div><p>大型二战纪念建筑群。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Soviet%20War%20Memorial%20Treptower%20Park%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Soviet%20War%20Memorial%20Treptower%20Park%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="soviet">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-soviet">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="soviet">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="soviet" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="soviet" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="nikolai">
+      <div><h3>尼古拉街区 Nikolaiviertel</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1h</span></div><p>柏林历史核心区，适合与红色市政厅一起步行。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Nikolaiviertel%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Nikolaiviertel%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="nikolai">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-nikolai">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="nikolai">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="nikolai" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="nikolai" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article><article class="spot-card ">
+      <label><input type="checkbox" data-id="tiergarten">
+      <div><h3>Tiergarten</h3><div class="chips"><span class="chip ">经典柏林</span><span class="chip">1–2h</span></div><p>城市中心大型绿地，可作为路线缓冲段。</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&amp;query=Tiergarten%20Berlin">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&amp;destination=Tiergarten%20Berlin">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="tiergarten">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-tiergarten">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="tiergarten">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="tiergarten" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="tiergarten" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article></div>
+</div>
+
+<div class="footer">
+资料说明：本页面的《巴比伦柏林》取景地以 visitBerlin、RBB、Babylon Berlin Tour 等公开资料交叉核验；“小红书等平台”内容受搜索可见性限制，因此未把无法核验的网帖当作事实。导航按钮使用 Google Maps 查询/路线链接，实际开放时间、入场及道路情况请以现场和地图实时信息为准。
+</div>
+</div>
+
+
+
+<script>
+const origins=[
+{id:'alex',name:'Alexanderplatz',lat:52.5219,lon:13.4132,q:'Alexanderplatz Berlin'},
+{id:'haupt',name:'Berlin Hauptbahnhof',lat:52.5251,lon:13.3694,q:'Berlin Hauptbahnhof'},
+{id:'brandenburg',name:'Brandenburger Tor',lat:52.5163,lon:13.3777,q:'Brandenburg Gate Berlin'},
+{id:'ostbahnhof',name:'Berlin Ostbahnhof',lat:52.5108,lon:13.4346,q:'Berlin Ostbahnhof'},
+{id:'suedkreuz',name:'Berlin Südkreuz',lat:52.4752,lon:13.3656,q:'Berlin Südkreuz'},
+{id:'zoo',name:'Berlin Zoologischer Garten',lat:52.5069,lon:13.3329,q:'Berlin Zoologischer Garten'},
+{id:'charlottenburg',name:'Schloss Charlottenburg',lat:52.5206,lon:13.2952,q:'Charlottenburg Palace Berlin'},
+{id:'tempelhof',name:'Tempelhofer Feld',lat:52.4731,lon:13.4039,q:'Tempelhofer Feld Berlin'}
+];
+
+const places=[
+{id:'brandenburg',name:'勃兰登堡门 Brandenburg Gate',type:'经典',tag:'经典柏林',dur:'45m',lat:52.5163,lon:13.3777,q:'Brandenburg Gate Berlin',desc:'柏林城市象征，适合与国会大厦、Tiergarten、纪念碑串联。'},
+{id:'reichstag',name:'国会大厦 Reichstag',type:'经典',tag:'经典柏林',dur:'1.5h',lat:52.5186,lon:13.3762,q:'Reichstag Berlin',desc:'玻璃穹顶是柏林最经典的城市观景点之一。穹顶需提前预约。'},
+{id:'holocaust',name:'欧洲被害犹太人纪念碑',type:'经典',tag:'经典柏林',dur:'45m',lat:52.5138,lon:13.3785,q:'Memorial to the Murdered Jews of Europe Berlin',desc:'勃兰登堡门南侧的城市记忆地标。'},
+{id:'potsdamer',name:'波茨坦广场 Potsdamer Platz',type:'经典',tag:'经典柏林',dur:'1h',lat:52.5096,lon:13.3760,q:'Potsdamer Platz Berlin',desc:'现代柏林建筑群与城市更新的代表。'},
+{id:'checkpoint',name:'查理检查站 Checkpoint Charlie',type:'经典',tag:'经典柏林',dur:'45m',lat:52.5076,lon:13.3904,q:'Checkpoint Charlie Berlin',desc:'冷战时期最著名的过境点之一。'},
+{id:'topography',name:'恐怖地形图 Topography of Terror',type:'经典',tag:'经典柏林',dur:'1.5h',lat:52.5064,lon:13.3820,q:'Topography of Terror Berlin',desc:'纳粹统治历史展览，适合历史主题路线。'},
+{id:'gendarmen',name:'御林广场 Gendarmenmarkt',type:'经典',tag:'经典柏林',dur:'45m',lat:52.5138,lon:13.3927,q:'Gendarmenmarkt Berlin',desc:'柏林最漂亮的历史广场之一。'},
+{id:'museum',name:'博物馆岛 Museumsinsel',type:'经典',tag:'经典柏林',dur:'2–5h',lat:52.5169,lon:13.4010,q:'Museum Island Berlin',desc:'联合国教科文组织世界遗产；五座历史博物馆集中于此。'},
+{id:'dom',name:'柏林大教堂 Berliner Dom',type:'经典',tag:'经典柏林',dur:'1–1.5h',lat:52.5192,lon:13.4011,q:'Berlin Cathedral',desc:'博物馆岛核心建筑，可登穹顶。'},
+{id:'humboldt',name:'洪堡论坛 Humboldt Forum',type:'经典',tag:'经典柏林',dur:'1.5–3h',lat:52.5177,lon:13.4019,q:'Humboldt Forum Berlin',desc:'重建的柏林宫城市地标与大型文化展览空间。'},
+{id:'alex',name:'亚历山大广场 Alexanderplatz',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'1h',lat:52.5219,lon:13.4132,q:'Alexanderplatz Berlin',desc:'剧中重要城市场景；今天可做1929与现代柏林的今昔对照。'},
+{id:'rathaus',name:'红色市政厅 Rotes Rathaus',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'45–60m',lat:52.5186,lon:13.4083,q:'Rotes Rathaus Berlin',desc:'剧中替代“Rote Burg”警察总部的核心取景地。'},
+{id:'babyloncinema',name:'Kino Babylon / Rosa-Luxemburg-Platz',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'30–60m',lat:52.5262,lon:13.4105,q:'Kino Babylon Berlin',desc:'现实中的巴比伦影院，也是官方路线相关集合区域。'},
+{id:'schiff',name:'Theater am Schiffbauerdamm',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'45m',lat:52.5229,lon:13.3872,q:'Theater am Schiffbauerdamm Berlin',desc:'《三文钱的歌剧》相关剧中戏剧场景。'},
+{id:'delphi',name:'Theater im Delphi',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'1h',lat:52.5518,lon:13.4204,q:'Theater im Delphi Berlin',desc:'剧中 Moka Efti 内部的重要拍摄地。'},
+{id:'schoneberg',name:'Rathaus Schöneberg',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'45m',lat:52.4840,lon:13.3440,q:'Rathaus Schöneberg Berlin',desc:'大厅、楼梯、Paternoster 等用于剧中警察总部内部场景。'},
+{id:'hermann',name:'Hermannplatz',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'45–60m',lat:52.4867,lon:13.4248,q:'Hermannplatz Berlin',desc:'1929年街头冲突及地铁相关场景。'},
+{id:'immanuel',name:'Immanuelkirche',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'30–45m',lat:52.5322,lon:13.4264,q:'Immanuelkirche Berlin',desc:'Anno 与 Helga 婚礼相关场景；官方 Babylon Berlin Tour 集合点。'},
+{id:'jewish',name:'Jüdischer Friedhof Weißensee',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'1–1.5h',lat:52.5545,lon:13.4532,q:'Jewish Cemetery Weissensee Berlin',desc:'官方取景地名单中的历史墓园，请遵守参观与摄影规定。'},
+{id:'koerner',name:'Körnerpark',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'45m',lat:52.4677,lon:13.4295,q:'Körnerpark Berlin',desc:'官方取景地名单中的南柏林公园。'},
+{id:'wannsee',name:'Strandbad Wannsee',type:'巴比伦柏林',tag:'巴比伦柏林',dur:'1.5h',lat:52.4192,lon:13.1613,q:'Strandbad Wannsee Berlin',desc:'官方取景地名单中的经典柏林湖滨场景。'},
+{id:'eastwall',name:'东边画廊 East Side Gallery',type:'经典',tag:'经典柏林',dur:'1–1.5h',lat:52.5050,lon:13.4397,q:'East Side Gallery Berlin',desc:'最长的柏林墙艺术画廊段，适合沿墙步行。'},
+{id:'wallmem',name:'柏林墙纪念馆 Bernauer Straße',type:'经典',tag:'经典柏林',dur:'1.5–2h',lat:52.5351,lon:13.3903,q:'Berlin Wall Memorial Bernauer Strasse',desc:'保存有原始边境设施与展览，是理解柏林墙历史的重要地点。'},
+{id:'tv',name:'柏林电视塔 Fernsehturm',type:'经典',tag:'经典柏林',dur:'1–2h',lat:52.5208,lon:13.4094,q:'Berlin TV Tower',desc:'柏林最高城市观景点之一。'},
+{id:'charlottenburg',name:'夏洛滕堡宫 Schloss Charlottenburg',type:'经典',tag:'经典柏林',dur:'2–3h',lat:52.5206,lon:13.2952,q:'Charlottenburg Palace Berlin',desc:'普鲁士宫殿与大公园。'},
+{id:'kudamm',name:'Kurfürstendamm / KaDeWe',type:'经典',tag:'经典柏林',dur:'1.5–3h',lat:52.5030,lon:13.3350,q:'Kurfürstendamm Berlin',desc:'西柏林经典商业街区。'},
+{id:'zoo',name:'柏林动物园 Zoo Berlin',type:'经典',tag:'经典柏林',dur:'2–4h',lat:52.5086,lon:13.3378,q:'Zoo Berlin',desc:'欧洲最著名城市动物园之一。'},
+{id:'victory',name:'胜利纪念柱 Siegessäule',type:'经典',tag:'经典柏林',dur:'45–60m',lat:52.5145,lon:13.3501,q:'Siegessäule Berlin',desc:'Tiergarten 中心地标，可与国会大厦、勃兰登堡门串联。'},
+{id:'teufelsberg',name:'Teufelsberg',type:'经典',tag:'经典柏林',dur:'2–3h',lat:52.4960,lon:13.2405,q:'Teufelsberg Berlin',desc:'冷战监听站遗址与城市全景，适合喜欢工业遗迹的人。'},
+{id:'tempelhof',name:'Tempelhofer Feld',type:'经典',tag:'经典柏林',dur:'1.5–3h',lat:52.4731,lon:13.4039,q:'Tempelhofer Feld Berlin',desc:'废弃机场跑道形成的超大型城市开放空间。'},
+{id:'olympia',name:'柏林奥林匹克体育场 Olympiastadion',type:'经典',tag:'经典柏林',dur:'1.5–2.5h',lat:52.5147,lon:13.2395,q:'Olympiastadion Berlin',desc:'1936年奥运会遗产与现代体育场。'},
+{id:'soviet',name:'苏维埃战争纪念碑 Treptower Park',type:'经典',tag:'经典柏林',dur:'1–1.5h',lat:52.4894,lon:13.4696,q:'Soviet War Memorial Treptower Park Berlin',desc:'大型二战纪念建筑群。'},
+{id:'nikolai',name:'尼古拉街区 Nikolaiviertel',type:'经典',tag:'经典柏林',dur:'1h',lat:52.5168,lon:13.4080,q:'Nikolaiviertel Berlin',desc:'柏林历史核心区，适合与红色市政厅一起步行。'},
+{id:'tiergarten',name:'Tiergarten',type:'经典',tag:'经典柏林',dur:'1–2h',lat:52.5146,lon:13.3501,q:'Tiergarten Berlin',desc:'城市中心大型绿地，可作为路线缓冲段。'}
+];
+
+let selected=new Set(), filter='all';
+const grid=document.getElementById('spotGrid'), count=document.getElementById('selectedCount'), result=document.getElementById('routeResult');
+
+function render(){
+  const q=(document.getElementById('search')?.value||'').toLowerCase().trim();
+  grid.innerHTML=places.filter(p=>(filter==='all'||(filter==='classic'&&p.type==='经典')||(filter==='babylon'&&p.type==='巴比伦柏林')) && (!q||(p.name+p.desc).toLowerCase().includes(q))).map(p=>{
+    const checked=selected.has(p.id);
+    return `<article class="spot-card ${checked?'selected':''}">
+      <label><input type="checkbox" data-id="${p.id}" ${checked?'checked':''}>
+      <div><h3>${p.name}</h3><div class="chips"><span class="chip ${p.type==='巴比伦柏林'?'red':''}">${p.tag}</span><span class="chip">${p.dur}</span></div><p>${p.desc}</p></div></label>
+      <div class="card-actions">
+  <a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.q)}">📍 地图</a>
+  <a target="_blank" href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(p.q)}">🧭 导航</a>
+</div>
+<div class="inline-ai">
+  <button type="button" class="inline-ai-toggle" data-inline-ai="${p.id}">🤖 问 AI</button>
+  <div class="inline-ai-panel" id="inline-ai-${p.id}">
+    <div class="inline-ai-questions">
+      <button type="button" data-inline-q="history">🏛 历史</button>
+      <button type="button" data-inline-q="photo">📸 照片/机位</button>
+      <button type="button" data-inline-q="babylon">🎬 巴比伦柏林</button>
+      <button type="button" data-inline-q="visit">🕒 开放/参观</button>
+      <button type="button" data-inline-q="nearby">🚶 附近景点</button>
+      <button type="button" data-inline-q="food">🍴 餐厅咖啡</button>
+    </div>
+    <div class="inline-ai-actions">
+      <button type="button" class="inline-copy" data-inline-copy="${p.id}">📋 复制问题</button>
+      <button type="button" class="inline-open-chat" data-inline-open="${p.id}" data-provider="chatgpt">ChatGPT</button>
+      <button type="button" class="inline-open-gemini" data-inline-open="${p.id}" data-provider="gemini">Gemini</button>
+    </div>
+    <div class="inline-ai-status">先选择问题，再选择 AI。</div>
+  </div>
+</div>
+    </article>`;
+  }).join('');
+  grid.querySelectorAll('input').forEach(x=>x.addEventListener('change',e=>{e.target.checked?selected.add(e.target.dataset.id):selected.delete(e.target.dataset.id);render();}));
+  count.textContent=`已选 ${selected.size}`;
+  setupInlineAI();
+}
+function distance(a,b){const R=6371,rad=x=>x*Math.PI/180;const dLat=rad(b.lat-a.lat),dLon=rad(b.lon-a.lon);const q=Math.sin(dLat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(q));}
+function plan(){
+  if(!selected.size){
+    result.innerHTML='<div class="route-placeholder">请至少选择 1 个景点。</div>';
+    return;
+  }
+  const origin=origins.find(p=>p.id===document.getElementById('origin').value)||origins[0];
+  let pool=places.filter(p=>selected.has(p.id)).filter(p=>p.id!==origin.id), cur=origin, route=[], total=0;
+  if(!pool.length){ result.innerHTML='<div class="route-placeholder">起点不能作为唯一目的地。请至少再选择一个景点。</div>'; return; }
+  while(pool.length){
+    let best=pool[0],bd=distance(cur,best);
+    for(const p of pool){const d=distance(cur,p);if(d<bd){bd=d;best=p}}
+    route.push({p:best,d:bd}); total+=bd; cur=best; pool=pool.filter(p=>p.id!==best.id);
+  }
+  const waypoints=route.slice(0,-1).map(x=>encodeURIComponent(x.p.q)).join('|');
+  const maps=`https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin.q)}&destination=${encodeURIComponent(route.at(-1).p.q)}${waypoints?'&waypoints='+waypoints:''}&travelmode=${document.getElementById('mode').value==='walk'?'walking':'transit'}`;
+
+  // Normalize points into a compact schematic map area.
+  const all=[origin,...route.map(x=>x.p)];
+  const minLat=Math.min(...all.map(p=>p.lat)), maxLat=Math.max(...all.map(p=>p.lat));
+  const minLon=Math.min(...all.map(p=>p.lon)), maxLon=Math.max(...all.map(p=>p.lon));
+  const padLat=Math.max((maxLat-minLat)*.12,.005), padLon=Math.max((maxLon-minLon)*.12,.005);
+  const loLat=minLat-padLat, hiLat=maxLat+padLat, loLon=minLon-padLon, hiLon=maxLon+padLon;
+  const W=760,H=300;
+  const xy=p=>({x:42+(p.lon-loLon)/(hiLon-loLon)*(W-84),y:28+(hiLat-p.lat)/(hiLat-loLat)*(H-56)});
+  const pts=[origin,...route.map(x=>x.p)];
+  const poly=pts.map(p=>{const z=xy(p);return `${z.x},${z.y}`}).join(' ');
+  const circles=pts.map((p,i)=>{
+    const z=xy(p), label=i===0?'起':String(i);
+    return `<g><circle cx="${z.x}" cy="${z.y}" r="${i===0?9:8}" class="m-dot ${i===0?'start':''}"></circle><text x="${z.x}" y="${z.y+4}" text-anchor="middle" class="m-num">${label}</text><text x="${z.x}" y="${z.y-14}" text-anchor="middle" class="m-label">${p.name.split(' ')[0]}</text></g>`;
+  }).join('');
+
+  result.innerHTML=`
+  <section class="route-board">
+    <div class="route-summary">
+      <div><b>你的柏林路线</b><span>起点：${origin.name} · 先看完整路线，再决定是否打开地图导航。</span></div>
+      <div class="route-stats"><span>${route.length} 个地点</span><span>约 ${total.toFixed(1)} km</span><span>${document.getElementById('mode').value==='walk'?'步行优先':'公共交通优先'}</span></div>
+    </div>
+
+    <div class="flow-title">路线流程图 <small>按建议访问顺序排列</small></div>
+    <div class="flowchart">
+      <div class="flow-node origin"><span class="flow-num">起</span><div><b>${origin.name}</b><small>起点</small></div></div>
+      ${route.map((x,i)=>`
+        <div class="flow-arrow"><span>↓</span><small>${i===0?'出发':`约 ${x.d.toFixed(1)} km`}</small></div>
+        <div class="flow-node"><span class="flow-num">${i+1}</span><div><b>${x.p.name}</b><small><em>${x.p.tag}</em> · ${x.p.dur}</small><p>${x.p.desc}</p><a target="_blank" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(x.p.q)}">📍 查看位置</a>
+        <button type="button" class="node-ai" data-place="${x.p.id}">🤖 AI 问问</button></div></div>
+      `).join('')}
+    </div>
+
+    <div class="mini-map-head"><b>地图路线缩略图</b><span>示意路线 · 位置按真实坐标绘制</span></div>
+    <div class="mini-map">
+      <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="柏林路线缩略图">
+        <rect x="0" y="0" width="${W}" height="${H}" rx="12" class="map-bg"></rect>
+        <path d="M 80 55 C 210 20, 320 110, 440 70 S 650 85, 710 235" class="river"></path>
+        <polyline points="${poly}" class="route-line"></polyline>${circles}
+      </svg>
+    </div>
+    <div class="ai-box">
+      <div class="ai-head"><div><b>🤖 让 AI 继续研究这个景点</b><span>选择一个问题，一键带着景点名称打开 ChatGPT 或 Gemini。</span></div></div>
+      <div class="ai-question-grid">
+        <button type="button" class="ai-q" data-aiq="history">🏛 历史是什么？</button>
+        <button type="button" class="ai-q" data-aiq="photo">📸 推荐拍照机位</button>
+        <button type="button" class="ai-q" data-aiq="babylon">🎬 《巴比伦柏林》关联</button>
+        <button type="button" class="ai-q" data-aiq="visit">🕒 开放时间与参观建议</button>
+        <button type="button" class="ai-q" data-aiq="nearby">🚶 附近还有什么值得去？</button>
+        <button type="button" class="ai-q" data-aiq="food">🍴 附近餐厅与咖啡馆</button>
+      </div>
+      <div class="ai-actions">
+        <button type="button" class="btn btn-copy" id="copyPromptBtn">📋 复制问题</button>
+        <button type="button" class="btn btn-ai" id="chatgptBtn">复制 + 打开 ChatGPT</button>
+        <button type="button" class="btn btn-gemini" id="geminiBtn">复制 + 打开 Gemini</button>
+      </div>
+      <div id="aiHint" class="ai-hint">先选择一个问题，再点击 ChatGPT 或 Gemini。</div>
+    </div>
+    <div class="map-actions">
+      <div><b>路线已经生成。</b><span>先检查流程图；需要实时交通/步行指引时再打开地图。</span></div>
+      <a class="btn btn-red" target="_blank" href="${maps}">🧭 打开 Google Maps 导航</a>
+    </div>
+  </section>`;
+  setupAI();
+}
+
+const aiPrompts={
+ history:p=>`请介绍 ${p.name} 的历史。请用中文回答，重点说明它的建造/形成背景、重要历史事件、建筑特色，以及为什么今天值得参观。请区分确定事实和可能存在争议的说法。`,
+ photo:p=>`我准备去柏林的 ${p.name}。请推荐适合游客拍照的机位、最佳时间、拍摄角度，以及附近可以一起拍摄的地点。如果涉及私人区域或拍摄限制，请提醒我。`,
+ babylon:p=>`请介绍柏林 ${p.name} 与电视剧《巴比伦柏林》（Babylon Berlin）的关系：是否为取景地、对应哪些场景、剧中如何呈现，以及现实地点今天还能看到什么。请区分官方已核实信息和影迷推测。`,
+ visit:p=>`我准备去柏林的 ${p.name}。请告诉我目前的开放时间、门票/预约要求、最佳参观时长、参观注意事项，并提示我哪些信息需要出发前再次确认。`,
+ nearby:p=>`我正在柏林参观 ${p.name}。请推荐步行或短途公共交通范围内最值得一起去的 5 个地点，并按距离和主题给出顺序。`,
+ food:p=>`我正在柏林 ${p.name} 附近。请推荐适合游客的咖啡馆、餐厅或小吃店，并说明距离、特色和大致价格档次。请优先推荐当前仍营业的地点。`
+};
+let selectedAiQ='history';
+function makeAiPrompt(place,q){return aiPrompts[q](place)+`\\n\\n地点信息：${place.name}；标签：${place.tag}；简介：${place.desc}`;}
+async function openAI(provider, place){
+  const prompt=makeAiPrompt(place,selectedAiQ);
+  const target=provider==='chatgpt'
+    ? 'chatgpt://'
+    : 'https://gemini.google.com/app';
+  const hint=document.getElementById('aiHint');
+  try{
+    await navigator.clipboard.writeText(prompt);
+    hint.textContent='✓ 问题已复制。正在打开 '+(provider==='chatgpt'?'ChatGPT':'Gemini')+'，请直接粘贴（Ctrl/Cmd + V）发送。';
+  }catch(err){
+    // Clipboard API can be unavailable in some browsers/file contexts.
+    const ta=document.createElement('textarea');
+    ta.value=prompt; ta.setAttribute('readonly','');
+    ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select();
+    try{document.execCommand('copy'); hint.textContent='✓ 问题已复制。打开后请直接粘贴并发送。';}
+    catch(e){hint.textContent='已打开 AI，但浏览器未允许自动复制；请回到网页手动复制问题。';}
+    ta.remove();
+  }
+  window.open(target,'_blank','noopener');
+}
+function setupAI(){
+  document.querySelectorAll('.ai-q').forEach(btn=>btn.addEventListener('click',()=>{
+    selectedAiQ=btn.dataset.aiq;
+    document.querySelectorAll('.ai-q').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('aiHint').textContent='已选择：「'+btn.textContent+'」；下面选择 ChatGPT 或 Gemini。';
+  }));
+  document.querySelectorAll('.node-ai').forEach(btn=>btn.addEventListener('click',()=>{
+    const place=places.find(p=>p.id===btn.dataset.place);
+    if(!place)return;
+    selectedAiQ='history';
+    document.querySelectorAll('.ai-q').forEach(b=>b.classList.remove('selected'));
+    document.querySelector('.ai-q[data-aiq="history"]')?.classList.add('selected');
+    document.getElementById('aiHint').textContent='已选择「'+place.name+'」；请选择 ChatGPT 或 Gemini。';
+    document.getElementById('chatgptBtn').dataset.place=place.id;
+    document.getElementById('geminiBtn').dataset.place=place.id;
+    document.querySelector('.ai-box')?.scrollIntoView({behavior:'smooth',block:'center'});
+  }));
+  document.getElementById('chatgptBtn')?.addEventListener('click',()=>{
+    const id=document.getElementById('chatgptBtn').dataset.place;
+    const place=places.find(p=>p.id===id) || places.find(p=>selected.has(p.id)) || places[0];
+    openAI('chatgpt',place);
+  });
+  document.getElementById('copyPromptBtn')?.addEventListener('click',async()=>{
+    const id=document.getElementById('chatgptBtn').dataset.place;
+    const place=places.find(p=>p.id===id) || places.find(p=>selected.has(p.id)) || places[0];
+    const prompt=makeAiPrompt(place,selectedAiQ);
+    const hint=document.getElementById('aiHint');
+    try{await navigator.clipboard.writeText(prompt);hint.textContent='✓ 问题已复制到剪贴板。现在可以粘贴到任意 AI。';}
+    catch(err){
+      const ta=document.createElement('textarea');ta.value=prompt;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+      try{document.execCommand('copy');hint.textContent='✓ 问题已复制到剪贴板。';}catch(e){hint.textContent='浏览器阻止了自动复制，请手动复制问题。'}ta.remove();
+    }
+  });
+  document.getElementById('geminiBtn')?.addEventListener('click',()=>{
+    const id=document.getElementById('geminiBtn').dataset.place;
+    const place=places.find(p=>p.id===id) || places.find(p=>selected.has(p.id)) || places[0];
+    openAI('gemini',place);
+  });
+}
+
+const inlineQState={};
+function editPrompt(){
+  return `请编辑我上传的 Berlin_Babylon_CityGuide.html。
+这是一个柏林旅行规划网页。请先完整读取这个 HTML 文件，再直接在它的基础上修改。
+重要要求：
+1. 保留现有全部功能，包括景点搜索、景点选择、路线规划、路线流程图、地图路线缩略图、Google Maps 导航，以及每个景点下面的 ChatGPT/Gemini 问答。
+2. 不要删除或重写已有功能，除非我明确要求。
+3. 保持现有视觉风格。
+4. 我接下来会告诉你具体要修改什么。
+5. 修改完成后，请返回完整、可直接运行的 HTML 文件，而不是只给代码片段。`;
+}
+async function copyText(text,statusEl){
+  try{await navigator.clipboard.writeText(text); if(statusEl)statusEl.textContent='✓ 已复制。打开 AI 后直接粘贴。';}
+  catch(e){
+    const ta=document.createElement('textarea');ta.value=text;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');if(statusEl)statusEl.textContent='✓ 已复制。';}catch(_){if(statusEl)statusEl.textContent='浏览器未允许自动复制，请手动复制。'}ta.remove();
+  }
+}
+function inlinePrompt(place,q){return makeAiPrompt(place,q);}
+function setupInlineAI(){
+  document.querySelectorAll('.inline-ai-toggle').forEach(btn=>btn.addEventListener('click',()=>{
+    const panel=document.getElementById('inline-ai-'+btn.dataset.inlineAi);
+    if(panel) panel.classList.toggle('show');
+  }));
+  document.querySelectorAll('.inline-ai-panel').forEach(panel=>{
+    const id=panel.id.replace('inline-ai-','');
+    const place=places.find(p=>p.id===id);
+    if(!place)return;
+    inlineQState[id]=inlineQState[id]||'history';
+    panel.querySelectorAll('[data-inline-q]').forEach(qbtn=>qbtn.addEventListener('click',()=>{
+      inlineQState[id]=qbtn.dataset.inlineQ;
+      panel.querySelectorAll('[data-inline-q]').forEach(b=>b.classList.remove('active'));
+      qbtn.classList.add('active');
+      panel.querySelector('.inline-ai-status').textContent='已选择：「'+qbtn.textContent+'」';
+    }));
+    panel.querySelectorAll('[data-inline-open]').forEach(abtn=>abtn.addEventListener('click',async()=>{
+      const prompt=inlinePrompt(place,inlineQState[id]||'history');
+      await copyText(prompt,panel.querySelector('.inline-ai-status'));
+      if(abtn.dataset.provider==='chatgpt'){
+        window.location.href='chatgpt://';
+      }else{
+        window.open('https://gemini.google.com/app','_blank','noopener');
+      }
+    }));
+    panel.querySelector('[data-inline-copy]')?.addEventListener('click',async()=>{
+      await copyText(inlinePrompt(place,inlineQState[id]||'history'),panel.querySelector('.inline-ai-status'));
+    });
+  });
+}
+function setupTopAI(){
+  const buildCurrentFile=()=>{
+    const source='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+    const blob=new Blob([source],{type:'text/html;charset=utf-8'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download='Berlin_Babylon_CityGuide.html';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
+  };
+  document.getElementById('editChatGPT')?.addEventListener('click',async()=>{
+    const status=document.querySelector('.ai-edit-toolbar span');
+    buildCurrentFile();
+    await copyText(editPrompt(),status);
+    status.textContent='✓ HTML 已下载，编辑指令已复制。正在打开 ChatGPT App；上传刚才的 HTML 后粘贴即可。';
+    setTimeout(()=>{ window.location.href='chatgpt://'; },250);
+  });
+  document.getElementById('editGemini')?.addEventListener('click',async()=>{
+    const status=document.querySelector('.ai-edit-toolbar span');
+    buildCurrentFile();
+    await copyText(editPrompt(),status);
+    status.textContent='✓ HTML 已下载，编辑指令已复制。正在打开 Gemini；上传刚才的 HTML 后粘贴即可。';
+    setTimeout(()=>window.open('https://gemini.google.com/app','_blank','noopener'),250);
+  });
+  document.getElementById('downloadHtml')?.addEventListener('click',e=>{
+    e.preventDefault();
+    buildCurrentFile();
+  });
+}
+setupTopAI();
+document.getElementById('planBtn').addEventListener('click',plan);
+document.getElementById('clearBtn').addEventListener('click',()=>{selected.clear();render();result.innerHTML='<div class="route-placeholder">已清空。选择想去的景点后重新规划。</div>';});
+document.getElementById('search')?.addEventListener('input',render);
+document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{filter=btn.dataset.filter||'all';document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');render();}));
+render();
+</script>
+
+
+</body></html>
