@@ -725,7 +725,7 @@
             'route-stuttgart': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h 10m)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '终点', end: true }],
             'route-freiburg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE7 (1h 45m)', class: 't-re' }, { station: 'Freiburg Hbf', desc: '终点', end: true }],
             'route-baden': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 / S7 (25分钟)', class: 't-re' }, { station: 'Baden-Baden', desc: '终点', end: true }],
-            'route-tuebingen': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '中转' }, { tag: 'IRE6 (1h)', class: 't-ire' }, { station: 'Tübingen Hbf', desc: '终点', end: true }],
+            'route-tuebingen': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '中转' }, { tag: 'IRE6 (1h)', class: 't-re' }, { station: 'Tübingen Hbf', desc: '终点', end: true }],
             'route-oberkochen': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Aalen Hbf', desc: '中转' }, { tag: 'RE50 / MEX13 (15分钟)', class: 't-re' }, { station: 'Oberkochen', desc: '终点', end: true }],
             'route-konstanz': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 (3h 30m)', class: 't-re' }, { station: 'Konstanz', desc: '终点', end: true }],
             'route-triberg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 (1h 45m)', class: 't-re' }, { station: 'Triberg', desc: '终点', end: true }],
@@ -1457,6 +1457,7 @@
             });
         }
 
+        // ================= 使用贪心算法(最近邻居算法)替换原有的过滤逻辑 =================
         function generateOptimalTour() {
             const cbs = document.querySelectorAll('.spot-grid input[type="checkbox"]:checked');
             const selectedIds = Array.from(cbs).map(c => c.value);
@@ -1467,8 +1468,42 @@
             }
 
             const allSpots = citySpotsDb[currentCityKey] || [];
-            const selectedSpots = allSpots.filter(s => selectedIds.includes(s.id));
+            
+            // 1. 获取选中的景点，并绑定它们在雷达图上的散点坐标 (用于模拟真实地理位置计算)
+            let pendingSpots = allSpots
+                .map((spot, idx) => {
+                    return { ...spot, coord: minimapScatterCoords[idx] || { x: 50, y: 50 } };
+                })
+                .filter(s => selectedIds.includes(s.id));
 
+            // 2. 引入路径规划算法 (贪心算法 / 最近邻居算法 Nearest Neighbor)
+            // 假定主火车站/起点的坐标为中心偏下方 (x: 50, y: 90)
+            let currentPos = { x: 50, y: 90 };
+            const selectedSpots = [];
+
+            while (pendingSpots.length > 0) {
+                let nearestIdx = 0;
+                let minDistance = Infinity;
+
+                // 寻找距离当前位置直线距离最近的下一个景点
+                for (let i = 0; i < pendingSpots.length; i++) {
+                    let dx = pendingSpots[i].coord.x - currentPos.x;
+                    let dy = pendingSpots[i].coord.y - currentPos.y;
+                    let distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        nearestIdx = i;
+                    }
+                }
+
+                // 将最近的景点加入最优路线，并将当前坐标移动到该景点
+                const nextSpot = pendingSpots.splice(nearestIdx, 1)[0];
+                selectedSpots.push(nextSpot);
+                currentPos = nextSpot.coord;
+            }
+
+            // 3. 渲染最终优化后的路线
             const container = document.getElementById('mapTimeline');
             const mapTitle = document.getElementById('mapTitle');
             mapTitle.innerText = `${currentCityName} · 专属定制最优路线 (${selectedSpots.length}个景点)`;
