@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>D-Ticket | </title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-page: #f5f5f7; --bg-card: #ffffff; --text-main: #1d1d1f; --text-sec: #86868b;
+            --border: #d2d2d7; --bh-red: #E2001A; --bh-yellow: #FFCC00; --bh-blue: #0033A0; --bh-black: #111111;
+        }
+
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: var(--bg-page); color: var(--text-main); margin: 0; padding: 40px; line-height: 1.5; }
+        .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+        
+        header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid var(--bh-black); display: flex; justify-content: space-between; align-items: baseline; }
+        h1 { font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
+        .meta { color: var(--text-sec); font-size: 14px; font-weight: 500; }
+
+        table { width: 100%; border-collapse: collapse; background: var(--bg-card); box-shadow: 0 4px 24px rgba(0,0,0,0.04); border-radius: 12px; overflow: hidden; }
+        th { text-align: left; padding: 18px 24px; color: var(--text-sec); font-weight: 600; font-size: 13px; border-bottom: 1px solid var(--border); background: #fdfdfd;}
+        td { padding: 16px 24px; font-size: 14px; vertical-align: middle; border-bottom: 1px solid var(--border); }
+
+        .t-tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; transition: transform 0.1s, box-shadow 0.1s; }
+        .t-tag[onclick] { cursor: pointer; border-bottom: 2px solid rgba(0,0,0,0.2); }
+        .t-tag[onclick]:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        
+        .t-re { background: #fdf2f3; color: #E2001A; border: 1px solid #f9dadd; }
+        .t-s { background: #f0f8f5; color: #00754A; border: 1px solid #cce8dd; }
+        .t-rb { background: #f0f4fb; color: #0033A0; border: 1px solid #d9e3f4; }
+        .t-ire { background: #fffcf0; color: #b38f00; border: 1px solid #ffeb99; }
+        .t-other { background: #f4e8f9; color: #8e44ad; border: 1px solid #e2c6f2; }
+        .t-walk { background: #f0f0f0; color: #555; border: 1px solid #e0e0e0; }
+        
+        .opt-route { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .flag { width: 16px; height: 16px; border-radius: 50%; display: inline-block; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.4) inset; cursor: pointer; transition: transform 0.2s; position: relative; }
+        .city-flag { width: 16px; height: 12px; border-radius: 2px; display: inline-block; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.3) inset; cursor: pointer; transition: transform 0.2s; position: relative; margin-right: 8px; vertical-align: middle; }
+        
+        .city-name-btn { cursor: pointer; text-decoration: underline; text-decoration-color: transparent; transition: all 0.2s; font-weight: 600; }
+        .city-name-btn:hover { color: var(--bh-blue); text-decoration-color: var(--bh-blue); }
+
+        .flag:hover, .city-flag:hover { transform: scale(1.3); box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 10; }
+        .flag::after { content: '跨城路线'; position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%) scale(0.8); background: #333; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
+        .city-flag::after { content: '自由规划游玩'; position: absolute; bottom: 140%; left: 50%; transform: translateX(-50%) scale(0.8); background: #333; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 10px; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
+        .flag:hover::after, .city-flag:hover::after { opacity: 1; transform: translateX(-50%) scale(1); }
+        
+        .flag-de { background: linear-gradient(180deg, #000 33.3%, #D00 33.3%, #D00 66.6%, #FFCE00 66.6%); }
+        .flag-fr { background: linear-gradient(90deg, #002395 33.3%, #fff 33.3%, #fff 66.6%, #ED2939 66.6%); }
+        .flag-ch { background: #D52B1E url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path fill="%23FFF" d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z"/></svg>') center/70% no-repeat; }
+        .flag-at { background: linear-gradient(180deg, #ED2939 33.3%, #fff 33.3%, #fff 66.6%, #ED2939 66.6%); }
+        .flag-nl { background: linear-gradient(180deg, #AE1C28 33.3%, #fff 33.3%, #fff 66.6%, #21468B 66.6%); }
+        .f-bw { background: linear-gradient(180deg, #000 50%, #FFCE00 50%); } 
+        .f-by { background: linear-gradient(135deg, #0065BD 25%, #FFF 25%, #FFF 50%, #0065BD 50%, #0065BD 75%, #FFF 75%); } 
+        .f-rp { background: linear-gradient(180deg, #000 33.3%, #D00 33.3%, #FFCE00 66.6%); } 
+        .f-ch-b { background: #FFF url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 C30 10 20 30 20 50 C20 70 35 90 50 90 C65 90 80 70 80 50 C80 30 70 10 50 10" fill="none" stroke="black" stroke-width="8"/></svg>') center/cover; } 
+        
+        .region-header { background: #f1f1f4; cursor: pointer; transition: background 0.2s; user-select: none; }
+        .region-header:hover { background: #e8e8ed; }
+        .region-header td { padding: 12px 24px; font-weight: 600; font-size: 14px; color: var(--text-main); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        .region-arrow { font-size: 12px; opacity: 0.6; transition: transform 0.3s; }
+        .region-group { display: table-row-group; }
+
+        .main-row { cursor: pointer; transition: background 0.2s ease; }
+        .main-row:hover { background: #fdfdfd; }
+        .city-arrow { display: inline-block; transition: transform 0.3s; margin-right: 8px; opacity: 0.3; font-size: 10px; }
+        .main-row.active .city-arrow { transform: rotate(90deg); opacity: 1; color: var(--bh-red); }
+        .main-row.active { background: #f9f9fb; }
+
+        .drawer-row { display: none; background: #fafafa; }
+        .drawer-row.active { display: table-row; }
+        .drawer-content { padding: 24px; border-left: 4px solid var(--border); }
+        .drawer-content.d-de { border-color: var(--bh-yellow); }
+        .drawer-content.d-fr { border-color: var(--bh-blue); }
+        .drawer-content.d-ch, .drawer-content.d-at { border-color: var(--bh-red); }
+        .drawer-content.d-nl { border-color: #F36C21; }
+
+        .route-info { background: #fff; border: 1px solid #eaeaea; border-radius: 6px; padding: 12px 16px; margin-bottom: 16px; font-size: 13px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);}
+        .route-info .warning { color: var(--bh-red); font-weight: 500; display: flex; gap: 8px; align-items: baseline; }
+
+        .links-grid { display: flex; gap: 16px; flex-wrap: wrap; }
+        .sub-card { background: #fff; border: 1px solid var(--border); padding: 16px; border-radius: 8px; text-decoration: none; color: var(--text-main); width: calc(33.333% - 11px); box-sizing: border-box; transition: all 0.2s; }
+        .sub-card:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.06); border-color: #bbb; }
+        .sub-card h4 { margin: 0 0 6px 0; font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; }
+        .sub-card h4 span { color: var(--text-sec); font-size: 14px; }
+        .sub-card p { margin: 0; font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+
+        .tag-valid { background: #eaf6ed; color: #1e7033; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+        .tag-invalid { background: #fdf2f3; color: #E2001A; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+
+        .map-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .map-overlay.show { opacity: 1; pointer-events: auto; }
+        
+        .map-modal { background: #fff; width: 580px; max-height: 88vh; overflow-y: auto; max-width: 92%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); padding: 30px; transform: scale(0.8) translateY(20px); opacity: 0; transition: all 0.3s ease; position: relative; }
+        .map-overlay.show .map-modal { transform: scale(1) translateY(0); opacity: 1; }
+        
+        .map-close { position: absolute; top: 20px; right: 20px; background: #f1f1f4; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #555; transition: background 0.2s; z-index: 9999;}
+        .map-close:hover { background: #e0e0e5; color: var(--bh-red); }
+        
+        .map-header-title { font-size: 18px; font-weight: 700; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; padding-right: 40px; }
+        
+        .city-minimap-box { width: 100%; height: 380px; background-color: #fafafa; background-image: linear-gradient(#e5e5ea 1px, transparent 1px), linear-gradient(90deg, #e5e5ea 1px, transparent 1px); background-size: 40px 40px; border-radius: 12px; border: 1px solid var(--border); position: relative; margin-top: 10px; overflow: hidden; }
+        .minimap-pin { position: absolute; width: 13px; height: 13px; background-color: var(--bh-red); border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: translate(-50%, -50%); cursor: pointer; transition: transform 0.2s; z-index: 2; }
+        .minimap-pin:hover { transform: translate(-50%, -50%) scale(1.6); z-index: 10; background-color: var(--bh-blue); }
+        .minimap-label { position: absolute; background: rgba(255,255,255,0.95); border: 1px solid #ccc; padding: 3px 6px; border-radius: 50px; font-size: 10px; font-weight: 600; color: #111; pointer-events: none; transform: translate(10px, -18px); white-space: nowrap; box-shadow: 0 4px 8px rgba(0,0,0,0.08); z-index: 3; }
+        .minimap-legend { margin-top: 15px; font-size: 12px; color: var(--text-sec); display: flex; flex-wrap: wrap; gap: 10px; padding: 10px; background: #fdfdfd; border-radius: 6px; border: 1px solid #eee; }
+        
+        .spot-select-intro { font-size: 13px; color: var(--text-sec); margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .spot-tools a { color: var(--bh-blue); text-decoration: none; font-size: 12px; margin-left: 10px; cursor: pointer; font-weight: 500; }
+        .spot-tools a:hover { text-decoration: underline; }
+        
+        .spot-search-box { margin-bottom: 16px; }
+        .spot-search-box input { width: 100%; border: 1px solid var(--border); padding: 12px 14px; border-radius: 8px; font-size: 14px; outline: none; transition: border-color 0.2s; box-sizing: border-box; background: #fdfdfd; }
+        .spot-search-box input:focus { border-color: var(--bh-blue); background: #fff; box-shadow: 0 0 0 3px rgba(0,51,160,0.1); }
+        
+        .spot-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .spot-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; border: 1px solid #e5e5ea; border-radius: 8px; cursor: pointer; transition: all 0.2s; background: #fafafa; }
+        .spot-item:hover { border-color: var(--bh-blue); background: #fff; }
+        .spot-item.selected { border-color: var(--bh-blue); background: #f0f6ff; }
+        .spot-item input[type="checkbox"] { width: 16px; height: 16px; margin-top: 3px; accent-color: var(--bh-blue); cursor: pointer; }
+        .spot-item-content { flex: 1; pointer-events: none; }
+        .spot-item-name { font-weight: 600; font-size: 13px; color: var(--text-main); display: flex; justify-content: space-between; }
+        .spot-item-desc { font-size: 11px; color: var(--text-sec); margin-top: 3px; line-height: 1.4; }
+
+        .btn-plan { display: block; width: 100%; padding: 14px; background: var(--bh-black); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s; margin-top: 10px; }
+        .btn-plan:hover { background: #333; }
+        .btn-back-select { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--bh-blue); background: #eaf0fc; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-bottom: 16px; cursor: pointer; }
+        .btn-back-select:hover { background: var(--bh-blue); color: #fff; }
+
+        .timeline { display: flex; flex-direction: column; }
+        .tl-node { display: flex; align-items: flex-start; gap: 16px; color: var(--text-main); position: relative; z-index: 2; }
+        .tl-text { display: flex; flex-direction: column; width: 100%; }
+        
+        .tl-station-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .tl-station-name { font-weight: 600; font-size: 15px; }
+        .tl-nav { font-size: 11px; color: var(--bh-blue); text-decoration: none; padding: 2px 6px; background: #eaf0fc; border-radius: 4px; transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; }
+        .tl-nav:hover { background: var(--bh-blue); color: #fff; }
+        
+        .tl-desc { font-size: 12px; color: #888; font-weight: 400; margin-top: 4px; }
+        .tl-rest { font-size: 11px; color: #555; margin-top: 6px; background: #fbfbfb; padding: 6px 10px; border-radius: 4px; border-left: 2px solid #ddd; display: inline-block; line-height: 1.4; }
+        .tl-rest span { font-weight: 600; color: #d35400; margin-right: 4px; }
+
+        .tl-dot { width: 12px; height: 12px; border-radius: 50%; border: 3px solid var(--text-main); background: #fff; flex-shrink: 0; margin-top: 4px; }
+        .tl-dot.dest { border-color: var(--bh-red); background: var(--bh-red); box-shadow: 0 0 0 3px rgba(226,0,26,0.15); }
+        .tl-segment { margin-left: 5px; border-left: 2px solid var(--border); padding: 20px 0 20px 24px; position: relative; display: flex; align-items: center; }
+        .tl-segment.dashed { border-left-style: dashed; border-color: var(--bh-red); }
+
+        .db-board-container { font-family: 'Inter', sans-serif; }
+        .db-train-row { border-bottom: 1px solid #eee; padding: 14px 0; }
+        .db-train-row:last-child { border-bottom: none; }
+        .db-time { font-size: 20px; font-weight: 700; color: #111; }
+        .db-delay { color: #E2001A; font-size: 13px; margin-left: 8px; font-weight: 600; }
+        .db-train { background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 13px; letter-spacing: 0.5px; }
+        .db-meta { font-size: 12px; color: #666; margin-top: 8px; display: flex; justify-content: space-between; }
+        .db-plat { font-weight: 700; color: #111; font-size: 13px; }
+        .db-ext-btn { display: block; text-align: center; background: #eaf0fc; color: var(--bh-blue); text-decoration: none; padding: 12px; border-radius: 8px; font-weight: 600; margin-top: 16px; transition: all 0.2s; }
+        .db-ext-btn:hover { background: var(--bh-blue); color: #fff; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--bh-red); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .watermark {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 99999;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='350' height='250'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' transform='rotate(-30, 175, 125)' fill='rgba(0,0,0,0.03)' font-size='24' font-family='Arial, sans-serif' font-weight='bold'>ahh-Nein出品</text></svg>");
+            background-repeat: repeat;
+        }
+
+        @media print {
+            body { padding: 0; background: #fff; }
+            .region-group, .drawer-row { display: table-row-group !important; }
+            .city-arrow, .region-arrow, .map-overlay, .flag::after, .city-flag::after { display: none !important; }
+            .watermark { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='350' height='250'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' transform='rotate(-30, 175, 125)' fill='rgba(0,0,0,0.05)' font-size='24' font-family='Arial, sans-serif' font-weight='bold'>ahh-Nein出品</text></svg>"); -webkit-print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+    <div class="watermark"></div>
+
+    <div class="container">
+        <header>
+            <h1>D-Ticket</h1>
+            <div class="meta">📍 始发: Karlsruhe Hbf | </div>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="32%">目的地 </th>
+                    <th width="24%">最优路径 </th>
+                    <th width="11%">时效</th>
+                    <th width="33%">票务状态</th>
+                </tr>
+            </thead>
+
+            <!-- ================= 巴符州 ================= -->
+            <tbody class="region-header-body">
+                <tr class="region-header" onclick="toggleRegion('grp-bw', this)">
+                    <td colspan="4"><div class="flex-between"><span>🇩🇪 巴登-符腾堡州 (Baden-Württemberg)</span><span class="region-arrow">▼</span></div></td>
+                </tr>
+            </tbody>
+            <tbody id="grp-bw" class="region-group">
+                <tr class="main-row" onclick="toggleCity('heidelberg', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'heidelberg', '海德堡')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'heidelberg', '海德堡')">海德堡 Heidelberg</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-heidelberg', '海德堡')"></span><span class="t-tag t-s" onclick="openDbBoard(event, '8000156', 'Heidelberg Hbf')">S3</span></div></td>
+                    <td>45m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="heidelberg" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.schloss-heidelberg.de/" class="sub-card" target="_blank"><h4>海德堡城堡 <span>↗</span></h4><p>缆车与宫殿遗址门票预订系统。</p></a>
+                        <a href="https://www.heidelberg-marketing.de/poi/alte-bruecke" class="sub-card" target="_blank"><h4>老桥 Alte Brücke <span>↗</span></h4><p>内卡河畔标志性古桥与铜猴雕像。</p></a>
+                        <a href="https://www.heidelberg-marketing.de/poi/philosophenweg" class="sub-card" target="_blank"><h4>哲学家小径 <span>↗</span></h4><p>隔河相望城堡的绝佳徒步观景路线。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('stuttgart', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'stuttgart', '斯图加特')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'stuttgart', '斯图加特')">斯图加特 Stuttgart</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-stuttgart', '斯图加特')"></span><span class="t-tag t-ire" onclick="openDbBoard(event, '8000096', 'Stuttgart Hbf')">IRE1</span></div></td>
+                    <td>1h 10m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="stuttgart" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.mercedes-benz.com/en/classic/museum/" class="sub-card" target="_blank"><h4>奔驰博物馆 <span>↗</span></h4><p>预约九层螺旋展厅导览。</p></a>
+                        <a href="https://www.porsche.com/museum/en/" class="sub-card" target="_blank"><h4>保时捷博物馆 <span>↗</span></h4><p>赛道基因朝圣，预约入场场次。</p></a>
+                        <a href="https://www.stuttgart-tourist.de/en/a-schlossplatz-stuttgart" class="sub-card" target="_blank"><h4>王宫广场 <span>↗</span></h4><p>市中心绿地与州立美术馆核心区。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('freiburg', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'freiburg', '弗莱堡')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'freiburg', '弗莱堡')">弗莱堡 Freiburg</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-freiburg', '弗莱堡')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000107', 'Freiburg Hbf')">RE7</span></div></td>
+                    <td>1h 45m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="freiburg" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.schlossbergbahn-freiburg.de/" class="sub-card" target="_blank"><h4>Schlossberg 缆车 <span>↗</span></h4><p>登顶俯瞰黑森林与老城全景。</p></a>
+                        <a href="https://freiburg.de/" class="sub-card" target="_blank"><h4>弗莱堡大教堂 <span>↗</span></h4><p>著名红色砂岩哥特式教堂。</p></a>
+                        <a href="https://www.freiburg.de/pb/231368.html" class="sub-card" target="_blank"><h4>老城水渠 Bächle <span>↗</span></h4><p>密布全城的特色中世纪引水渠步道。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('baden', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'baden', '巴登-巴登')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'baden', '巴登-巴登')">巴登-巴登 Baden-Baden</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-baden', '巴登-巴登')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000022', 'Baden-Baden')">RE2/S7</span></div></td>
+                    <td>25m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="baden" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.carasana.de/" class="sub-card" target="_blank"><h4>卡拉卡拉浴场 <span>↗</span></h4><p>顶级温泉与桑拿区门票预订。</p></a>
+                        <a href="https://www.casino-baden-baden.de/" class="sub-card" target="_blank"><h4>百年赌场 <span>↗</span></h4><p>欧洲最古老赌场之一，预订导览。</p></a>
+                        <a href="https://www.baden-baden.com/en/lichtentaler-allee" class="sub-card" target="_blank"><h4>林荫大道 <span>↗</span></h4><p>极其优美的古典皇家园林散步道。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('tuebingen', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'tuebingen', '图宾根')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'tuebingen', '图宾根')">图宾根 Tübingen</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-tuebingen', '图宾根')"></span><span class="t-tag t-ire" onclick="openDbBoard(event, '8000128', 'Tübingen Hbf')">IRE</span></div></td>
+                    <td>2h 10m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="tuebingen" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.tuebingen-info.de/stocherkahn" class="sub-card" target="_blank"><h4>传统撑篙船 <span>↗</span></h4><p>内卡河特色木船 Stocherkahn 预约。</p></a>
+                        <a href="https://www.tuebingen.de/" class="sub-card" target="_blank"><h4>中世纪老城中心 <span>↗</span></h4><p>集市广场与市政厅彩色壁画打卡。</p></a>
+                        <a href="https://www.mut.uni-tuebingen.de/" class="sub-card" target="_blank"><h4>霍亨图宾根城堡 <span>↗</span></h4><p>大学城制高点与古代艺术博物馆。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('oberkochen', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'oberkochen', '奥伯科亨')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'oberkochen', '奥伯科亨')">奥伯科亨 Oberkochen</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-oberkochen', '奥伯科亨')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8004526', 'Oberkochen')">RE50</span></div></td>
+                    <td>2h 15m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="oberkochen" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.zeiss.de/corporate/ueber-zeiss/geschichte/zeiss-museum-der-optik.html" class="sub-card" target="_blank"><h4>蔡司光学博物馆 <span>↗</span></h4><p>硬核光学与极紫外光刻机历史朝圣。</p></a>
+                        <a href="https://www.oberkochen.de/" class="sub-card" target="_blank"><h4>科赫尔河源头 <span>↗</span></h4><p>Kocher Ursprung 自然景观。</p></a>
+                        <a href="https://www.schwaebischer-albverein.de/" class="sub-card" target="_blank"><h4>福尔克马斯山 <span>↗</span></h4><p>Volkmarsberg，徒步远足胜地。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('konstanz', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'konstanz', '康斯坦茨')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'konstanz', '康斯坦茨')">康斯坦茨 Konstanz</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-konstanz', '康斯坦茨')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000204', 'Konstanz')">RE2</span></div></td>
+                    <td>3h 30m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="konstanz" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.mainau.de/de/" class="sub-card" target="_blank"><h4>梅瑙岛 Mainau <span>↗</span></h4><p>预订博登湖上著名花岛登岛门票。</p></a>
+                        <a href="https://www.konstanz-info.com/imperia" class="sub-card" target="_blank"><h4>因佩利亚雕像 <span>↗</span></h4><p>博登湖港口地标与全景漫步道。</p></a>
+                        <a href="https://www.konstanz-info.com/" class="sub-card" target="_blank"><h4>康斯坦茨大教堂 <span>↗</span></h4><p>旧城区核心，大公会议遗址。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('triberg', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'triberg', '特里贝格')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'triberg', '特里贝格')">特里贝格 Triberg</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-triberg', '特里贝格')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000135', 'Triberg')">RE2</span></div></td>
+                    <td>1h 45m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="triberg" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.triberg.de/" class="sub-card" target="_blank"><h4>特里贝格瀑布群 <span>↗</span></h4><p>预订自然保护区通票，探访最高瀑布。</p></a>
+                        <a href="https://www.triberg.de/" class="sub-card" target="_blank"><h4>世界最大布谷鸟钟 <span>↗</span></h4><p>黑森林机械钟表工艺朝圣打卡。</p></a>
+                        <a href="https://www.schwarzwaldmuseum.de/" class="sub-card" target="_blank"><h4>黑森林博物馆 <span>↗</span></h4><p>沉浸式了解黑森林地区木雕与民俗。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('ulm', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-bw" onclick="openSpotSelector(event, 'ulm', '乌尔姆')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'ulm', '乌尔姆')">乌尔姆 Ulm</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-ulm', '乌尔姆')"></span><span class="t-tag t-ire" onclick="openDbBoard(event, '8000170', 'Ulm Hbf')">IRE</span></div></td>
+                    <td>2h 30m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="ulm" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.ulmer-muenster.de/" class="sub-card" target="_blank"><h4>乌尔姆大教堂 <span>↗</span></h4><p>购买塔楼登顶票，挑战世界最高教堂。</p></a>
+                        <a href="https://tourismus.ulm.de/" class="sub-card" target="_blank"><h4>渔人区 Fischerviertel <span>↗</span></h4><p>多瑙河畔绝美的半木结构建筑群与水巷。</p></a>
+                        <a href="https://kunsthalle-weishaupt.de/" class="sub-card" target="_blank"><h4>Weishaupt 艺术馆 <span>↗</span></h4><p>市中心的现当代艺术及建筑地标。</p></a>
+                    </div>
+                </div></td></tr>
+            </tbody>
+
+            <!-- ================= 莱法州 ================= -->
+            <tbody class="region-header-body">
+                <tr class="region-header" onclick="toggleRegion('grp-rp', this)">
+                    <td colspan="4"><div class="flex-between"><span>🇩🇪 莱茵兰-普法尔茨州 (Rheinland-Pfalz)</span><span class="region-arrow">▼</span></div></td>
+                </tr>
+            </tbody>
+            <tbody id="grp-rp" class="region-group">
+                <tr class="main-row" onclick="toggleCity('mainz', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-rp" onclick="openSpotSelector(event, 'mainz', '美因茨')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'mainz', '美因茨')">美因茨 Mainz</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-mainz', '美因茨')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000240', 'Mainz Hbf')">RE4</span></div></td>
+                    <td>2h 05m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="mainz" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.gutenberg-museum.de/" class="sub-card" target="_blank"><h4>古腾堡博物馆 <span>↗</span></h4><p>查询开馆时间，观摩早期活字印刷术真迹。</p></a>
+                        <a href="https://mainz.de/" class="sub-card" target="_blank"><h4>美因茨大教堂 <span>↗</span></h4><p>千年历史的罗曼式建筑代表作。</p></a>
+                        <a href="https://mainz.de/" class="sub-card" target="_blank"><h4>古罗马剧场遗址 <span>↗</span></h4><p>阿尔卑斯山以北最大的古罗马剧院。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('speyer', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-rp" onclick="openSpotSelector(event, 'speyer', '施派尔')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'speyer', '施派尔')">施派尔 Speyer</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-speyer', '施派尔')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000086', 'Speyer Hbf')">RE4</span></div></td>
+                    <td>45m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="speyer" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://speyer.technik-museum.de/" class="sub-card" target="_blank"><h4>施派尔技术博物馆 <span>↗</span></h4><p>预订门票，体验航天飞机及巨型客机内部。</p></a>
+                        <a href="https://www.dom-zu-speyer.de/" class="sub-card" target="_blank"><h4>施派尔大教堂 <span>↗</span></h4><p>世界文化遗产，宏伟的皇室墓地。</p></a>
+                        <a href="https://speyer.de/" class="sub-card" target="_blank"><h4>老城门 Altpörtel <span>↗</span></h4><p>德国最高的中世纪城门之一。</p></a>
+                    </div>
+                </div></td></tr>
+            </tbody>
+
+            <!-- ================= 巴伐利亚 ================= -->
+            <tbody class="region-header-body">
+                <tr class="region-header" onclick="toggleRegion('grp-by', this)">
+                    <td colspan="4"><div class="flex-between"><span>🇩🇪 巴伐利亚州 (Bayern)</span><span class="region-arrow">▼</span></div></td>
+                </tr>
+            </tbody>
+            <tbody id="grp-by" class="region-group">
+                <tr class="main-row" onclick="toggleCity('munich', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-by" onclick="openSpotSelector(event, 'munich', '慕尼黑')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'munich', '慕尼黑')">慕尼黑 München</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-munich', '慕尼黑')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000261', 'München Hbf')">RE9</span></div></td>
+                    <td>4h 30m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="munich" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://tickets.fcbayern.com/" class="sub-card" target="_blank"><h4>安联球场 <span>↗</span></h4><p>南大王主场比赛票务及球场观光预约。</p></a>
+                        <a href="https://www.bmw-welt.com/" class="sub-card" target="_blank"><h4>BMW Welt <span>↗</span></h4><p>宝马世界、博物馆及工厂产线预约。</p></a>
+                        <a href="https://www.muenchen.de/sehenswuerdigkeiten/marienplatz" class="sub-card" target="_blank"><h4>玛利亚广场 <span>↗</span></h4><p>市中心新市政厅木偶钟及购物步行街。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('nurnberg', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-by" onclick="openSpotSelector(event, 'nurnberg', '纽伦堡')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'nurnberg', '纽伦堡')">纽伦堡 Nürnberg</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-nurnberg', '纽伦堡')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000284', 'Nürnberg Hbf')">RE90</span></div></td>
+                    <td>4h 15m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="nurnberg" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.kaiserburg-nuernberg.de/" class="sub-card" target="_blank"><h4>皇帝堡 Kaiserburg <span>↗</span></h4><p>神圣罗马帝国行宫遗址群及深井导览。</p></a>
+                        <a href="https://museen.nuernberg.de/dokuzentrum" class="sub-card" target="_blank"><h4>二战档案中心 <span>↗</span></h4><p>前纳粹党代会集会场与历史记录馆。</p></a>
+                        <a href="https://www.christkindlesmarkt.de/" class="sub-card" target="_blank"><h4>主集市广场 <span>↗</span></h4><p>美泉打卡点，全德最著名圣诞市场举办地。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('lindau', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-by" onclick="openSpotSelector(event, 'lindau', '林道')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'lindau', '林道')">林道 Lindau</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-de" onclick="openMap(event, 'route-lindau', '林道')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000227', 'Lindau-Insel')">RE5</span></div></td>
+                    <td>3h 40m</td><td><span class="tag-valid">全域覆盖</span></td>
+                </tr>
+                <tr id="lindau" class="drawer-row"><td colspan="4"><div class="drawer-content d-de">
+                    <div class="links-grid">
+                        <a href="https://www.lindau.de/" class="sub-card" target="_blank"><h4>林道港口 & 狮子雕像 <span>↗</span></h4><p>博登湖上巴伐利亚标志性港口风光。</p></a>
+                        <a href="https://www.bsb.de/" class="sub-card" target="_blank"><h4>博登湖游船队 BSB <span>↗</span></h4><p>预订连接林道与奥地利、瑞士的跨国渡轮。</p></a>
+                        <a href="https://www.lindau.de/" class="sub-card" target="_blank"><h4>老城 Maximilianstraße <span>↗</span></h4><p>岛上的中世纪风情购物与美食步行街。</p></a>
+                    </div>
+                </div></td></tr>
+            </tbody>
+
+            <!-- ================= 瑞士 ================= -->
+            <tbody class="region-header-body">
+                <tr class="region-header" onclick="toggleRegion('grp-ch', this)">
+                    <td colspan="4"><div class="flex-between"><span>🇨🇭 瑞士 (Switzerland)</span><span class="region-arrow">▼</span></div></td>
+                </tr>
+            </tbody>
+            <tbody id="grp-ch" class="region-group">
+                <tr class="main-row" onclick="toggleCity('basel', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-ch-b" onclick="openSpotSelector(event, 'basel', '巴塞尔')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'basel', '巴塞尔')">巴塞尔 Basel</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-ch" onclick="openMap(event, 'route-basel', '巴塞尔')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8000026', 'Basel Bad Bf')">RE7</span></div></td>
+                    <td>2h 30m</td><td><span class="tag-invalid">覆盖至 Basel Bad</span></td>
+                </tr>
+                <tr id="basel" class="drawer-row"><td colspan="4"><div class="drawer-content d-ch">
+                    <div class="route-info">
+                        <div class="warning"><span>⚠️</span><span>仅覆盖至德国特许站 <strong>Basel Bad Bf (坏站)</strong>。市区深游需补票。</span></div>
+                    </div>
+                    <div class="links-grid">
+                        <a href="https://kunstmuseumbasel.ch/" class="sub-card" target="_blank"><h4>巴塞尔美术馆 <span>↗</span></h4><p>欧洲最古老的公共艺术收藏机构。</p></a>
+                        <a href="https://www.fondationbeyeler.ch/" class="sub-card" target="_blank"><h4>贝耶勒基金会 <span>↗</span></h4><p>全球顶级的现当代美术与雕塑特展。</p></a>
+                        <a href="https://www.basel.com/en/places-interest/basel-minster" class="sub-card" target="_blank"><h4>巴塞尔大教堂 <span>↗</span></h4><p>红色砂岩教堂，绝佳莱茵河景露台。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('schaffhausen', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag f-ch-b" onclick="openSpotSelector(event, 'schaffhausen', '沙夫豪森')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'schaffhausen', '沙夫豪森')">沙夫豪森 Schaffhausen</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-ch" onclick="openMap(event, 'route-schaffhausen', '沙夫豪森')"></span><span class="t-tag t-s" onclick="openDbBoard(event, '8503300', 'Schaffhausen')">S-Bahn</span></div></td>
+                    <td>2h 15m</td><td><span class="tag-valid">全线特许覆盖</span></td>
+                </tr>
+                <tr id="schaffhausen" class="drawer-row"><td colspan="4"><div class="drawer-content d-ch">
+                    <div class="links-grid">
+                        <a href="https://rheinfall.ch/" class="sub-card" target="_blank"><h4>莱茵瀑布 Rheinfall <span>↗</span></h4><p>欧洲最大瀑布，查询游船及登岩门票。</p></a>
+                        <a href="https://schaffhauserland.ch/de/munot" class="sub-card" target="_blank"><h4>穆诺特要塞 Munot <span>↗</span></h4><p>沙夫豪森地标性环形火炮要塞。</p></a>
+                        <a href="https://schaffhauserland.ch/" class="sub-card" target="_blank"><h4>老城凸窗建筑群 <span>↗</span></h4><p>欣赏保留完好的文艺复兴时期壁画与凸窗。</p></a>
+                    </div>
+                </div></td></tr>
+            </tbody>
+
+            <!-- ================= 奥地利 ================= -->
+            <tbody class="region-header-body">
+                <tr class="region-header" onclick="toggleRegion('grp-at', this)">
+                    <td colspan="4"><div class="flex-between"><span>🇦🇹 奥地利 (Austria)</span><span class="region-arrow">▼</span></div></td>
+                </tr>
+            </tbody>
+            <tbody id="grp-at" class="region-group">
+                <tr class="main-row" onclick="toggleCity('salzburg', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-at" onclick="openSpotSelector(event, 'salzburg', '萨尔茨堡')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'salzburg', '萨尔茨堡')">萨尔茨堡 Salzburg</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-at" onclick="openMap(event, 'route-salzburg', '萨尔茨堡')"></span><span class="t-tag t-rb" onclick="openDbBoard(event, '8100002', 'Salzburg Hbf')">BRB</span></div></td>
+                    <td>6h 30m</td><td><span class="tag-invalid">覆盖至 Hbf</span></td>
+                </tr>
+                <tr id="salzburg" class="drawer-row"><td colspan="4"><div class="drawer-content d-at">
+                    <div class="route-info">
+                        <div class="warning"><span>⚠️</span><span>由于属于边境特许站，通票仅覆盖至 <strong>Salzburg Hbf</strong>，进入老城区需购买公交车票。</span></div>
+                    </div>
+                    <div class="links-grid">
+                        <a href="https://www.salzburg-burgen.at/de/festung-hohensalzburg/" class="sub-card" target="_blank"><h4>萨尔茨堡要塞 <span>↗</span></h4><p>搭乘全景缆车参观中世纪最大完整堡垒。</p></a>
+                        <a href="https://mozarteum.at/" class="sub-card" target="_blank"><h4>莫扎特故居 <span>↗</span></h4><p>粮食胡同 9 号，音乐神童出生地。</p></a>
+                        <a href="https://www.salzburg.info/" class="sub-card" target="_blank"><h4>米拉贝尔宫 <span>↗</span></h4><p>《音乐之声》取景地，华丽的巴洛克式花园。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('kufstein', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-at" onclick="openSpotSelector(event, 'kufstein', '库夫施泰因')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'kufstein', '库夫施泰因')">库夫施泰因 Kufstein</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-at" onclick="openMap(event, 'route-kufstein', '库夫施泰因')"></span><span class="t-tag t-rb" onclick="openDbBoard(event, '8100114', 'Kufstein')">BRB</span></div></td>
+                    <td>5h 45m</td><td><span class="tag-invalid">覆盖至车站</span></td>
+                </tr>
+                <tr id="kufstein" class="drawer-row"><td colspan="4"><div class="drawer-content d-at">
+                    <div class="route-info">
+                        <div class="warning"><span>⚠️</span><span>通票止于库夫施泰因火车站，进入蒂罗尔其他区域需补票。</span></div>
+                    </div>
+                    <div class="links-grid">
+                        <a href="https://www.festung.kufstein.at/" class="sub-card" target="_blank"><h4>库夫施泰因要塞 <span>↗</span></h4><p>预订缆车及聆听世界最大露天风琴音乐会。</p></a>
+                        <a href="https://www.kufstein.com/" class="sub-card" target="_blank"><h4>Römerhofgasse <span>↗</span></h4><p>蒂罗尔风格极浓郁的中世纪传统小巷。</p></a>
+                        <a href="https://www.riedel.com/" class="sub-card" target="_blank"><h4>Riedel 玻璃工厂 <span>↗</span></h4><p>参观世界顶级酒杯品牌的手工吹制过程。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('reutte', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-at" onclick="openSpotSelector(event, 'reutte', '罗伊特')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'reutte', '罗伊特')">罗伊特 Reutte</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-at" onclick="openMap(event, 'route-reutte', '罗伊特')"></span><span class="t-tag t-rb" onclick="openDbBoard(event, '8100137', 'Reutte in Tirol')">RB</span></div></td>
+                    <td>5h 50m</td><td><span class="tag-valid">特许跨国覆盖</span></td>
+                </tr>
+                <tr id="reutte" class="drawer-row"><td colspan="4"><div class="drawer-content d-at">
+                    <div class="links-grid">
+                        <a href="https://www.highline179.tirol/" class="sub-card" target="_blank"><h4>Highline179 索桥 <span>↗</span></h4><p>挑战全长 406 米的阿尔卑斯悬索桥。</p></a>
+                        <a href="https://www.ehrenberg.at/" class="sub-card" target="_blank"><h4>埃伦贝格城堡遗址 <span>↗</span></h4><p>探索中世纪防御工事及历史博物馆。</p></a>
+                        <a href="https://www.alpentherme-ehrenberg.at/" class="sub-card" target="_blank"><h4>Alpentherme 温泉 <span>↗</span></h4><p>徒步后放松身心的阿尔卑斯景观浴场。</p></a>
+                    </div>
+                </div></td></tr>
+            </tbody>
+
+            <!-- ================= 荷兰 ================= -->
+            <tbody class="region-header-body">
+                <tr class="region-header" onclick="toggleRegion('grp-nl', this)">
+                    <td colspan="4"><div class="flex-between"><span>🇳🇱 荷兰 (Netherlands)</span><span class="region-arrow">▼</span></div></td>
+                </tr>
+            </tbody>
+            <tbody id="grp-nl" class="region-group">
+                <tr class="main-row" onclick="toggleCity('venlo', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-nl" onclick="openSpotSelector(event, 'venlo', '芬洛')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'venlo', '芬洛')">芬洛 Venlo</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-nl" onclick="openMap(event, 'route-venlo', '芬洛')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8400644', 'Venlo')">RE13</span></div></td>
+                    <td>5h 30m</td><td><span class="tag-valid">RE13 特许全包</span></td>
+                </tr>
+                <tr id="venlo" class="drawer-row"><td colspan="4"><div class="drawer-content d-nl">
+                    <div class="links-grid">
+                        <a href="https://www.limburgsmuseum.nl/" class="sub-card" target="_blank"><h4>林堡博物馆 <span>↗</span></h4><p>全面了解马斯河流域文化与边境历史。</p></a>
+                        <a href="https://www.venloverwelkomt.nl/" class="sub-card" target="_blank"><h4>芬洛市中心 & 市场 <span>↗</span></h4><p>体验荷兰生活节奏与当地特色生鲜集市。</p></a>
+                        <a href="https://www.vanbommelvandam.nl/" class="sub-card" target="_blank"><h4>Museum van Bommel <span>↗</span></h4><p>现当代艺术博物馆及摄影展览。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('arnhem', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-nl" onclick="openSpotSelector(event, 'arnhem', '阿纳姆')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'arnhem', '阿纳姆')">阿纳姆 Arnhem</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-nl" onclick="openMap(event, 'route-arnhem', '阿纳姆')"></span><span class="t-tag t-re" onclick="openDbBoard(event, '8400057', 'Arnhem Centraal')">RE19</span></div></td>
+                    <td>6h 15m</td><td><span class="tag-valid">RE19 特许全包</span></td>
+                </tr>
+                <tr id="arnhem" class="drawer-row"><td colspan="4"><div class="drawer-content d-nl">
+                    <div class="links-grid">
+                        <a href="https://www.openluchtmuseum.nl/" class="sub-card" target="_blank"><h4>国家露天博物馆 <span>↗</span></h4><p>沉浸式体验荷兰百年来的真实历史生活场景。</p></a>
+                        <a href="https://www.airbornemuseum.nl/" class="sub-card" target="_blank"><h4>空降兵博物馆 <span>↗</span></h4><p>纪念“市场花园行动”的二战主题博物馆。</p></a>
+                        <a href="https://www.burgerszoo.nl/" class="sub-card" target="_blank"><h4>皇家伯格斯动物园 <span>↗</span></h4><p>欧洲顶级生态动物园，拥有室内热带雨林。</p></a>
+                    </div>
+                </div></td></tr>
+            </tbody>
+
+            <!-- ================= 法国 ================= -->
+            <tbody class="region-header-body">
+                <tr class="region-header" onclick="toggleRegion('grp-fr', this)">
+                    <td colspan="4"><div class="flex-between"><span>🇫🇷 法国 (France)</span><span class="region-arrow">▼</span></div></td>
+                </tr>
+            </tbody>
+            <tbody id="grp-fr" class="region-group">
+                <tr class="main-row" onclick="toggleCity('wissembourg', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-fr" onclick="openSpotSelector(event, 'wissembourg', '维森堡')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'wissembourg', '维森堡')">维森堡 Wissembourg</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-fr" onclick="openMap(event, 'route-wissembourg', '维森堡')"></span><span class="t-tag t-rb" onclick="openDbBoard(event, '8700023', 'Wissembourg')">RB51</span></div></td>
+                    <td>50m</td><td><span class="tag-valid">边境特许覆盖</span></td>
+                </tr>
+                <tr id="wissembourg" class="drawer-row"><td colspan="4"><div class="drawer-content d-fr">
+                    <div class="links-grid">
+                        <a href="https://www.alsace-verte.com/" class="sub-card" target="_blank"><h4>圣彼得与保罗修道院 <span>↗</span></h4><p>阿尔萨斯地区第二大宗教建筑群。</p></a>
+                        <a href="https://www.alsace-verte.com/" class="sub-card" target="_blank"><h4>盐屋 Maison du Sel <span>↗</span></h4><p>标志性的 15 世纪特色陡峭屋顶建筑。</p></a>
+                        <a href="https://www.ot-wissembourg.fr/" class="sub-card" target="_blank"><h4>中世纪城墙遗址 <span>↗</span></h4><p>沿着老城护城河散步并品尝法式火焰饼。</p></a>
+                    </div>
+                </div></td></tr>
+
+                <tr class="main-row" onclick="toggleCity('strasbourg', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-fr" onclick="openSpotSelector(event, 'strasbourg', '斯特拉斯堡')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'strasbourg', '斯特拉斯堡')">斯特拉斯堡 Strasbourg</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-fr" onclick="openMap(event, 'route-strasbourg', '斯特拉斯堡')"></span><span class="t-tag t-rb" onclick="openDbBoard(event, '8700011', 'Strasbourg')">SWE</span></div></td>
+                    <td>1h 15m</td><td><span class="tag-invalid">仅有效至 Kehl</span></td>
+                </tr>
+                <tr id="strasbourg" class="drawer-row"><td colspan="4"><div class="drawer-content d-fr">
+                    <div class="route-info">
+                        <div class="warning"><span>⚠️</span><span>德国月票覆盖止于 <strong>Kehl</strong>，进入法国境内的过河 Tram D 线需单独购买 CTS 车票。</span></div>
+                    </div>
+                    <div class="links-grid">
+                        <a href="https://www.strasbourg.info/cathedral/" class="sub-card" target="_blank"><h4>大教堂 <span>↗</span></h4><p>雨果笔下宏伟的哥特式建筑奇迹与天文钟。</p></a>
+                        <a href="https://www.batorama.com/" class="sub-card" target="_blank"><h4>小法兰西 <span>↗</span></h4><p>极其精美的运河木筋房，可预订游船。</p></a>
+                        <a href="https://www.europarl.europa.eu/visiting/" class="sub-card" target="_blank"><h4>欧洲议会总部 <span>↗</span></h4><p>提前预约欧盟核心机构内部参观导览。</p></a>
+                    </div>
+                </div></td></tr>
+                
+                <tr class="main-row" onclick="toggleCity('colmar', event)">
+                    <td>
+                        <span class="city-arrow">▶</span>
+                        <span class="city-flag flag-fr" onclick="openSpotSelector(event, 'colmar', '科尔马')"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event, 'colmar', '科尔马')">科尔马 Colmar</span>
+                    </td>
+                    <td><div class="opt-route"><span class="flag flag-fr" onclick="openMap(event, 'route-colmar', '科尔马')"></span><span class="t-tag t-rb" onclick="openDbBoard(event, '8700022', 'Colmar')">SWE</span></div></td>
+                    <td>2h 45m</td><td><span class="tag-invalid">有效至 Breisach</span></td>
+                </tr>
+                <tr id="colmar" class="drawer-row"><td colspan="4"><div class="drawer-content d-fr">
+                    <div class="route-info">
+                        <div class="warning"><span>⚠️</span><span>德国月票覆盖止于边境 <strong>Breisach</strong>，最后一段路程需购买法国 TER 的跨境大巴车票至科尔马。</span></div>
+                    </div>
+                    <div class="links-grid">
+                        <a href="https://www.musee-unterlinden.com/" class="sub-card" target="_blank"><h4>恩特林登博物馆 <span>↗</span></h4><p>预订特展门票，观摩著名的《伊森海姆祭坛画》。</p></a>
+                        <a href="https://www.barques-colmar.fr/" class="sub-card" target="_blank"><h4>小威尼斯游船 <span>↗</span></h4><p>在线预订木船，漫游风景如画的运河区。</p></a>
+                        <a href="https://www.tourisme-colmar.com/" class="sub-card" target="_blank"><h4>普菲斯特屋 <span>↗</span></h4><p>打卡《哈尔的移动城堡》核心取景地。</p></a>
+                    </div>
+                </div></td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 弹窗层 -->
+    <div id="mapOverlay" class="map-overlay" onclick="closeMap()">
+        <div class="map-modal" onclick="event.stopPropagation()">
+            <button class="map-close" onclick="closeMap()">×</button>
+            <div class="map-header-title">
+                <span id="mapIcon" class="flag"></span>
+                <span id="mapTitle">路线拓扑图</span>
+            </div>
+            <div id="mapTimeline"></div>
+        </div>
+    </div>
+
+    <!-- DB 实时监测弹窗 -->
+    <div id="dbOverlay" class="map-overlay" onclick="closeDbBoard()">
+        <div class="map-modal db-board-container" onclick="event.stopPropagation()">
+            <button class="map-close" onclick="closeDbBoard()">×</button>
+            <div class="map-header-title">
+                <span class="city-flag f-bw"></span> 
+                <span id="dbTitle">实时发车监测</span>
+            </div>
+            <div id="dbContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentCityKey = '';
+        let currentCityName = '';
+
+        // 20点分布星图散点
+        const minimapScatterCoords = [
+            { x: 18, y: 18 }, { x: 42, y: 14 }, { x: 68, y: 16 }, { x: 86, y: 22 },
+            { x: 26, y: 34 }, { x: 50, y: 32 }, { x: 74, y: 38 }, { x: 14, y: 48 },
+            { x: 38, y: 52 }, { x: 62, y: 50 }, { x: 88, y: 54 }, { x: 24, y: 66 },
+            { x: 48, y: 68 }, { x: 76, y: 70 }, { x: 16, y: 82 }, { x: 36, y: 84 },
+            { x: 60, y: 86 }, { x: 84, y: 84 }, { x: 50, y: 94 }, { x: 70, y: 92 }
+        ];
+
+        function filterSpots() {
+            const input = document.getElementById('spotSearchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.spot-item');
+            items.forEach(item => {
+                const text = item.innerText.toLowerCase();
+                item.style.display = text.includes(input) ? 'flex' : 'none';
+            });
+        }
+
+        const mapData = {
+            'route-heidelberg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'S3 (45分钟)', class: 't-s' }, { station: 'Heidelberg Hbf', desc: '终点', end: true }],
+            'route-stuttgart': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h 10m)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '终点', end: true }],
+            'route-freiburg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE7 (1h 45m)', class: 't-re' }, { station: 'Freiburg Hbf', desc: '终点', end: true }],
+            'route-baden': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 / S7 (25分钟)', class: 't-re' }, { station: 'Baden-Baden', desc: '终点', end: true }],
+            'route-tuebingen': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '中转' }, { tag: 'IRE6 (1h)', class: 't-ire' }, { station: 'Tübingen Hbf', desc: '终点', end: true }],
+            'route-oberkochen': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Aalen Hbf', desc: '中转' }, { tag: 'RE50 / MEX13 (15分钟)', class: 't-re' }, { station: 'Oberkochen', desc: '终点', end: true }],
+            'route-konstanz': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 (3h 30m)', class: 't-re' }, { station: 'Konstanz', desc: '终点', end: true }],
+            'route-triberg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 (1h 45m)', class: 't-re' }, { station: 'Triberg', desc: '终点', end: true }],
+            'route-ulm': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '中转' }, { tag: 'RE9 (1h)', class: 't-re' }, { station: 'Ulm Hbf', desc: '终点', end: true }],
+            'route-mainz': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE4 SÜWEX (2h 05m)', class: 't-re' }, { station: 'Mainz Hbf', desc: '终点', end: true }],
+            'route-speyer': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE4 (45分钟)', class: 't-re' }, { station: 'Speyer Hbf', desc: '终点', end: true }],
+            'route-munich': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '中转' }, { tag: 'RE9 (1h)', class: 't-re' }, { station: 'Ulm Hbf', desc: '中转' }, { tag: 'RE9 (2h)', class: 't-re' }, { station: 'München Hbf', desc: '终点', end: true }],
+            'route-nurnberg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '中转' }, { tag: 'RE90 (2h 30m)', class: 't-re' }, { station: 'Nürnberg Hbf', desc: '终点', end: true }],
+            'route-lindau': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 (1h)', class: 't-ire' }, { station: 'Stuttgart Hbf', desc: '中转' }, { tag: 'RE9 (1h)', class: 't-re' }, { station: 'Ulm Hbf', desc: '中转' }, { tag: 'RE5 (1.5h)', class: 't-re' }, { station: 'Lindau-Insel', desc: '终点', end: true }],
+            'route-basel': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE7 (2h 30m)', class: 't-re' }, { station: 'Basel Bad Bf', desc: '终点 (🇨🇭边境有效站)', end: true }],
+            'route-schaffhausen': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 (2h)', class: 't-re' }, { station: 'Singen(Hohentwiel)', desc: '中转' }, { tag: 'IRE3 / S-Bahn (15分钟)', class: 't-s' }, { station: 'Schaffhausen', desc: '终点 (🇨🇭特许跨国有效)', end: true }],
+            'route-salzburg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 / RE9', class: 't-ire' }, { station: 'Ulm Hbf', desc: '中转' }, { tag: 'RE9', class: 't-re' }, { station: 'München Hbf', desc: '中转' }, { tag: 'BRB RE5 (2h)', class: 't-rb' }, { station: 'Salzburg Hbf', desc: '终点 (🇦🇹边境有效站)', end: true }],
+            'route-kufstein': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 / RE9', class: 't-ire' }, { station: 'München Hbf', desc: '中转' }, { tag: 'BRB RB54 (1h 15m)', class: 't-rb' }, { station: 'Kufstein', desc: '终点 (🇦🇹边境有效站)', end: true }],
+            'route-reutte': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'IRE1 / RE9', class: 't-ire' }, { station: 'Ulm Hbf', desc: '中转' }, { tag: 'RE75', class: 't-re' }, { station: 'Kempten(Allgäu)', desc: '中转' }, { tag: 'RB73 (Außerfernbahn)', class: 't-rb' }, { station: 'Reutte in Tirol', desc: '终点 (🇦🇹特许跨国)', end: true }],
+            'route-venlo': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE4', class: 't-re' }, { station: 'Mainz Hbf', desc: '中转' }, { tag: 'RE2', class: 't-re' }, { station: 'Koblenz Hbf', desc: '中转' }, { tag: 'RE8', class: 't-re' }, { station: 'Mönchengladbach Hbf', desc: '中转' }, { tag: 'RE13', class: 't-re' }, { station: 'Venlo', desc: '终点 (🇳🇱特许跨国)', end: true }],
+            'route-arnhem': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE4', class: 't-re' }, { station: 'Mainz Hbf', desc: '中转' }, { tag: 'RE2', class: 't-re' }, { station: 'Koblenz Hbf', desc: '中转' }, { tag: 'RE5', class: 't-re' }, { station: 'Düsseldorf Hbf', desc: '中转' }, { tag: 'RE19', class: 't-re' }, { station: 'Arnhem Centraal', desc: '终点 (🇳🇱特许跨国)', end: true }],
+            'route-wissembourg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RB51 (30分钟)', class: 't-rb' }, { station: 'Winden(Pfalz)', desc: '中转' }, { tag: 'RB53 (20分钟)', class: 't-rb' }, { station: 'Wissembourg', desc: '终点 (🇫🇷特许跨国)', end: true }],
+            'route-strasbourg': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE2 (35分钟)', class: 't-re' }, { station: 'Appenweier', desc: '中转' }, { tag: 'RB25 (15分钟)', class: 't-rb' }, { station: 'Kehl', desc: '🇩🇪最后有效站' }, { tag: 'Tram D (需单买法段票)', class: 't-other', dashed: true }, { station: 'Strasbourg (🇫🇷)', desc: '终点', end: true }],
+            'route-colmar': [{ station: 'Karlsruhe Hbf', desc: '始发' }, { tag: 'RE7 (1h 45m)', class: 't-re' }, { station: 'Freiburg Hbf', desc: '中转' }, { tag: 'S1 (30分钟)', class: 't-s' }, { station: 'Breisach', desc: '🇩🇪最后有效站' }, { tag: 'TER 大巴 (需单独购票)', class: 't-other', dashed: true }, { station: 'Colmar (🇫🇷)', desc: '终点', end: true }]
+        };
+
+        // ================= 24座城市全量游玩总库 (每城满血 20 景点) =================
+        const citySpotsDb = {
+            'heidelberg': [
+                { id: 'hd_1', name: '海德堡城堡', dur: '2小时', desc: '缆车登顶俯瞰全城与大酒桶', nav: 'Schloss Heidelberg', rest: 'Hackteufel (4.7★)' },
+                { id: 'hd_2', name: '老桥 Alte Brücke', dur: '45分钟', desc: '红砂岩拱桥与铜猴雕像', nav: 'Alte Brücke Heidelberg', rest: 'Schnitzelbank (4.7★)' },
+                { id: 'hd_3', name: '哲学家小径', dur: '1.5小时', desc: '半山步道对望城堡', nav: 'Philosophenweg Heidelberg', rest: 'Vetter\'s Alt Heidelberger Brauhaus (4.4★)' },
+                { id: 'hd_4', name: '学生监狱', dur: '30分钟', desc: '生动记录历史涂鸦的场所', nav: 'Studentenkarzer Heidelberg', rest: 'Zum Roten Ochsen (4.6★)' },
+                { id: 'hd_5', name: '集市广场与圣灵教堂', dur: '45分钟', desc: '老城心脏与市政厅', nav: 'Marktplatz Heidelberg', rest: 'Perkeo (4.5★)' },
+                { id: 'hd_6', name: '王座山 Königstuhl', dur: '1.5小时', desc: '齿轨缆车直通峰顶全景', nav: 'Königstuhl Heidelberg', rest: 'Berggasthof Königstuhl (4.3★)' },
+                { id: 'hd_7', name: '选帝侯博物馆', dur: '1小时', desc: '展示普法尔茨历史', nav: 'Kurpfälzisches Museum' },
+                { id: 'hd_8', name: '耶稣会教堂', dur: '30分钟', desc: '巴洛克式纯白内饰', nav: 'Jesuitenkirche Heidelberg' },
+                { id: 'hd_9', name: '圣山露天剧场 Thingstätte', dur: '1.5小时', desc: '森林深处壮观遗址', nav: 'Thingstätte Heidelberg' },
+                { id: 'hd_10', name: '海德堡动物园', dur: '2小时', desc: '内卡河畔现代动物园', nav: 'Zoo Heidelberg' },
+                { id: 'hd_11', name: '粮食广场 Kornmarkt', dur: '30分钟', desc: '仰望城堡绝佳机位', nav: 'Kornmarkt Heidelberg' },
+                { id: 'hd_12', name: '海德堡老大学', dur: '45分钟', desc: 'Alte Universität 古老学府', nav: 'Alte Universität Heidelberg' },
+                { id: 'hd_13', name: '大学图书馆 Bibliotheca Palatina', dur: '45分钟', desc: '红砂岩华丽建筑', nav: 'Universitätsbibliothek Heidelberg' },
+                { id: 'hd_14', name: '骑士之家 Haus zum Ritter', dur: '30分钟', desc: '文艺复兴幸存建筑', nav: 'Haus zum Ritter Heidelberg' },
+                { id: 'hd_15', name: '圣弥额尔修道院遗址', dur: '1小时', desc: '圣山顶峰中世纪废墟', nav: 'Michaelskloster Heidelberg' },
+                { id: 'hd_16', name: '内卡河漫步绿道', dur: '1小时', desc: 'Neckarwiese 阳光草坪', nav: 'Neckarwiese Heidelberg' },
+                { id: 'hd_17', name: '植物园 Botanischer Garten', dur: '1小时', desc: '药用植物与温室', nav: 'Botanischer Garten Heidelberg' },
+                { id: 'hd_18', name: '包装博物馆 Deutsches Verpackungs-Museum', dur: '45分钟', desc: '独特品牌历史展', nav: 'Deutsches Verpackungs-Museum' },
+                { id: 'hd_19', name: '卡尔门 Karlstor', dur: '30分钟', desc: '老城东侧凯旋门', nav: 'Karlstor Heidelberg' },
+                { id: 'hd_20', name: '纽堡修道院 Stift Neuburg', dur: '1.5小时', desc: '河畔古老有机农庄', nav: 'Stift Neuburg Heidelberg' }
+            ],
+            'stuttgart': [
+                { id: 'st_1', name: '保时捷博物馆', dur: '2.5小时', desc: '赛道基因与极速美学朝圣', nav: 'Porsche Museum Stuttgart', rest: 'Christophorus (4.6★)' },
+                { id: 'st_2', name: '奔驰博物馆', dur: '3小时', desc: '九层双螺旋展厅百年历史', nav: 'Mercedes-Benz Museum', rest: 'Bertha\'s Restaurant (4.5★)' },
+                { id: 'st_3', name: '王宫广场 Schlossplatz', dur: '1小时', desc: '市中心绿地与新王宫核心区', nav: 'Schlossplatz Stuttgart', rest: 'Carls Brauhaus (4.3★)' },
+                { id: 'st_4', name: '市立图书馆 Stadtbibliothek', dur: '45分钟', desc: '纯白极简主义建筑打卡', nav: 'Stadtbibliothek Stuttgart' },
+                { id: 'st_5', name: '斯图加特电视塔', dur: '1.5小时', desc: '首座钢筋混凝土电视塔', nav: 'Fernsehturm Stuttgart', rest: 'Leonhardts (4.4★)' },
+                { id: 'st_6', name: '威廉玛动植物园 Wilhelma', dur: '2.5小时', desc: '摩尔式皇家园林', nav: 'Wilhelma Stuttgart' },
+                { id: 'st_7', name: '州立美术馆 Staatsgalerie', dur: '2小时', desc: '经典与后现代建筑融合', nav: 'Staatsgalerie Stuttgart' },
+                { id: 'st_8', name: '基勒斯山公园 Höhenpark', dur: '1.5小时', desc: '乘小火车与赏花绿洲', nav: 'Höhenpark Killesberg' },
+                { id: 'st_9', name: '市场大厅 Markthalle', dur: '45分钟', desc: '新艺术运动风格集市', nav: 'Markthalle Stuttgart', rest: 'Empore (4.5★)' },
+                { id: 'st_10', name: '路德维希堡王宫', dur: '3小时', desc: '德国最大巴洛克宫殿之一', nav: 'Residenzschloss Ludwigsburg' },
+                { id: 'st_11', name: '魏森霍夫住宅区', dur: '1小时', desc: '柯布西耶现代建筑群', nav: 'Weissenhofsiedlung' },
+                { id: 'st_12', name: '孤独城堡 Schloss Solitude', dur: '2小时', desc: '绝美洛可可山顶宫殿', nav: 'Schloss Solitude' },
+                { id: 'st_13', name: '老王宫与符腾堡州立博物馆', dur: '1.5小时', desc: '中世纪内庭古堡', nav: 'Landesmuseum Württemberg' },
+                { id: 'st_14', name: '圣约翰教堂 Johanneskirche', dur: '45分钟', desc: '火湖畔哥特水上教堂', nav: 'Johanneskirche Stuttgart' },
+                { id: 'st_15', name: '梅肯湖 Max-Eyth-See', dur: '2小时', desc: '内卡河畔帆船绿地', nav: 'Max-Eyth-See' },
+                { id: 'st_16', name: '尤金广场 Eugensplatz', dur: '45分钟', desc: '俯瞰全城与吃冰淇淋', nav: 'Eugensplatz Stuttgart' },
+                { id: 'st_17', name: '符腾堡山陵墓教堂', dur: '1.5小时', desc: '葡萄园深处俄式罗曼蒂克', nav: 'Grabkapelle auf dem Württemberg' },
+                { id: 'st_18', name: '霍恩海姆大学宫殿花园', dur: '2小时', desc: '古老农业学府植物园', nav: 'Schloss Hohenheim' },
+                { id: 'st_19', name: '王宫花园 Schlossgarten', dur: '1小时', desc: '连绵数公里的城市绿带', nav: 'Oberer Schlossgarten Stuttgart' },
+                { id: 'st_20', name: 'MHP 竞技场 (VfB 主场)', dur: '2小时', desc: '德甲现场与球场巡礼', nav: 'MHPArena Stuttgart' }
+            ],
+            'freiburg': [
+                { id: 'fb_1', name: '弗莱堡大教堂', dur: '1.5小时', desc: '德国最美哥特式红砂岩教堂', nav: 'Freiburg Münster', rest: 'Hausbrauerei Feierling (4.6★)' },
+                { id: 'fb_2', name: '老城水渠 Bächle', dur: '1小时', desc: '清澈引水渠步道', nav: 'Martinstor Freiburg', rest: 'Martin\'s Bräu (4.5★)' },
+                { id: 'fb_3', name: '奥古斯丁博物馆', dur: '1.5小时', desc: '修道院改造的艺术宝库', nav: 'Augustinermuseum Freiburg' },
+                { id: 'fb_4', name: '城堡山缆车 Schlossberg', dur: '1.5小时', desc: '登顶俯瞰黑森林门户', nav: 'Schlossbergbahn Freiburg', rest: 'Dattler (4.5★)' },
+                { id: 'fb_5', name: '施瓦本门 Schwabentor', dur: '30分钟', desc: '保存完好的中世纪城门', nav: 'Schwabentor Freiburg' },
+                { id: 'fb_6', name: '哥伦比城堡 Colombischlössle', dur: '1小时', desc: '新哥特式考古博物馆', nav: 'Archäologisches Museum Colombischlössle' },
+                { id: 'fb_7', name: '湖滨公园 Seepark', dur: '1.5小时', desc: '大湖绿地与日本花园', nav: 'Seepark Freiburg' },
+                { id: 'fb_8', name: '大学植物园', dur: '1小时', desc: '丰富的温室植物群', nav: 'Botanischer Garten Freiburg' },
+                { id: 'fb_9', name: '德赖萨姆河滨步道 Dreisam', dur: '1小时', desc: '绿意沿河散步道', nav: 'Dreisam Freiburg' },
+                { id: 'fb_10', name: '绍因斯兰缆车 Schauinsland', dur: '3小时', desc: '直达1284米黑森林高峰', nav: 'Schauinslandbahn' },
+                { id: 'fb_11', name: '历史商馆 Historisches Kaufhaus', dur: '30分钟', desc: '深红外墙雕塑立面', nav: 'Historisches Kaufhaus Freiburg' },
+                { id: 'fb_12', name: '蒙登霍夫自然动物园 Mundenhof', dur: '2.5小时', desc: '欧洲大型生态农场', nav: 'Mundenhof' },
+                { id: 'fb_13', name: '马丁门 Martinstor', dur: '30分钟', desc: '第一座老城古城门', nav: 'Martinstor' },
+                { id: 'fb_14', name: '市政厅广场与新旧市政厅', dur: '45分钟', desc: '双市政厅连体建筑', nav: 'Rathausplatz Freiburg' },
+                { id: 'fb_15', name: '鲸鱼屋 Haus zum Walfisch', dur: '30分钟', desc: '伊拉斯谟曾居晚期哥特宅', nav: 'Haus zum Walfisch Freiburg' },
+                { id: 'fb_16', name: '城市历史博物馆 Wentzingerhaus', dur: '1小时', desc: '大教堂广场巴洛克宅邸', nav: 'Museum für Stadtgeschichte Freiburg' },
+                { id: 'fb_17', name: '现代艺术博物馆 Museum für Neue Kunst', dur: '1.5小时', desc: '二十世纪表现主义展', nav: 'Museum für Neue Kunst Freiburg' },
+                { id: 'fb_18', name: '阿尔特-西纳戈格广场', dur: '45分钟', desc: 'Platz der Alten Synagoge', nav: 'Platz der Alten Synagoge' },
+                { id: 'fb_19', name: '沃邦环保生态区 Quartier Vauban', dur: '1.5小时', desc: '世界知名低碳可持续社区', nav: 'Quartier Vauban' },
+                { id: 'fb_20', name: '瓦尔德塞湖 Waldsee', dur: '1.5小时', desc: '森林包围的宁静划船湖', nav: 'Waldsee Freiburg' }
+            ],
+            'baden': [
+                { id: 'bad_1', name: '百年赌场 Casino', dur: '1.5小时', desc: '欧洲最华丽古典赌场', nav: 'Casino Baden-Baden', rest: 'Rizzi (4.4★)' },
+                { id: 'bad_2', name: '饮泉厅 Trinkhalle', dur: '45分钟', desc: '壮丽柱廊与神话壁画', nav: 'Trinkhalle Baden-Baden' },
+                { id: 'bad_3', name: '里希滕塔尔林荫大道', dur: '1小时', desc: '世界知名皇家园林', nav: 'Lichtentaler Allee' },
+                { id: 'bad_4', name: '卡拉卡拉浴场 Caracalla', dur: '3小时', desc: '现代黑森林顶级天然温泉', nav: 'Caracalla Therme' },
+                { id: 'bad_5', name: '腓特烈浴池 Friedrichsbad', dur: '3小时', desc: '罗马爱尔兰式沐浴殿堂', nav: 'Friedrichsbad Baden-Baden' },
+                { id: 'bad_6', name: '布尔达现代艺术馆 Burda', dur: '1.5小时', desc: '通透纯白艺术地标', nav: 'Museum Frieder Burda' },
+                { id: 'bad_7', name: '默克尔山缆车 Merkur', dur: '2小时', desc: '极陡缆车直登山顶', nav: 'Merkurbergbahn Baden-Baden' },
+                { id: 'bad_8', name: '巴登老城堡遗址 Hohenbaden', dur: '2小时', desc: '中世纪悬崖城堡遗迹', nav: 'Schloss Hohenbaden' },
+                { id: 'bad_9', name: '玫瑰园 Beutig', dur: '1小时', desc: '俯瞰全城国际玫瑰园', nav: 'Rosenneuheitengarten Beutig' },
+                { id: 'bad_10', name: '格罗尔茨奥瀑布', dur: '2小时', desc: '杜鹃花峡谷瀑布', nav: 'Geroldsauer Wasserfall' },
+                { id: 'bad_11', name: '节日剧院 Festspielhaus', dur: '1小时', desc: '德国最大歌剧院', nav: 'Festspielhaus Baden-Baden' },
+                { id: 'bad_12', name: '法贝热珠宝博物馆', dur: '1.5小时', desc: '沙皇彩蛋艺术展', nav: 'Fabergé Museum' },
+                { id: 'bad_13', name: '新城堡 Neues Schloss', dur: '1小时', desc: '大公爵宫殿外观与露台', nav: 'Neues Schloss Baden-Baden' },
+                { id: 'bad_14', name: '修道院教堂 Stiftskirche', dur: '45分钟', desc: '罗曼式大钟楼古教堂', nav: 'Stiftskirche Baden-Baden' },
+                { id: 'bad_15', name: '巴登-巴登城市博物馆', dur: '1.5小时', desc: '罗马温泉浴场历史展', nav: 'Stadtmuseum Baden-Baden' },
+                { id: 'bad_16', name: '勃拉姆斯故居 Brahms-Haus', dur: '1小时', desc: '音乐大师夏日创作室', nav: 'Brahmshaus Baden-Baden' },
+                { id: 'bad_17', name: '巴蒂斯城堡 Yburg', dur: '2小时', desc: '葡萄园山头古老废墟', nav: 'Yburg Baden-Baden' },
+                { id: 'bad_18', name: '国家艺术馆 Staatliche Kunsthalle', dur: '1.5小时', desc: '现当代前沿展览', nav: 'Staatliche Kunsthalle Baden-Baden' },
+                { id: 'bad_19', name: '贡纳尔广场 Augustaplatz', dur: '30分钟', desc: '花钟与大喷泉广场', nav: 'Augustaplatz Baden-Baden' },
+                { id: 'bad_20', name: '里希滕塔尔修道院 Kloster', dur: '1.5小时', desc: '西多会七百年修道院', nav: 'Kloster Lichtenthal' }
+            ],
+            'tuebingen': [
+                { id: 'tue_1', name: '内卡河木船 Stocherkahn', dur: '1.5小时', desc: '撑篙木船游览水域', nav: 'Neckarinsel Tübingen', rest: 'Neckarmüller (4.4★)' },
+                { id: 'tue_2', name: '荷尔德林塔 Hölderlinturm', dur: '45分钟', desc: '诗人晚年居所', nav: 'Hölderlinturm Tübingen' },
+                { id: 'tue_3', name: '集市广场与市政厅', dur: '1小时', desc: '十五世纪彩绘建筑', nav: 'Marktplatz Tübingen', rest: 'Wurstküche (4.5★)' },
+                { id: 'tue_4', name: '霍亨图宾根城堡', dur: '1.5小时', desc: '俯瞰全城古老大学博物馆', nav: 'Schloss Hohentübingen' },
+                { id: 'tue_5', name: '圣乔治学院教堂 Stiftskirche', dur: '45分钟', desc: '大公长眠所与钟楼', nav: 'Stiftskirche Tübingen' },
+                { id: 'tue_6', name: '大学旧植物园', dur: '45分钟', desc: '市中心绿意公园', nav: 'Alter Botanischer Garten Tübingen' },
+                { id: 'tue_7', name: '新大学植物园', dur: '1.5小时', desc: '亚热带高山温室群', nav: 'Botanischer Garten Tübingen' },
+                { id: 'tue_8', name: '阿默尔运河小巷 Ammergasse', dur: '1小时', desc: '古朴浪漫运河石桥', nav: 'Ammergasse Tübingen' },
+                { id: 'tue_9', name: '图宾根艺术馆 Kunsthalle', dur: '1.5小时', desc: '国际级当代艺术展', nav: 'Kunsthalle Tübingen' },
+                { id: 'tue_10', name: '贝本豪森修道院 Bebenhausen', dur: '2.5小时', desc: '森林深处古修道院', nav: 'Kloster Bebenhausen' },
+                { id: 'tue_11', name: '城市博物馆 Stadtmuseum', dur: '1小时', desc: '剪影与木偶剧文化展', nav: 'Stadtmuseum Tübingen' },
+                { id: 'tue_12', name: '齐默尔剧院 Zimmertheater', dur: '30分钟', desc: '老城独特河畔剧场', nav: 'Zimmertheater Tübingen' },
+                { id: 'tue_13', name: '普拉塔嫩林荫道 Platanenallee', dur: '45分钟', desc: '内卡岛两百年悬铃木', nav: 'Platanenallee Tübingen' },
+                { id: 'tue_14', name: '黑格尔故居纪念牌', dur: '30分钟', desc: '图宾根神学院历史地', nav: 'Tübinger Stift' },
+                { id: 'tue_15', name: '厄斯特贝格观景台 Österberg', dur: '1.5小时', desc: '俯瞰全城与施瓦本汝拉山', nav: 'Österberg Tübingen' },
+                { id: 'tue_16', name: '古生物学博物馆 MUT', dur: '1.5小时', desc: '恐龙骨架与鱼龙化石', nav: 'Paläontologische Sammlung Tübingen' },
+                { id: 'tue_17', name: '木匠工坊水闸 Haagtor', dur: '30分钟', desc: '老城西部护城河遗迹', nav: 'Haagtor Tübingen' },
+                { id: 'tue_18', name: '开普勒故居遗迹', dur: '30分钟', desc: '天文学先驱求学地', nav: 'Kepler Gymnasium Tübingen' },
+                { id: 'tue_19', name: '楚岑豪森宫殿 Schloss Kressbach', dur: '2小时', desc: '郊野庄园与高尔夫绿地', nav: 'Schloss Kressbach' },
+                { id: 'tue_20', name: '黑森林边界肖恩布赫自然公园', dur: '3小时', desc: 'Schönbuch 森林远足', nav: 'Naturpark Schönbuch' }
+            ],
+            'oberkochen': [
+                { id: 'ob_1', name: '蔡司光学博物馆 Zeiss Museum', dur: '2.5小时', desc: '硬核EUV极紫外光刻透镜', nav: 'Zeiss Museum der Optik', rest: 'Gasthof Pflug (4.6★)' },
+                { id: 'ob_2', name: '科赫尔河源头 Kocherursprung', dur: '1小时', desc: '喀斯特清澈泉水景观', nav: 'Kocherursprung Oberkochen' },
+                { id: 'ob_3', name: '福尔克马斯山 Volkmarsberg', dur: '2小时', desc: '高地与观景塔远足', nav: 'Volkmarsberg Oberkochen' },
+                { id: 'ob_4', name: '罗德施泰因岩 Rodstein', dur: '1.5小时', desc: '白垩纪石灰岩崖壁', nav: 'Rodstein Oberkochen' },
+                { id: 'ob_5', name: '阿伦古罗马石墙界博物馆', dur: '2小时', desc: '古罗马骑兵堡垒遗址', nav: 'Limesmuseum Aalen' },
+                { id: 'ob_6', name: '深井访客矿山 Tiefer Stollen', dur: '2小时', desc: '小火车深入地下铁矿', nav: 'Besucherbergwerk Tiefer Stollen' },
+                { id: 'ob_7', name: '阿伦观景塔 Aalbäumle', dur: '1.5小时', desc: '俯瞰施瓦本汝拉山脉', nav: 'Aalbäumle Aalen' },
+                { id: 'ob_8', name: '史前世界博物馆 Urweltmuseum', dur: '1.5小时', desc: '侏罗纪菊石与化石', nav: 'Urweltmuseum Aalen' },
+                { id: 'ob_9', name: '法赫森费尔德城堡', dur: '2小时', desc: '先驱庄园生态公园', nav: 'Schloss Fachsenfeld' },
+                { id: 'ob_10', name: '卡普芬堡城堡 Kapfenburg', dur: '2.5小时', desc: '条顿骑士团中世纪古堡', nav: 'Schloss Kapfenburg' },
+                { id: 'ob_11', name: '布伦茨河源头 Brenzursprung', dur: '1小时', desc: '清澈水源地水车', nav: 'Brenzursprung' },
+                { id: 'ob_12', name: '阿伦罗马风温泉 Limes-Thermen', dur: '2.5小时', desc: '全景山丘矿物温泉', nav: 'Limes-Thermen Aalen' },
+                { id: 'ob_13', name: '天球观象台 Sternwarte', dur: '1.5小时', desc: '天文科普观测台', nav: 'Sternwarte Oberkochen' },
+                { id: 'ob_14', name: '格洛茨谷森林步道 Grotztal', dur: '1.5小时', desc: '清幽冷杉溪谷漫步', nav: 'Grotztal Oberkochen' },
+                { id: 'ob_15', name: '奥伯科亨圣彼得与保罗教堂', dur: '30分钟', desc: '现代与历史融合建筑', nav: 'St. Peter und Paul Oberkochen' },
+                { id: 'ob_16', name: '赫伦谷水库 Stausee', dur: '1.5小时', desc: '高地静水野餐区', nav: 'Stausee Aalen' },
+                { id: 'ob_17', name: '内雷斯海姆本笃会修道院', dur: '2.5小时', desc: '巴特萨·诺伊曼晚期巨作', nav: 'Abtei Neresheim' },
+                { id: 'ob_18', name: '霍亨雷夏茨古堡废墟', dur: '2小时', desc: 'Burgruine Hohenrechberg', nav: 'Burg Hohenrechberg' },
+                { id: 'ob_19', name: '哈赫塔高地崖 Härtsfeld', dur: '2小时', desc: '石灰岩干谷奇景', nav: 'Härtsfeld' },
+                { id: 'ob_20', name: '夏岑贝格滑雪与徒步山', dur: '2小时', desc: '冬季越野与夏季滑道', nav: 'Skilift Oberkochen' }
+            ],
+            'konstanz': [
+                { id: 'kn_1', name: '因佩利亚雕像 Imperia', dur: '45分钟', desc: '港口地标旋转雕像', nav: 'Imperia Konstanz', rest: 'Hafen Halle (4.3★)' },
+                { id: 'kn_2', name: '梅瑙花岛 Mainau', dur: '3.5小时', desc: '博登湖地中海花卉奇观', nav: 'Insel Mainau' },
+                { id: 'kn_3', name: '康斯坦茨大教堂', dur: '1小时', desc: '千年历史大教堂登顶', nav: 'Konstanzer Münster', rest: 'Brauhaus Johann Albrecht (4.4★)' },
+                { id: 'kn_4', name: '尼德堡老城区 Niederburg', dur: '1.5小时', desc: '古老狭窄巷弄与酒馆', nav: 'Niederburg Konstanz' },
+                { id: 'kn_5', name: '玫瑰园博物馆 Rosgarten', dur: '1.5小时', desc: '区域艺术与手工业史', nav: 'Rosgartenmuseum Konstanz' },
+                { id: 'kn_6', name: '博登湖水族馆 SEA LIFE', dur: '1.5小时', desc: '淡海水水生生物展览', nav: 'SEA LIFE Konstanz' },
+                { id: 'kn_7', name: '博登湖温泉 Therme', dur: '2.5小时', desc: '雪山湖景顶级室外温泉', nav: 'Bodensee-Therme Konstanz' },
+                { id: 'kn_8', name: '旧莱茵河大桥', dur: '30分钟', desc: '莱茵河流出博登湖起点', nav: 'Alte Rheinbrücke Konstanz' },
+                { id: 'kn_9', name: '赖谢瑙蔬菜修道院岛 Reichenau', dur: '3小时', desc: '世界遗产三座古修道院', nav: 'Insel Reichenau' },
+                { id: 'kn_10', name: '克鲁林根湖滨公园 (瑞士)', dur: '1.5小时', desc: '跨过边境即达的城堡公园', nav: 'Seeburgpark Kreuzlingen' },
+                { id: 'kn_11', name: '州立考古博物馆 ALM', dur: '1.5小时', desc: '博登湖史前水上木屋展', nav: 'Archäologisches Landesmuseum Konstanz' },
+                { id: 'kn_12', name: '莱茵门塔 Rheintorturm', dur: '45分钟', desc: '古城门与桥头要塞', nav: 'Rheintorturm Konstanz' },
+                { id: 'kn_13', name: '胡斯博物馆 Hus-Haus', dur: '1小时', desc: '宗教改革先驱被焚纪念地', nav: 'Hus-Museum Konstanz' },
+                { id: 'kn_14', name: '康斯坦茨大公会议大厦', dur: '45分钟', desc: '1414年教皇选举古建筑', nav: 'Konzilgebäude Konstanz' },
+                { id: 'kn_15', name: '施纳茨门 Schnetztor', dur: '30分钟', desc: '保存完好彩绘半木城楼', nav: 'Schnetztor Konstanz' },
+                { id: 'kn_16', name: '海滨浴场 Hörnle', dur: '2小时', desc: '全城最大露天草坪湖水浴', nav: 'Strandbad Hörnle' },
+                { id: 'kn_17', name: '大学植物园 Botanischer Garten', dur: '1小时', desc: '山顶现代大学生态园', nav: 'Botanischer Garten Universität Konstanz' },
+                { id: 'kn_18', name: '俾斯麦塔 Bismarckturm', dur: '1小时', desc: '俯瞰博登湖全景石塔', nav: 'Bismarckturm Konstanz' },
+                { id: 'kn_19', name: '沃灵根自然保护区 Wollmatinger Ried', dur: '2.5小时', desc: '欧洲顶级水鸟湿地', nav: 'Wollmatinger Ried' },
+                { id: 'kn_20', name: '博登湖跨国渡轮码头', dur: '1.5小时', desc: '乘船直达梅尔斯堡', nav: 'Fähre Konstanz-Meersburg' }
+            ],
+            'triberg': [
+                { id: 'tri_1', name: '特里贝格瀑布', dur: '2小时', desc: '163米落差七级瀑布', nav: 'Triberger Wasserfälle', rest: 'Tresores (4.5★)' },
+                { id: 'tri_2', name: '黑森林博物馆', dur: '1.5小时', desc: '欧洲最大自动乐器展', nav: 'Schwarzwaldmuseum Triberg' },
+                { id: 'tri_3', name: '世界最大布谷鸟钟 Eble', dur: '1小时', desc: '房屋比例机械钟奇观', nav: 'Weltgrößte Kuckucksuhr Eble' },
+                { id: 'tri_4', name: '千钟之屋 Haus der 1000 Uhren', dur: '45分钟', desc: '传统手工布谷鸟钟店', nav: 'Haus der 1000 Uhren' },
+                { id: 'tri_5', name: '枞树圣母朝圣教堂', dur: '45分钟', desc: '森林溪旁巴洛克朝圣地', nav: 'Maria in der Tanne Triberg' },
+                { id: 'tri_6', name: '市政厅木雕会议室', dur: '30分钟', desc: '精美全木雕阿尔卑斯厅', nav: 'Rathaus Triberg' },
+                { id: 'tri_7', name: '山湖漫步道 Bergsee', dur: '1小时', desc: '高山天然幽静小湖', nav: 'Bergsee Triberg', rest: 'Bergseestüble (4.6★)' },
+                { id: 'tri_8', name: '猛禽公园 Greifvogelpark', dur: '1.5小时', desc: '鹰隼空中飞行展示', nav: 'Greifvogelpark Triberg' },
+                { id: 'tri_9', name: '黑森林铁路双环观景点', dur: '1.5小时', desc: '俯瞰隧道列车转弯', nav: 'Schwarzwaldbahn Erlebnispfad' },
+                { id: 'tri_10', name: '施特克勒瓦尔德观景塔', dur: '2小时', desc: '海拔1069米远眺雪山', nav: 'Stöcklewaldturm' },
+                { id: 'tri_11', name: '盲湖高山沼泽 Blindensee', dur: '2小时', desc: '神秘的高山自然湿地', nav: 'Blindensee' },
+                { id: 'tri_12', name: '木雕工艺作坊街', dur: '1小时', desc: '传统木雕现场手作', nav: 'Triberg Holz' },
+                { id: 'tri_13', name: '古斯塔夫·艾菲尔铁路桥遗迹', dur: '1小时', desc: '历史工业遗产铁桥', nav: 'Gutachtalbrücke' },
+                { id: 'tri_14', name: '黑森林梦幻火车乐园', dur: '1.5小时', desc: 'Triberg-Land 微缩模型世界', nav: 'Triberg-Land' },
+                { id: 'tri_15', name: '胡贝尔岩 Huberfelsen', dur: '2小时', desc: '俯瞰埃尔扎赫山谷险峻巨石', nav: 'Huberfelsen' },
+                { id: 'tri_16', name: '古塔赫露天民俗博览园', dur: '3小时', desc: 'Vogtsbauernhof 农庄历史', nav: 'Schwarzwälder Freilichtmuseum Vogtsbauernhof' },
+                { id: 'tri_17', name: '索莫罗德高山滑车', dur: '1.5小时', desc: 'Sommerrodelbahn 轨道极速飞驰', nav: 'Sommerrodelbahn Gutach' },
+                { id: 'tri_18', name: '莱恩伯格古堡废墟', dur: '2小时', desc: 'Burgruine Althornberg', nav: 'Burg Althornberg' },
+                { id: 'tri_19', name: '舍恩瓦尔德滑雪胜地', dur: '2.5小时', desc: '布谷鸟钟起源村庄', nav: 'Schonach im Schwarzwald' },
+                { id: 'tri_20', name: '布里加赫河源头', dur: '1.5小时', desc: '多瑙河两条源流之一', nav: 'Brigachursprung' }
+            ],
+            'ulm': [
+                { id: 'ul_1', name: '乌尔姆大教堂 Ulmer Münster', dur: '2小时', desc: '登顶161.5米世界最高塔楼', nav: 'Ulmer Münster', rest: 'Barfüßer (4.4★)' },
+                { id: 'ul_2', name: '渔人区 Fischerviertel', dur: '1.5小时', desc: '浪漫中世纪水巷木屋', nav: 'Fischerviertel Ulm', rest: 'Zur Forelle (4.6★)' },
+                { id: 'ul_3', name: '倾斜的房屋 Schiefes Haus', dur: '30分钟', desc: '吉尼斯纪录倾斜古建筑', nav: 'Schiefes Haus Ulm' },
+                { id: 'ul_4', name: '多瑙河滨绿道与城墙', dur: '1小时', desc: '眺望新旧城区水岸', nav: 'Donauufer Ulm' },
+                { id: 'ul_5', name: '维布林根修道院 Wiblingen', dur: '2小时', desc: '巴洛克洛可可黄金图书馆', nav: 'Kloster Wiblingen' },
+                { id: 'ul_6', name: '爱因斯坦纪念雕像与喷泉', dur: '30分钟', desc: '物理巨匠出生地地标', nav: 'Einsteinbrunnen Ulm' },
+                { id: 'ul_7', name: '屠夫塔 Metzgerturm', dur: '30分钟', desc: '“乌尔姆斜塔”古防御塔', nav: 'Metzgerturm Ulm' },
+                { id: 'ul_8', name: '乌尔姆博物馆 Museum Ulm', dur: '1.5小时', desc: '四万年前象牙狮人雕像', nav: 'Museum Ulm' },
+                { id: 'ul_9', name: '魏斯豪普特艺术馆', dur: '1.5小时', desc: '当代波普与现代艺术', nav: 'kunsthalle weishaupt' },
+                { id: 'ul_10', name: '威廉斯堡联邦堡垒', dur: '2小时', desc: '欧洲最大军事堡垒群', nav: 'Wilhelmsburg Ulm' },
+                { id: 'ul_11', name: '鹅塔 Gänsturm', dur: '30分钟', desc: '中世纪古城墙塔楼', nav: 'Gänsturm Ulm' },
+                { id: 'ul_12', name: '乌尔姆动物园 Tiergarten', dur: '1.5小时', desc: '多瑙河畔生态水族馆', nav: 'Tiergarten Ulm' },
+                { id: 'ul_13', name: '誓言屋 Schwörhaus', dur: '30分钟', desc: '市长年度宣誓历史阳台', nav: 'Schwörhaus Ulm' },
+                { id: 'ul_14', name: '新市政厅 Stadthaus Ulm', dur: '45分钟', desc: '理查德·迈耶设计的白色地标', nav: 'Stadthaus Ulm' },
+                { id: 'ul_15', name: '面包文化博物馆 Forum Baker', dur: '1.5小时', desc: '人类农业与粮食文明展', nav: 'Museum Brot und Kunst' },
+                { id: 'ul_16', name: '植物园 Botanischer Garten', dur: '1.5小时', desc: '乌尔姆大学高地药用园', nav: 'Botanischer Garten Ulm' },
+                { id: 'ul_17', name: '腓特烈公园 Friedrichsau', dur: '1.5小时', desc: '多瑙河畔广阔绿肺啤酒园', nav: 'Friedrichsau Ulm' },
+                { id: 'ul_18', name: '新乌尔姆彼得斯沃特公园', dur: '1小时', desc: '隔多瑙河对望大教堂剪影', nav: 'Petruspark Neu-Ulm' },
+                { id: 'ul_19', name: '克罗伊茨堡全景露台', dur: '1.5小时', desc: '俯瞰整座双子城全景', nav: 'Kreuzberg Ulm' },
+                { id: 'ul_20', name: '艾兴多夫观景步道', dur: '2小时', desc: '阿尔卑斯群峰远眺远足', nav: 'Eichendorffweg Ulm' }
+            ],
+            'mainz': [
+                { id: 'mz_1', name: '古腾堡博物馆', dur: '2小时', desc: '印刷术发明地圣经真迹', nav: 'Gutenberg Museum Mainz', rest: 'Augustinerkeller (4.6★)' },
+                { id: 'mz_2', name: '美因茨大教堂 Mainzer Dom', dur: '1.5小时', desc: '红色砂岩六塔大教堂', nav: 'Mainzer Dom' },
+                { id: 'mz_3', name: '圣斯蒂芬教堂 St. Stephan', dur: '45分钟', desc: '夏加尔深蓝梦幻彩绘玻璃', nav: 'St. Stephan Mainz' },
+                { id: 'mz_4', name: '古罗马露天剧场遗址', dur: '1小时', desc: '阿尔卑斯以北最大剧院', nav: 'Römisches Theater Mainz' },
+                { id: 'mz_5', name: '美因茨要塞 Zitadelle', dur: '1.5小时', desc: '星形巴洛克军事要塞', nav: 'Zitadelle Mainz' },
+                { id: 'mz_6', name: '选帝侯宫殿', dur: '1小时', desc: '德国文艺复兴建筑典范', nav: 'Kurfürstliches Schloss Mainz' },
+                { id: 'mz_7', name: '莱茵河滨大道 Rheinufer', dur: '1小时', desc: '沿河散步与啤酒花园', nav: 'Rheinufer Mainz', rest: 'Eisgrub-Bräu (4.3★)' },
+                { id: 'mz_8', name: '樱桃园广场 Kirschgarten', dur: '45分钟', desc: '最美半木结构古民居街', nav: 'Kirschgarten Mainz' },
+                { id: 'mz_9', name: '狂欢节喷泉 Fastnachtsbrunnen', dur: '30分钟', desc: '两百尊铜像狂欢文化缩影', nav: 'Fastnachtsbrunnen Mainz' },
+                { id: 'mz_10', name: '古代航海博物馆', dur: '1.5小时', desc: '古罗马战舰复原展', nav: 'Museum für Antike Schifffahrt' },
+                { id: 'mz_11', name: '自然历史博物馆 nhm', dur: '1.5小时', desc: '珍稀动植物化石标本', nav: 'Naturhistorisches Museum Mainz' },
+                { id: 'mz_12', name: '席勒广场 Schillerplatz', dur: '45分钟', desc: '历史雕像与名品商圈', nav: 'Schillerplatz Mainz' },
+                { id: 'mz_13', name: '德鲁苏斯纪念碑 Drususstein', dur: '30分钟', desc: '古罗马军团统帅纪念冢', nav: 'Drususstein' },
+                { id: 'mz_14', name: '圣伊格纳茨教堂 St. Ignaz', dur: '45分钟', desc: '古典主义外饰天主教名刹', nav: 'St. Ignaz Mainz' },
+                { id: 'mz_15', name: '伊希斯神庙遗迹 Isis', dur: '1小时', desc: '地底发掘的古罗马埃及神庙', nav: 'Heiligtum der Isis und Mater Magna' },
+                { id: 'mz_16', name: '州立博物馆 Landesmuseum', dur: '2小时', desc: '古罗马石碑与中世纪绘画', nav: 'Landesmuseum Mainz' },
+                { id: 'mz_17', name: '大市场广场 Markt', dur: '45分钟', desc: '每周三次传统生鲜市集', nav: 'Markt Mainz' },
+                { id: 'mz_18', name: '城市公园 Stadtpark', dur: '1.5小时', desc: '火烈鸟池与玫瑰园绿肺', nav: 'Stadtpark Mainz' },
+                { id: 'mz_19', name: '莱茵黄金大厅 Rheingoldhalle', dur: '30分钟', desc: '现代会议与艺术中心', nav: 'Rheingoldhalle Mainz' },
+                { id: 'mz_20', name: '卡斯特尔罗马水渠遗迹', dur: '1.5小时', desc: 'Römersteine 水利工程遗迹', nav: 'Römersteine Mainz' }
+            ],
+            'speyer': [
+                { id: 'sp_1', name: '施派尔帝国大教堂 Dom', dur: '2小时', desc: '世界遗产罗曼式皇帝陵寝', nav: 'Speyerer Dom', rest: 'Domhof (4.5★)' },
+                { id: 'sp_2', name: '施派尔技术博物馆', dur: '3.5小时', desc: '暴风雪号航天飞机与波音747', nav: 'Technik Museum Speyer' },
+                { id: 'sp_3', name: '普法尔茨历史博物馆', dur: '2小时', desc: '青铜时代黄金帽子真品', nav: 'Historisches Museum der Pfalz' },
+                { id: 'sp_4', name: '老城门 Altpörtel', dur: '45分钟', desc: '55米中世纪最高雄伟城门', nav: 'Altpörtel Speyer' },
+                { id: 'sp_5', name: '纪念教堂 Gedächtniskirche', dur: '45分钟', desc: '抗议宗发源纪念高耸哥特', nav: 'Gedächtniskirche Speyer' },
+                { id: 'sp_6', name: '犹太庭院遗址 Judenhof', dur: '1小时', desc: '最古老12世纪仪式沐浴池', nav: 'Judenhof Speyer' },
+                { id: 'sp_7', name: '三位一体教堂', dur: '45分钟', desc: '惊艳巴洛克木雕内饰', nav: 'Dreifaltigkeitskirche Speyer' },
+                { id: 'sp_8', name: '水族馆 SEA LIFE Speyer', dur: '1.5小时', desc: '海底隧道直达热带海洋', nav: 'SEA LIFE Speyer' },
+                { id: 'sp_9', name: '莱茵河滨大道 Rheinufer', dur: '1小时', desc: '内河驳船与啤酒花园', nav: 'Rheinufer Speyer', rest: 'Alter Hammer (4.6★)' },
+                { id: 'sp_10', name: '阿登纳公园 Adenauerpark', dur: '45分钟', desc: '古树雕塑历史纪念园林', nav: 'Adenauerpark Speyer' },
+                { id: 'sp_11', name: '马克西米利安大街', dur: '1小时', desc: '核心商业步行街与露天座', nav: 'Maximilianstraße Speyer' },
+                { id: 'sp_12', name: '历史市政厅 Historisches Rathaus', dur: '30分钟', desc: '洛可可风格华丽议事厅', nav: 'Historisches Rathaus Speyer' },
+                { id: 'sp_13', name: '圣约瑟夫教堂 St. Joseph', dur: '45分钟', desc: '普法尔茨最大天主教双塔堂', nav: 'St. Joseph Speyer' },
+                { id: 'sp_14', name: '主教宫殿遗迹 Antikenhalle', dur: '30分钟', desc: '古典雕塑陈列走廊', nav: 'Antikenhalle Speyer' },
+                { id: 'sp_15', name: '海因里希·布灵油画馆', dur: '1小时', desc: 'Feuerbachhaus 故居', nav: 'Feuerbachhaus Speyer' },
+                { id: 'sp_16', name: '莱茵河滨自然湿地公园', dur: '1.5小时', desc: 'Rheinauen Speyer 森林漫步', nav: 'Rheinauen Speyer' },
+                { id: 'sp_17', name: '宾格尔胡夫古街', dur: '45分钟', desc: '中世纪葡萄酒储藏地窖街', nav: 'Binselhof Speyer' },
+                { id: 'sp_18', name: '普法尔茨福音派档案馆', dur: '45分钟', desc: '珍贵宗教改革文献馆', nav: 'Zentralarchiv der Evangelischen Kirche der Pfalz' },
+                { id: 'sp_19', name: '多姆纳普夫 Domnapf', dur: '15分钟', desc: '新主教就职盛酒巨石大盆', nav: 'Domnapf Speyer' },
+                { id: 'sp_20', name: '施派尔划船俱乐部旧运河', dur: '1小时', desc: '幽静水上皮划艇绿道', nav: 'Rudergesellschaft Speyer' }
+            ],
+            'munich': [
+                { id: 'mu_1', name: '宝马世界与博物馆 BMW Welt', dur: '2.5小时', desc: '宝马全系工业设计朝圣', nav: 'BMW Welt' },
+                { id: 'mu_2', name: '安联球场 Allianz Arena', dur: '2.5小时', desc: '拜仁慕尼黑主场巡礼', nav: 'Allianz Arena' },
+                { id: 'mu_3', name: '玛利亚广场 Marienplatz', dur: '1.5小时', desc: '新市政厅木偶钟与中心商圈', nav: 'Marienplatz München', rest: 'Hofbräuhaus (4.3★)' },
+                { id: 'mu_4', name: '英国花园 Englischer Garten', dur: '2小时', desc: '冰溪冲浪与中国塔啤酒园', nav: 'Englischer Garten München' },
+                { id: 'mu_5', name: '宁芬堡宫 Nymphenburg', dur: '2.5小时', desc: '国王夏季行宫与天鹅湖', nav: 'Schloss Nymphenburg' },
+                { id: 'mu_6', name: '德意志博物馆', dur: '3.5小时', desc: '最大自然科学工程博物馆', nav: 'Deutsches Museum' },
+                { id: 'mu_7', name: '谷物市场 Viktualienmarkt', dur: '1小时', desc: '百年露天美食小吃市集', nav: 'Viktualienmarkt' },
+                { id: 'mu_8', name: '慕尼黑王宫 Residenz', dur: '2.5小时', desc: '欧洲最壮观内陆宫殿群', nav: 'Residenz München' },
+                { id: 'mu_9', name: '奥林匹克公园 Olympiapark', dur: '1.5小时', desc: '索网屋顶建筑与观景塔', nav: 'Olympiapark München' },
+                { id: 'mu_10', name: '圣母教堂 Frauenkirche', dur: '45分钟', desc: '双洋葱圆顶与魔鬼脚印', nav: 'Frauenkirche München', rest: 'Augustiner-Keller (4.6★)' },
+                { id: 'mu_11', name: '老绘画陈列馆 Alte Pinakothek', dur: '2.5小时', desc: '达芬奇拉斐尔大师画廊', nav: 'Alte Pinakothek' },
+                { id: 'mu_12', name: '王宫花园 Hofgarten', dur: '1小时', desc: '绝美意式宫廷文艺复兴花园', nav: 'Hofgarten München' },
+                { id: 'mu_13', name: '铁阿提纳教堂 Theatinerkirche', dur: '45分钟', desc: '鲜黄巴洛克与高耸圆顶', nav: 'Theatinerkirche München' },
+                { id: 'mu_14', name: '卡尔广场 Karlsplatz (Stachus)', dur: '45分钟', desc: '老城大城门与喷泉起点', nav: 'Karlsplatz München' },
+                { id: 'mu_15', name: '圣伯多禄教堂 St. Peter (老彼得)', dur: '1小时', desc: '登顶俯瞰玛利亚广场绝佳位', nav: 'Kirche St. Peter München' },
+                { id: 'mu_16', name: '阿桑教堂 Asamkirche', dur: '30分钟', desc: '极致华丽晚期巴洛克杰作', nav: 'Asamkirche München' },
+                { id: 'mu_17', name: '海拉布伦动物园 Hellabrunn', dur: '3小时', desc: '世界首座地缘动物园', nav: 'Tierpark Hellabrunn' },
+                { id: 'mu_18', name: '现代艺术陈列馆 Pinakothek der Moderne', dur: '2小时', desc: '四大现代设计展览馆', nav: 'Pinakothek der Moderne' },
+                { id: 'mu_19', name: '统帅堂 Feldherrnhalle', dur: '30分钟', desc: '路德维希一世纪念拱廊', nav: 'Feldherrnhalle München' },
+                { id: 'mu_20', name: '伊萨尔河滩与森德灵门', dur: '1.5小时', desc: 'Isar 亲水鹅卵石沙滩', nav: 'Isarstrand München' }
+            ],
+            'nurnberg': [
+                { id: 'nb_1', name: '皇帝堡 Kaiserburg', dur: '2小时', desc: '神圣罗马帝国皇帝驻地', nav: 'Kaiserburg Nürnberg', rest: 'Bratwurst Röslein (4.4★)' },
+                { id: 'nb_2', name: '二战党代会遗址 Dokuzentrum', dur: '2.5小时', desc: '第三帝国巨型遗址反思展', nav: 'Dokumentationszentrum Reichsparteitagsgelände' },
+                { id: 'nb_3', name: '丢勒故居 Dürer-Haus', dur: '1.5小时', desc: '文艺复兴巨匠完好画室', nav: 'Albrecht-Dürer-Haus', rest: 'Albrecht Dürer Stube (4.7★)' },
+                { id: 'nb_4', name: '主集市广场与美泉', dur: '1小时', desc: '转动铜环许愿地标', nav: 'Hauptmarkt Nürnberg' },
+                { id: 'nb_5', name: '日耳曼国家博物馆', dur: '2.5小时', desc: '德语区文化史最大收藏', nav: 'Germanisches Nationalmuseum' },
+                { id: 'nb_6', name: '圣洛伦茨教堂 St. Lorenz', dur: '45分钟', desc: '哥特双塔与悬空木雕', nav: 'St. Lorenz Nürnberg' },
+                { id: 'nb_7', name: '手工艺人庭院 Handwerkerhof', dur: '1小时', desc: '玻璃与皮具传统作坊街', nav: 'Handwerkerhof Nürnberg' },
+                { id: 'nb_8', name: '纽伦堡审判纪念馆 600法庭', dur: '1.5小时', desc: '战后历史法庭所在地', nav: 'Memorium Nürnberger Prozesse' },
+                { id: 'nb_9', name: '玩具博物馆 Spielzeugmuseum', dur: '1.5小时', desc: '世界玩具制造之都缩影', nav: 'Spielzeugmuseum Nürnberg' },
+                { id: 'nb_10', name: '刽子手廊桥 Henkersteg', dur: '45分钟', desc: '最古老木质廊桥风光', nav: 'Henkersteg Nürnberg' },
+                { id: 'nb_11', name: '白革巷 Weißgerbergasse', dur: '45分钟', desc: '绝美彩色半木结构古巷', nav: 'Weißgerbergasse Nürnberg' },
+                { id: 'nb_12', name: '纽伦堡动物园 Tiergarten', dur: '2.5小时', desc: '砂岩采石场天然生态园', nav: 'Tiergarten Nürnberg' },
+                { id: 'nb_13', name: '圣塞巴尔德教堂 St. Sebald', dur: '45分钟', desc: '镀金青铜圣徒神龛', nav: 'St. Sebald Nürnberg' },
+                { id: 'nb_14', name: '婚姻旋转木马喷泉', dur: '30分钟', desc: 'Ehekarussell 奇趣雕塑', nav: 'Ehekarussell Nürnberg' },
+                { id: 'nb_15', name: '图赫城堡博物馆 Schloss Tucher', dur: '1.5小时', desc: '贵族庄园文艺复兴家具', nav: 'Museum Tucherschloss' },
+                { id: 'nb_16', name: '铁路博物馆 DB Museum', dur: '2小时', desc: '德国第一辆蒸汽火车鹰号', nav: 'DB Museum Nürnberg' },
+                { id: 'nb_17', name: '圣灵医院 Heilig-Geist-Spital', dur: '30分钟', desc: '佩格尼茨河拱桥水上建筑', nav: 'Heilig-Geist-Spital Nürnberg' },
+                { id: 'nb_18', name: '地下岩石地道 Felsengänge', dur: '1.5小时', desc: '中世纪地下啤酒冷藏隧道', nav: 'Historische Felsengänge Nürnberg' },
+                { id: 'nb_19', name: '沃尔德马施泰因公园', dur: '1小时', desc: 'Wöhrder Wiese 水岸公园', nav: 'Wöhrder Wiese' },
+                { id: 'nb_20', name: '新博物馆 Staatliches Museum', dur: '1.5小时', desc: '弧形玻璃现代艺术殿堂', nav: 'Neues Museum Nürnberg' }
+            ],
+            'lindau': [
+                { id: 'ld_1', name: '林道港口与巴伐利亚狮', dur: '1小时', desc: '石狮与远山帆船地标', nav: 'Lindau Hafen', rest: 'Wissingers im Schlechterbräu (4.5★)' },
+                { id: 'ld_2', name: '新灯塔 Neuer Leuchtturm', dur: '45分钟', desc: '德国最南端灯塔登顶', nav: 'Neuer Leuchtturm Lindau' },
+                { id: 'ld_3', name: '老市政厅 Altes Rathaus', dur: '30分钟', desc: '十五世纪华丽历史壁画', nav: 'Altes Rathaus Lindau' },
+                { id: 'ld_4', name: '马克西米利安大街', dur: '1.5小时', desc: '哥特与文艺复兴步行街', nav: 'Maximilianstraße Lindau', rest: 'Alte Post (4.6★)' },
+                { id: 'ld_5', name: '小偷塔 Diebsturm', dur: '30分钟', desc: '彩色琉璃瓦屋顶古塔', nav: 'Diebsturm Lindau' },
+                { id: 'ld_6', name: '芒塔 Mangturm', dur: '30分钟', desc: '旧石造灯塔见证巡更史', nav: 'Mangturm Lindau' },
+                { id: 'ld_7', name: '卡瓦岑博物馆 Cavazzen', dur: '1小时', desc: '最美巴洛克民居建筑', nav: 'Haus zum Cavazzen' },
+                { id: 'ld_8', name: '林登霍夫公园 Lindenhofpark', dur: '1.5小时', desc: '古老树林与庄园湖滩', nav: 'Lindenhofpark Lindau' },
+                { id: 'ld_9', name: '圣彼得教堂 Peterskirche', dur: '30分钟', desc: '内藏霍尔拜因受难壁画', nav: 'Peterskirche Lindau' },
+                { id: 'ld_10', name: '霍耶尔山全景台 Hoyerberg', dur: '2小时', desc: '俯瞰林道岛与博登湖', nav: 'Hoyerberg Lindau' },
+                { id: 'ld_11', name: '林道城市博物馆', dur: '1小时', desc: '机械乐器与艺术收藏', nav: 'Stadtmuseum Lindau' },
+                { id: 'ld_12', name: '火药塔 Pulverturm', dur: '30分钟', desc: '古老湖畔火药防御遗址', nav: 'Pulverturm Lindau' },
+                { id: 'ld_13', name: '圣母大教堂 Münster U.L. Frau', dur: '45分钟', desc: '明亮洛可可天顶画', nav: 'Münster Unserer Lieben Frau Lindau' },
+                { id: 'ld_14', name: '后港水上木栈道 Hintere Insel', dur: '1小时', desc: '林道后岛静谧日落步道', nav: 'Hintere Insel Lindau' },
+                { id: 'ld_15', name: '湖畔赌场 Casino Lindau', dur: '1.5小时', desc: '全景玻璃幕墙现代化赌场', nav: 'Spielbank Lindau' },
+                { id: 'ld_16', name: '塞斯马尔城堡 Schloss Senftenau', dur: '1.5小时', desc: '护城河环绕中世纪水堡', nav: 'Schloss Senftenau' },
+                { id: 'ld_17', name: '托斯卡纳公园 Toskanapark', dur: '1小时', desc: '靠近跨湖大桥的幽雅绿地', nav: 'Toskanapark Lindau' },
+                { id: 'ld_18', name: '林道木偶剧院 Marionettenoper', dur: '1.5小时', desc: '古典歌剧微缩木偶表演', nav: 'Lindauer Marionettenoper' },
+                { id: 'ld_19', name: '阿沙赫古城堡 Schloss Achberg', dur: '2.5小时', desc: '近郊森林内骑士古堡', nav: 'Schloss Achberg' },
+                { id: 'ld_20', name: '巴特施亚赫湖滨浴场', dur: '2小时', desc: '历史木制水上凉亭跳水台', nav: 'Lindenhofbad Lindau' }
+            ],
+            'basel': [
+                { id: 'bs_1', name: '巴塞尔美术馆 Kunstmuseum', dur: '2.5小时', desc: '全球最古老公共艺术收藏', nav: 'Kunstmuseum Basel', rest: 'Zum Isaak (4.5★)' },
+                { id: 'bs_2', name: '巴塞尔大教堂 Münster', dur: '1小时', desc: '红砂岩教堂与莱茵河露台', nav: 'Basler Münster' },
+                { id: 'bs_3', name: '丁格利机械喷泉', dur: '30分钟', desc: '灵动喷水机械雕塑', nav: 'Tinguely Brunnen' },
+                { id: 'bs_4', name: '斯巴伦门 Spalentor', dur: '45分钟', desc: '瑞士最壮美中世纪城门', nav: 'Spalentor Basel' },
+                { id: 'bs_5', name: '贝耶勒基金会 Beyeler', dur: '2.5小时', desc: '世界级现代艺术殿堂', nav: 'Fondation Beyeler' },
+                { id: 'bs_6', name: '三国交界纪念碑 Dreiländereck', dur: '1小时', desc: '瑞法德三国莱茵河汇流点', nav: 'Dreiländereck Basel' },
+                { id: 'bs_7', name: '巴塞尔市政厅 Rathaus', dur: '45分钟', desc: '鲜红镀金文艺复兴建筑', nav: 'Rathaus Basel', rest: 'Walliserkanne (4.4★)' },
+                { id: 'bs_8', name: '巴塞尔动物园 Zolli', dur: '2.5小时', desc: '瑞士历史最悠久生态园', nav: 'Zoo Basel' },
+                { id: 'bs_9', name: '让·丁格利博物馆', dur: '2小时', desc: '动态雕塑实验博物馆', nav: 'Museum Tinguely' },
+                { id: 'bs_10', name: '维特拉设计博物馆 Vitra', dur: '3小时', desc: '大师联手工业设计园区', nav: 'Vitra Design Museum' },
+                { id: 'bs_11', name: '圣阿尔班古城门 St. Alban', dur: '45分钟', desc: '幽静造纸作坊运河区', nav: 'St. Alban-Tor' },
+                { id: 'bs_12', name: '巴塞尔历史博物馆', dur: '1.5小时', desc: '方济各会教堂内中世纪宝藏', nav: 'Historisches Museum Basel' },
+                { id: 'bs_13', name: '造纸工坊博物馆 Papiermühle', dur: '2小时', desc: '古水车与亲手造纸体验', nav: 'Basler Papiermühle' },
+                { id: 'bs_14', name: '普法尔茨观景台 Pfalz', dur: '30分钟', desc: '大教堂后悬崖俯瞰大河', nav: 'Pfalz Basel' },
+                { id: 'bs_15', name: '莱茵河无动力古渡轮 Fähri', dur: '30分钟', desc: '缆绳引流环保横渡体验', nav: 'Basler Personenfähren' },
+                { id: 'bs_16', name: '现代艺术博物馆 MGK', dur: '1.5小时', desc: 'Museum für Gegenwartskunst', nav: 'Kunstmuseum Basel | Gegenwart' },
+                { id: 'bs_17', name: '巴塞尔大学植物园', dur: '1小时', desc: '世界最古老大学植物园之一', nav: 'Botanischer Garten der Universität Basel' },
+                { id: 'bs_18', name: '圣伊丽莎白教堂 Elisabethen', dur: '45分钟', desc: '瑞士最重要新哥特教堂', nav: 'Offene Kirche Elisabethen' },
+                { id: 'bs_19', name: '巴塞尔狂欢节博物馆', dur: '1小时', desc: 'Fasnacht 独特铜管面具展', nav: 'Fasnachtsmuseum Basel' },
+                { id: 'bs_20', name: '巴塞尔药学博物馆 Pharmazie', dur: '1.5小时', desc: '炼金术实验室与古药房', nav: 'Pharmaziemuseum Universität Basel' }
+            ],
+            'schaffhausen': [
+                { id: 'sh_1', name: '莱茵瀑布 Rheinfall', dur: '2.5小时', desc: '乘船直冲欧洲最大瀑布', nav: 'Rheinfall', rest: 'Schlössli Wörth (4.5★)' },
+                { id: 'sh_2', name: '穆诺特要塞 Munot', dur: '1.5小时', desc: '环形要塞俯瞰莱茵河葡萄园', nav: 'Munot Schaffhausen' },
+                { id: 'sh_3', name: '老城凸窗建筑群 Fronwag', dur: '1小时', desc: '171座文艺复兴彩绘凸窗', nav: 'Fronwagplatz Schaffhausen' },
+                { id: 'sh_4', name: '万国表博物馆 IWC', dur: '1.5小时', desc: '奢华制表发源地与展览', nav: 'IWC Museum Schaffhausen' },
+                { id: 'sh_5', name: '诸圣修道院博物馆', dur: '1.5小时', desc: '十一世纪本笃会修道院', nav: 'Museum zu Allerheiligen' },
+                { id: 'sh_6', name: '劳芬城堡 Schloss Laufen', dur: '1.5小时', desc: '悬崖峭壁俯瞰瀑布磅礴水汽', nav: 'Schloss Laufen am Rheinfall' },
+                { id: 'sh_7', name: '沃尔特城堡 Schlössli Wörth', dur: '45分钟', desc: '下游水上城堡与观瀑台', nav: 'Schlössli Wörth' },
+                { id: 'sh_8', name: '施瓦本门 Schwabentor', dur: '30分钟', desc: '1370年防御城门与石板街', nav: 'Schwabentor Schaffhausen' },
+                { id: 'sh_9', name: '莱茵河滨长廊 Rheinquai', dur: '1小时', desc: '漫步欣赏瑞士内河游船', nav: 'Rheinquai Schaffhausen', rest: 'Güterhof (4.6★)' },
+                { id: 'sh_10', name: '天堂修道院庄园 Paradies', dur: '2小时', desc: '铁艺博物馆与宁静庄园', nav: 'Klostergut Paradies' },
+                { id: 'sh_11', name: '卡姆加恩艺术中心 Kammgarn', dur: '1.5小时', desc: '纺织厂改造的工业文化区', nav: 'Kammgarn Schaffhausen' },
+                { id: 'sh_12', name: '骑士之家 Haus zum Ritter', dur: '30分钟', desc: '著名托比亚斯·施蒂默壁画', nav: 'Haus zum Ritter Schaffhausen' },
+                { id: 'sh_13', name: '大圣约翰教堂 St. Johann', dur: '45分钟', desc: '声学极佳古老五通廊大堂', nav: 'Kirche St. Johann Schaffhausen' },
+                { id: 'sh_14', name: '诸圣大教堂回廊 Kreuzgang', dur: '45分钟', desc: '瑞士最大浪漫主义修道回廊', nav: 'Kreuzgang zu Allerheiligen' },
+                { id: 'sh_15', name: '席勒大钟 Schillerglocke', dur: '30分钟', desc: '《钟之歌》灵感来源古钟', nav: 'Schillerglocke Schaffhausen' },
+                { id: 'sh_16', name: '黄金之牛之屋 Haus zum Goldenen Ochsen', dur: '30分钟', desc: '十六世纪精雕细琢凸窗宅', nav: 'Haus zum Goldenen Ochsen' },
+                { id: 'sh_17', name: '贝罗林根庄园 Bernerhaus', dur: '45分钟', desc: '巴洛克式古典贵族建筑', nav: 'Bernerhaus Schaffhausen' },
+                { id: 'sh_18', name: '莱茵瀑布探险高空绳索乐园', dur: '2.5小时', desc: 'Adventure Park 树顶滑索', nav: 'Adventure Park Rheinfall' },
+                { id: 'sh_19', name: '莫森塔 Moserturm', dur: '30分钟', desc: '俯瞰老城区古城垣角楼', nav: 'Moserturm Schaffhausen' },
+                { id: 'sh_20', name: '莱茵河木制古浴场 Rhybadi', dur: '1.5小时', desc: '1870年水中木质泳池平台', nav: 'Rhybadi Schaffhausen' }
+            ],
+            'salzburg': [
+                { id: 'sz_1', name: '萨尔茨堡要塞 Hohensalzburg', dur: '2.5小时', desc: '欧洲最大中世纪城堡全景', nav: 'Festung Hohensalzburg' },
+                { id: 'sz_2', name: '米拉贝尔宫与花园 Mirabell', dur: '1.5小时', desc: '《音乐之声》Do-Re-Mi取景地', nav: 'Schloss Mirabell', rest: 'Bärenwirt (4.6★)' },
+                { id: 'sz_3', name: '莫扎特出生地 Geburtshaus', dur: '1.5小时', desc: '粮食胡同9号黄色房屋朝圣', nav: 'Mozarts Geburtshaus' },
+                { id: 'sz_4', name: '粮食胡同 Getreidegasse', dur: '1.5小时', desc: '中世纪铁艺招牌商业街', nav: 'Getreidegasse Salzburg' },
+                { id: 'sz_5', name: '萨尔茨堡大教堂 Dom', dur: '1小时', desc: '莫扎特受洗地与巴洛克圆顶', nav: 'Salzburger Dom' },
+                { id: 'sz_6', name: '海尔布伦宫机关喷泉 Hellbrunn', dur: '2.5小时', desc: '大主教设计奇趣喷泉宫殿', nav: 'Schloss Hellbrunn' },
+                { id: 'sz_7', name: '圣彼得墓园与修道院 St. Peter', dur: '1小时', desc: '古修道院与神秘山间墓穴', nav: 'Stift Sankt Peter Salzburg' },
+                { id: 'sz_8', name: '红牛7号机库 Hangar-7', dur: '1.5小时', desc: '现代机库展出F1与飞行器', nav: 'Hangar-7 Salzburg' },
+                { id: 'sz_9', name: '卡布基纳山观景台', dur: '1.5小时', desc: '俯瞰老城天际线绝佳视角', nav: 'Kapuzinerberg Salzburg' },
+                { id: 'sz_10', name: '主教宫殿广场 Residenzplatz', dur: '1小时', desc: '大理石喷泉与马车汇聚地', nav: 'Residenzplatz Salzburg', rest: 'Augustiner Bräustübl (4.7★)' },
+                { id: 'sz_11', name: '莫扎特故居 Wohnhaus', dur: '1.5小时', desc: '莫扎特青年时期主居所', nav: 'Mozart-Wohnhaus' },
+                { id: 'sz_12', name: '现代艺术博物馆 Mönchsberg', dur: '2小时', desc: '悬崖顶端现代艺术殿堂', nav: 'Museum der Moderne Salzburg' },
+                { id: 'sz_13', name: '洗马池 Pferdeschwemme', dur: '30分钟', desc: '皇家华丽驯马壁画喷泉', nav: 'Pferdeschwemme Salzburg' },
+                { id: 'sz_14', name: '萨尔茨堡节日大剧院', dur: '1小时', desc: '世界顶级音乐节主会场', nav: 'Großes Festspielhaus' },
+                { id: 'sz_15', name: '修士山电梯与全景步道', dur: '1.5小时', desc: '沿崖壁栈道俯瞰萨尔茨河', nav: 'Mönchsberg Aufzug' },
+                { id: 'sz_16', name: '农山修道院 Stift Nonnberg', dur: '1小时', desc: '八百年历史修女院', nav: 'Stift Nonnberg' },
+                { id: 'sz_17', name: '莫扎特广场 Mozartplatz', dur: '45分钟', desc: '纪念铜像与露天咖啡座', nav: 'Mozartplatz Salzburg' },
+                { id: 'sz_18', name: '林茨巷 Linzer Gasse', dur: '1.5小时', desc: '右岸古朴手工艺与餐饮街', nav: 'Linzer Gasse Salzburg' },
+                { id: 'sz_19', name: '自然之家自然科学博物馆', dur: '2.5小时', desc: 'Haus der Natur 互动科技馆', nav: 'Haus der Natur Salzburg' },
+                { id: 'sz_20', name: '利奥波德斯克隆宫', dur: '1.5小时', desc: 'Schloss Leopoldskron 湖畔宫殿', nav: 'Schloss Leopoldskron' }
+            ],
+            'kufstein': [
+                { id: 'kf_1', name: '库夫施泰因要塞 Festung', dur: '2.5小时', desc: '斜坡缆车登顶聆听英雄风琴', nav: 'Festung Kufstein' },
+                { id: 'kf_2', name: '罗马人小巷 Römerhofgasse', dur: '1小时', desc: '蒂罗尔彩绘古壁画中世纪街', nav: 'Römerhofgasse Kufstein', rest: 'Auracher Löchl (4.6★)' },
+                { id: 'kf_3', name: '理德尔玻璃工厂 Riedel Glas', dur: '1.5小时', desc: '顶级酒杯品牌人工吹制工坊', nav: 'Riedel Glas Kufstein' },
+                { id: 'kf_4', name: '皇帝缆车 Kaiserlift', dur: '3小时', desc: '单人缆车直登高山自然区', nav: 'Kaiserlift Kufstein' },
+                { id: 'kf_5', name: '黑希特湖 Hechtsee', dur: '2小时', desc: '松林翡翠高山湖环湖步道', nav: 'Hechtsee Kufstein' },
+                { id: 'kf_6', name: '蒂尔湖 Thiersee', dur: '2小时', desc: '群山倒映高山湖划船胜地', nav: 'Thiersee Kufstein' },
+                { id: 'kf_7', name: '因河滨河步道 Innpromenade', dur: '1小时', desc: '漫步眺望阿尔卑斯要塞背景', nav: 'Innpromenade Kufstein' },
+                { id: 'kf_8', name: '城市公园 Stadtpark', dur: '45分钟', desc: '市中心花坛喷泉休憩区', nav: 'Stadtpark Kufstein', rest: 'Purlepaus (4.7★)' },
+                { id: 'kf_9', name: '提绍弗史前洞穴 Tischofer', dur: '2.5小时', desc: '石器时代天然巨型溶洞', nav: 'Tischofer Höhle' },
+                { id: 'kf_10', name: '下城市广场 Unterer Stadtplatz', dur: '1小时', desc: '选购传统毛毡与手工艺品', nav: 'Unterer Stadtplatz Kufstein' },
+                { id: 'kf_11', name: '英雄露天管风琴 Heldenorgel', dur: '45分钟', desc: '每日中午演奏的巨型风琴', nav: 'Heldenorgel Kufstein' },
+                { id: 'kf_12', name: '玛丽亚施泰因悬崖朝圣教堂', dur: '2小时', desc: '峭壁之上的险峻圣殿', nav: 'Wallfahrtskirche Mariastein' },
+                { id: 'kf_13', name: '阿尔卑斯杜兰特峡谷 Duxeralm', dur: '2.5小时', desc: '高山草甸全景小木屋徒步', nav: 'Duxeralm Kufstein' },
+                { id: 'kf_14', name: '圣维特教区教堂 St. Vitus', dur: '45分钟', desc: '十五世纪哥特式老城主堂', nav: 'Pfarrkirche St. Vitus Kufstein' },
+                { id: 'kf_15', name: '品岑霍夫动物生态园', dur: '2小时', desc: 'Raritätenzoo Ebbs 珍稀鸟类', nav: 'Raritätenzoo Ebbs' },
+                { id: 'kf_16', name: '埃布斯哈夫林格马育种场', dur: '2小时', desc: 'Fohlenhof Ebbs 金鬃名马馆', nav: 'Fohlenhof Ebbs' },
+                { id: 'kf_17', name: '瓦尔德塞清幽小湖 Waldsee', dur: '1.5小时', desc: '隐匿于密林中的森林浴池', nav: 'Waldsee Kufstein' },
+                { id: 'kf_18', name: '因河铁路铁桥观景台', dur: '30分钟', desc: '拍摄因河与古堡同框机位', nav: 'Innbrücke Kufstein' },
+                { id: 'kf_19', name: '劳特巴赫峡谷 Längsee', dur: '2小时', desc: '未开发的天然宁静湖泊', nav: 'Längsee Kufstein' },
+                { id: 'kf_20', name: '上城市广场 Oberer Stadtplatz', dur: '45分钟', desc: '蒂罗尔彩绘外墙市政厅', nav: 'Rathaus Kufstein' }
+            ],
+            'reutte': [
+                { id: 're_1', name: '世界最长索桥 Highline179', dur: '2小时', desc: '跨越山谷114米极限悬索桥', nav: 'Highline179', rest: 'Salzstadl (4.6★)' },
+                { id: 're_2', name: '埃伦贝格古堡遗址 Ehrenberg', dur: '2小时', desc: '雄伟十三世纪防御城堡废墟', nav: 'Burgruine Ehrenberg' },
+                { id: 're_3', name: '城堡山顶要塞 Schlosskopf', dur: '1.5小时', desc: '巴洛克式火炮阵地与全景', nav: 'Festung Schlosskopf' },
+                { id: 're_4', name: '普兰湖 Plansee', dur: '3小时', desc: '峡湾般清澈高山蓝绿湖泊', nav: 'Plansee Reutte' },
+                { id: 're_5', name: '阿尔卑斯温泉 Alpentherme', dur: '3小时', desc: '直面雪山城堡的温泉乐园', nav: 'Alpentherme Ehrenberg' },
+                { id: 're_6', name: '克劳迪娅堡垒 Fort Claudia', dur: '1.5小时', desc: '隔山呼应古老要塞残垣', nav: 'Fort Claudia Reutte' },
+                { id: 're_7', name: '骑士城堡世界博物馆', dur: '1.5小时', desc: '沉浸式体验古代冷兵器战争', nav: 'Museum Burgenwelt Ehrenberg' },
+                { id: 're_8', name: '施图伊本瀑布步道 Stuibenfälle', dur: '2小时', desc: '天然水潭与层叠瀑布徒步', nav: 'Stuibenfälle Reutte' },
+                { id: 're_9', name: '下市场历史街区 Untermarkt', dur: '1小时', desc: '泽勒家族精美建筑彩绘山墙', nav: 'Untermarkt Reutte', rest: 'Moserhof (4.5★)' },
+                { id: 're_10', name: '辛特瓦格漫步道 Sintwag', dur: '1.5小时', desc: '俯瞰罗伊特盆地轻徒步', nav: 'Sintwag Reutte' },
+                { id: 're_11', name: '乌里湖 Urisee', dur: '2.5小时', desc: '清澈宁静天然沐浴湖泊', nav: 'Urisee' },
+                { id: 're_12', name: '狂野莱赫河谷步道 Lechweg', dur: '3小时', desc: '最后野生河流国家地质步道', nav: 'Lechweg Reutte' },
+                { id: 're_13', name: '黑特万格湖 Heiterwanger See', dur: '2.5小时', desc: '与普兰湖相连的游船湖', nav: 'Heiterwanger See' },
+                { id: 're_14', name: '阿尔特马克特绿地广场', dur: '45分钟', desc: '传统阿尔卑斯木屋聚落', nav: 'Altmärkte Reutte' },
+                { id: 're_15', name: '罗伊特地方绿色博物馆 Grünes Haus', dur: '1.5小时', desc: '华丽彩绘壁画历史宅邸', nav: 'Museum im Grünen Haus' },
+                { id: 're_16', name: '哈塞尔格尔峡谷 Hängebrücke', dur: '2小时', desc: '霍尔茨高木吊桥徒步', nav: 'Hängebrücke Holzgau' },
+                { id: 're_17', name: '施奈德山缆车 Hahnenkammbahn', dur: '3小时', desc: '海拔1900米高山全景滑雪场', nav: 'Reuttener Seilbahnen Hahnenkamm' },
+                { id: 're_18', name: '圣安娜方济各会修道院', dur: '45分钟', desc: '十七世纪宁静巴洛克堂', nav: 'Franziskanerkloster Reutte' },
+                { id: 're_19', name: '塔纳赫小溪瀑布 Thaneller', dur: '2小时', desc: '壮丽金字塔山峰下的小溪', nav: 'Thaneller Reutte' },
+                { id: 're_20', name: '布赖滕旺圣彼得与保罗教堂', dur: '45分钟', desc: '中世纪死亡之舞壁画', nav: 'Pfarrkirche Breitenwang' }
+            ],
+            'venlo': [
+                { id: 'vl_1', name: '林堡博物馆 Limburgs Museum', dur: '2小时', desc: '马斯河流域生活史与考古', nav: 'Limburgs Museum', rest: 'Café de Locomotief (4.5★)' },
+                { id: 'vl_2', name: '范·博梅尔当代美术馆', dur: '1.5小时', desc: '先锋现代艺术与摄影展', nav: 'Museum van Bommel van Dam' },
+                { id: 'vl_3', name: '芬洛市政厅 Stadhuis', dur: '30分钟', desc: '文艺复兴双塔标志建筑', nav: 'Stadhuis Venlo' },
+                { id: 'vl_4', name: '芬洛大集市广场 Markt', dur: '1小时', desc: '生鲱鱼与现炸薯条市集', nav: 'Markt Venlo', rest: 'Niej-Jork (4.4★)' },
+                { id: 'vl_5', name: '圣马丁努斯大教堂', dur: '45分钟', desc: '拥有著名钟琴的哥特教堂', nav: 'Sint-Martinuskerk Venlo' },
+                { id: 'vl_6', name: '马斯河滨长廊 Maasboulevard', dur: '1小时', desc: '现代亲水步道与露天咖啡', nav: 'Maasboulevard Venlo' },
+                { id: 'vl_7', name: '阿尔森城堡花园 Arcen', dur: '3.5小时', desc: '32公顷玫瑰园与巴洛克城堡', nav: 'Kasteeltuinen Arcen' },
+                { id: 'vl_8', name: '朱莉安娜公园 Julianapark', dur: '45分钟', desc: '百年古树遮蔽的城市花园', nav: 'Julianapark Venlo' },
+                { id: 'vl_9', name: '约赫姆剧院 De Maaspoort', dur: '45分钟', desc: '俯瞰马斯河现代建筑艺术', nav: 'De Maaspoort Venlo' },
+                { id: 'vl_10', name: '托弗兰奇幻乐园 Toverland', dur: '4小时', desc: '顶级魔法主题过山车乐园', nav: 'Attractiepark Toverland' },
+                { id: 'vl_11', name: '威廉明娜公园 Wilhelmina', dur: '1小时', desc: '宁静城市天鹅湖水景公园', nav: 'Wilhelminapark Venlo' },
+                { id: 'vl_12', name: '狂欢节历史博物馆 Jocus', dur: '1小时', desc: '荷兰传统狂欢节服饰展', nav: 'Jocus Museum Venlo' },
+                { id: 'vl_13', name: '斯泰尔修道院村 Steyl', dur: '2.5小时', desc: '圣言会三大古老跨国修道院', nav: 'Kloosterdorp Steyl' },
+                { id: 'vl_14', name: '斯泰尔植物园 Botanische Tuin', dur: '1.5小时', desc: '百年温室与热带睡莲池', nav: 'Botanische Tuin Jochumhof' },
+                { id: 'vl_15', name: '弗里科乳品与农贸体验中心', dur: '1.5小时', desc: '荷兰奶酪与生鲜大采购', nav: '2 Brüder Venlo' },
+                { id: 'vl_16', name: '马斯河大桥眺望点 Stadsbrug', dur: '30分钟', desc: '全景拍摄马斯河天际线', nav: 'Stadsbrug Venlo' },
+                { id: 'vl_17', name: '格罗特大广场 Grote Kerk', dur: '45分钟', desc: '古朴红砖步行街巷', nav: 'Grote Kerk Venlo' },
+                { id: 'vl_18', name: '荷德边境自然公园 Maas-Schwalm-Nette', dur: '3小时', desc: '跨国森林与石楠湿地', nav: 'Naturpark Maas-Schwalm-Nette' },
+                { id: 'vl_19', name: '托格尔城堡遗址 Kasteel Keverberg', dur: '2小时', desc: '现代玻璃与古废墟结合水堡', nav: 'Kasteel de Keverberg' },
+                { id: 'vl_20', name: '巴罗克小礼拜堂 Kapel van Genooi', dur: '1小时', desc: '黑圣母朝圣朝圣小径', nav: 'Kapel van Genooi' }
+            ],
+            'arnhem': [
+                { id: 'ah_1', name: '国家露天博物馆 Openlucht', dur: '3.5小时', desc: '百年风车老电车沉浸体验', nav: 'Nederlands Openluchtmuseum', rest: 'Trixie\'s (4.6★)' },
+                { id: 'ah_2', name: '皇家伯格斯动物园 Burgers', dur: '3.5小时', desc: '室内热带雨林与海底珊瑚礁', nav: 'Burgers\' Zoo Arnhem' },
+                { id: 'ah_3', name: '空降兵博物馆 Hartenstein', dur: '2小时', desc: '二战“市场花园行动”指挥部', nav: 'Airborne Museum Hartenstein' },
+                { id: 'ah_4', name: '圣尤西比乌斯教堂 Eusebius', dur: '1.5小时', desc: '玻璃全景电梯登顶观景台', nav: 'Eusebiuskerk Arnhem' },
+                { id: 'ah_5', name: '颂斯贝克公园 Sonsbeek', dur: '2小时', desc: '瀑布与白城堡绝美英式园林', nav: 'Park Sonsbeek Arnhem' },
+                { id: 'ah_6', name: '阿纳姆艺术博物馆 Museum Arnhem', dur: '2小时', desc: '悬崖挑空现代魔幻现实艺术', nav: 'Museum Arnhem' },
+                { id: 'ah_7', name: '约翰·弗罗斯特大桥', dur: '45分钟', desc: '二战“遥远的桥”历史大桥', nav: 'John Frost Bridge Arnhem' },
+                { id: 'ah_8', name: '罗泽特文化中心 Rozet', dur: '1小时', desc: '年度建筑大奖内部书山阶梯', nav: 'Rozet Arnhem' },
+                { id: 'ah_9', name: '土豚巨型雕塑 Aardvarken', dur: '30分钟', desc: '30米长躺卧混凝土趣味艺术', nav: 'Feestaardvarken Arnhem' },
+                { id: 'ah_10', name: '费卢韦佐姆国家公园', dur: '3.5小时', desc: '一望无际紫石楠荒原与森林', nav: 'Nationaal Park Veluwezoom' },
+                { id: 'ah_11', name: '谷物广场 Korenmarkt', dur: '1.5小时', desc: '历史仓库酒吧与热闹餐饮区', nav: 'Korenmarkt Arnhem' },
+                { id: 'ah_12', name: '穆西斯音乐殿堂 Musis', dur: '1小时', desc: '历史悠久的剧场与公园水景', nav: 'Musis Sacrum Arnhem' },
+                { id: 'ah_13', name: '津佩尔堡公园 Park Zypendaal', dur: '1.5小时', desc: '十八世纪贵族水上庄园', nav: 'Kasteel Zypendaal' },
+                { id: 'ah_14', name: '萨贝尔门 Sabelspoort', dur: '30分钟', desc: '仅存的中世纪宏伟古城门', nav: 'Sabelspoort Arnhem' },
+                { id: 'ah_15', name: '阿纳姆中央车站建筑奇观', dur: '45分钟', desc: 'UNStudio 扭曲混凝土钢构车站', nav: 'Arnhem Centraal' },
+                { id: 'ah_16', name: '库勒-穆勒博物馆 (近郊)', dur: '3.5小时', desc: '森林深处梵高第二大油画馆', nav: 'Kröller-Müller Museum' },
+                { id: 'ah_17', name: '杜斯堡芥末古镇 (近郊)', dur: '2.5小时', desc: '中世纪汉萨同盟古城与作坊', nav: 'Doesburg' },
+                { id: 'ah_18', name: '圣瓦尔堡天主教教堂', dur: '45分钟', desc: '双塔双钟楼十四世纪古堂', nav: 'Sint-Walburgisbasiliek' },
+                { id: 'ah_19', name: '莱茵河亲水阶梯 Rijnkade', dur: '1小时', desc: '河滨观景露天餐饮步行街', nav: 'Rijnkade Arnhem' },
+                { id: 'ah_20', name: '布朗肯堡水塔观景公园', dur: '1小时', desc: '高地俯瞰全城与莱茵河谷', nav: 'Watertoren Arnhem' }
+            ],
+            'wissembourg': [
+                { id: 'ws_1', name: '圣彼得与保罗修道院', dur: '1.5小时', desc: '阿尔萨斯第二大哥特修道院', nav: 'Abbatiale Saints-Pierre-et-Paul de Wissembourg', rest: 'A l\'Ange (4.5★)' },
+                { id: 'ws_2', name: '盐屋 Maison du Sel', dur: '45分钟', desc: '1448年多层陡峭斜屋顶建筑', nav: 'Maison du Sel Wissembourg' },
+                { id: 'ws_3', name: '中世纪古城墙与护城河', dur: '1.5小时', desc: '沿劳特河清澈流水环城漫步', nav: 'Remparts de Wissembourg' },
+                { id: 'ws_4', name: '什一税谷仓 Grange aux Dîmes', dur: '30分钟', desc: '修道院征收农产历史古仓', nav: 'Grange aux Dîmes Wissembourg' },
+                { id: 'ws_5', name: '韦斯特坎普博物馆 Westercamp', dur: '1.5小时', desc: '普法战争与传统民俗文物', nav: 'Musée Westercamp' },
+                { id: 'ws_6', name: '圣让新教教堂 St-Jean', dur: '45分钟', desc: '布塞尔曾布道罗曼式钟楼', nav: 'Église Saint-Jean Wissembourg' },
+                { id: 'ws_7', name: '劳特河运河水岸 Quai', dur: '1小时', desc: '鲜花木筋房法式风情小巷', nav: 'Quai Anselmann Wissembourg', rest: 'Au Saumon (4.4★)' },
+                { id: 'ws_8', name: '圣保罗城堡遗迹 Château', dur: '1.5小时', desc: '俯瞰小镇全景与葡萄园古堡', nav: 'Château Saint-Paul Wissembourg' },
+                { id: 'ws_9', name: '鸽舍山口 Col du Pigeonnier', dur: '2小时', desc: '北孚日山脉边缘森林徒步', nav: 'Col du Pigeonnier' },
+                { id: 'ws_10', name: '克莱堡葡萄园 Cave Cleebourg', dur: '2.5小时', desc: '边境品尝雷司令白葡萄酒', nav: 'Cave de Cleebourg' },
+                { id: 'ws_11', name: '水闸景观区 Canal Lauter', dur: '45分钟', desc: '古水磨坊与小桥流水', nav: 'La Lauter Wissembourg' },
+                { id: 'ws_12', name: '镇政厅 Hôtel de Ville', dur: '30分钟', desc: '古典十八世纪红砂岩广场建筑', nav: 'Hôtel de Ville Wissembourg' },
+                { id: 'ws_13', name: '斯坦策尔木屋 Maison Stanislaw', dur: '30分钟', desc: '波兰国王流亡居住地', nav: 'Maison de Stanislas Wissembourg' },
+                { id: 'ws_14', name: '老屠夫工会之屋', dur: '30分钟', desc: '精美浮雕中世纪行会宅邸', nav: 'Maison des Bouchers Wissembourg' },
+                { id: 'ws_15', name: '友谊之桥边境线', dur: '30分钟', desc: '法德两国步行跨界小桥', nav: 'Pont de la Lauter' },
+                { id: 'ws_16', name: '希尔维斯海姆磨坊 Bruch', dur: '1.5小时', desc: '郊野古磨坊水车公园', nav: 'Moulin de Wissembourg' },
+                { id: 'ws_17', name: '盖斯贝格战役纪念碑', dur: '1.5小时', desc: '1870年普法战争高地纪念碑', nav: 'Monument du Geisberg' },
+                { id: 'ws_18', name: '孚日山脉古堡群 Fleckenstein', dur: '3.5小时', desc: '悬崖绝壁巨石中世纪古堡', nav: 'Château de Fleckenstein' },
+                { id: 'ws_19', name: '舍嫩堡马奇诺防线堡垒', dur: '3小时', desc: '地下二战巨型坚固工事群', nav: 'Fort de Schoenenbourg' },
+                { id: 'ws_20', name: '罗特小镇老陶艺村', dur: '2小时', desc: '阿尔萨斯传统手绘陶罐发源地', nav: 'Poterie d\'Alsace Soufflenheim' }
+            ],
+            'strasbourg': [
+                { id: 'sb_1', name: '斯特拉斯堡大教堂 Notre-Dame', dur: '2小时', desc: '雨果赞叹粉红巨构与天文钟', nav: 'Cathédrale Notre-Dame de Strasbourg', rest: 'Maison Kammerzell (4.3★)' },
+                { id: 'sb_2', name: '小法兰西 La Petite France', dur: '2小时', desc: '运河纵横鲜花木筋房制革区', nav: 'La Petite France Strasbourg' },
+                { id: 'sb_3', name: '罗昂宫 Palais Rohan', dur: '2小时', desc: '红衣主教奢华行宫三大馆', nav: 'Palais Rohan Strasbourg' },
+                { id: 'sb_4', name: '沃邦拦河坝 Barrage Vauban', dur: '45分钟', desc: '十七世纪水坝屋顶全景露台', nav: 'Barrage Vauban' },
+                { id: 'sb_5', name: '皮埃尔覆盖桥 Ponts Couverts', dur: '45分钟', desc: '运河上四座中世纪防御古塔', nav: 'Ponts Couverts Strasbourg' },
+                { id: 'sb_6', name: '欧洲议会总部 Parlement', dur: '2小时', desc: '欧盟立法核心玻璃钢构建筑', nav: 'Parlement Européen Strasbourg' },
+                { id: 'sb_7', name: '橘园公园 Orangerie', dur: '1.5小时', desc: '送子鹳保护筑巢地与法式园林', nav: 'Parc de l\'Orangerie' },
+                { id: 'sb_8', name: '克勒贝尔广场 Place Kléber', dur: '1小时', desc: '市中心商业广场圣诞树地标', nav: 'Place Kléber', rest: 'Le Gruber (4.4★)' },
+                { id: 'sb_9', name: '阿尔萨斯民俗博物馆 Alsacien', dur: '1.5小时', desc: '连体古民居传统生活全景', nav: 'Musée Alsacien Strasbourg' },
+                { id: 'sb_10', name: '圣托马斯教堂 St-Thomas', dur: '45分钟', desc: '莫扎特曾弹奏古老管风琴', nav: 'Église Saint-Thomas Strasbourg' },
+                { id: 'sb_11', name: '谷登堡广场 Place Gutenberg', dur: '45分钟', desc: '印刷术发明纪念铜像与旋转木马', nav: 'Place Gutenberg Strasbourg' },
+                { id: 'sb_12', name: '现代艺术博物馆 MAMCS', dur: '2小时', desc: '玻璃大厅与现当代艺术宝库', nav: 'MAMCS Strasbourg' },
+                { id: 'sb_13', name: '大岛运河游船 Batorama', dur: '1.5小时', desc: '水上穿过水闸环游全城世界遗产', nav: 'Batorama Strasbourg' },
+                { id: 'sb_14', name: '欧洲人权法院 CEDH', dur: '1小时', desc: '理查德·罗杰斯设计的正义之轮', nav: 'Cour Européenne des Droits de l\'Homme' },
+                { id: 'sb_15', name: '圣保罗教堂 St-Paul', dur: '45分钟', desc: '两河交汇处双尖塔新哥特地标', nav: 'Église Saint-Paul de Strasbourg' },
+                { id: 'sb_16', name: '德国帝国区 Neustadt', dur: '1.5小时', desc: '世界遗产十九世纪宏伟普鲁士大道', nav: 'Neustadt Strasbourg' },
+                { id: 'sb_17', name: '大学植物园 Jardin Botanique', dur: '1小时', desc: '大学城内古老温室与稀有树木', nav: 'Jardin Botanique de l\'Université de Strasbourg' },
+                { id: 'sb_18', name: '圣皮埃尔年轻堂 St-Pierre-le-Jeune', dur: '45分钟', desc: '保存十四世纪壁画与回廊', nav: 'Église Saint-Pierre-le-Jeune protestante' },
+                { id: 'sb_19', name: '两岸公园 Jardin des Deux Rives', dur: '1.5小时', desc: '跨越法德莱茵河步行景观索桥', nav: 'Passerelle des Deux Rives' },
+                { id: 'sb_20', name: '沃邦要塞星形遗址 Parc de la Citadelle', dur: '1.5小时', desc: '古水堡遗址森林公园', nav: 'Parc de la Citadelle Strasbourg' }
+            ],
+            'colmar': [
+                { id: 'cm_1', name: '恩特林登博物馆 Unterlinden', dur: '2.5小时', desc: '观摩艺术顶峰《伊森海姆祭坛画》', nav: 'Musée Unterlinden', rest: 'Wistub Brenner (4.5★)' },
+                { id: 'cm_2', name: '小威尼斯 La Petite Venise', dur: '2小时', desc: '劳赫河彩木屋与木船漫游', nav: 'La Petite Venise Colmar' },
+                { id: 'cm_3', name: '普菲斯特屋 Maison Pfister', dur: '30分钟', desc: '《哈尔移动城堡》原型建筑', nav: 'Maison Pfister Colmar' },
+                { id: 'cm_4', name: '人头屋 Maison des Têtes', dur: '30分钟', desc: '文艺复兴立面106个怪诞人头', nav: 'Maison des Têtes Colmar' },
+                { id: 'cm_5', name: '室内大集市 Marché Couvert', dur: '1小时', desc: '红砖市场品尝当地奶酪与糕点', nav: 'Marché Couvert Colmar', rest: 'La Soï (4.6★)' },
+                { id: 'cm_6', name: '圣马丁教堂 St-Martin', dur: '45分钟', desc: '十三世纪宏伟哥特主教堂', nav: 'Collégiale Saint-Martin Colmar' },
+                { id: 'cm_7', name: '巴托尔迪博物馆 Bartholdi', dur: '1.5小时', desc: '自由女神像创作者手稿故居', nav: 'Musée Bartholdi' },
+                { id: 'cm_8', name: '旧海关大楼 Koïfhus', dur: '45分钟', desc: '十城联盟彩色琉璃瓦历史建筑', nav: 'Koïfhus Colmar' },
+                { id: 'cm_9', name: '科尔马玩具博物馆', dur: '1.5小时', desc: '三层楼微缩火车与怀旧玩具', nav: 'Musée du Jouet Colmar' },
+                { id: 'cm_10', name: '战神广场公园 Champ de Mars', dur: '1小时', desc: '大喷泉与自由女神微缩像绿地', nav: 'Parc du Champ de Mars Colmar' },
+                { id: 'cm_11', name: '多明我会教堂 Dominicains', dur: '1小时', desc: '《玫瑰丛中的圣母》名画所在地', nav: 'Église des Dominicains Colmar' },
+                { id: 'cm_12', name: '罗塞尔曼喷泉 Roesselmann', dur: '30分钟', desc: '巴托尔迪雕刻白石喷泉', nav: 'Fontaine Roesselmann' },
+                { id: 'cm_13', name: '制革匠木屋区 Quartier des Tanneurs', dur: '1小时', desc: '通风格栅高大屋顶古建筑群', nav: 'Quartier des Tanneurs Colmar' },
+                { id: 'cm_14', name: '捕鱼桥 Rue des Poissonnerie', dur: '45分钟', desc: '色彩极其艳丽河畔木筋房排档', nav: 'Quai de la Poissonnerie Colmar' },
+                { id: 'cm_15', name: '施温迪喷泉 Fontaine Schwendi', dur: '30分钟', desc: '手持匈牙利托卡伊葡萄雕像', nav: 'Fontaine Schwendi Colmar' },
+                { id: 'cm_16', name: '微缩自由女神像环岛', dur: '30分钟', desc: '进城路口12米高自由女神致敬像', nav: 'Statue de la Liberté Colmar' },
+                { id: 'cm_17', name: '骑士圣约翰指挥所', dur: '45分钟', desc: 'Maison des Chevaliers de Saint-Jean', nav: 'Maison Saint-Jean Colmar' },
+                { id: 'cm_18', name: '圣马泰奥新教教堂 St-Matthieu', dur: '45分钟', desc: '方济各会声学大管风琴堂', nav: 'Église Saint-Matthieu de Colmar' },
+                { id: 'cm_19', name: '安特林登自然历史博物馆', dur: '1.5小时', desc: 'Musée d\'Histoire Naturelle', nav: 'Musée d\'Histoire Naturelle de Colmar' },
+                { id: 'cm_20', name: '阿尔萨斯葡萄酒之路起点村', dur: '2.5小时', desc: '埃吉桑 Eguisheim 同心圆童话村', nav: 'Eguisheim' }
+            ]
+        };
+
+        function toggleRegion(groupId, element) {
+            const groupBody = document.getElementById(groupId);
+            const arrow = element.querySelector('.region-arrow');
+            if (groupBody.style.display === 'none') {
+                groupBody.style.display = 'table-row-group';
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                groupBody.style.display = 'none';
+                arrow.style.transform = 'rotate(-90deg)';
+            }
+        }
+
+        function toggleCity(cityId, event) {
+            const targetDrawer = document.getElementById(cityId);
+            const currentRow = event.currentTarget;
+            if (targetDrawer.classList.contains('active')) {
+                targetDrawer.classList.remove('active');
+                currentRow.classList.remove('active');
+                return;
+            }
+            document.querySelectorAll('.drawer-row').forEach(d => d.classList.remove('active'));
+            document.querySelectorAll('.main-row').forEach(r => r.classList.remove('active'));
+            targetDrawer.classList.add('active');
+            currentRow.classList.add('active');
+        }
+
+        function openMap(event, mapKey, titleName) {
+            event.stopPropagation();
+            const overlay = document.getElementById('mapOverlay');
+            const mapTitle = document.getElementById('mapTitle');
+            const timeline = document.getElementById('mapTimeline');
+            const mapIcon = document.getElementById('mapIcon');
+            
+            mapIcon.className = event.target.className;
+            mapTitle.innerText = `至 ${titleName} · 最优跨城路线`;
+            timeline.innerHTML = ''; 
+
+            const route = mapData[mapKey];
+            if(!route) {
+                timeline.innerHTML = '<p style="color:#888; text-align:center; padding: 20px;">数据正在加载中...</p>';
+            } else {
+                let html = '<div class="timeline">';
+                route.forEach((item) => {
+                    if(item.station) {
+                        const dotClass = item.end ? 'tl-dot dest' : 'tl-dot';
+                        const descHtml = item.desc ? `<div class="tl-desc">${item.desc}</div>` : '';
+                        html += `
+                            <div class="tl-node">
+                                <div class="${dotClass}"></div>
+                                <div class="tl-text">
+                                    <div class="tl-station-row"><span class="tl-station-name">${item.station}</span></div>
+                                    ${descHtml}
+                                </div>
+                            </div>`;
+                    } else if (item.tag) {
+                        const lineClass = item.dashed ? 'tl-segment dashed' : 'tl-segment';
+                        html += `<div class="${lineClass}"><span class="t-tag ${item.class}">${item.tag}</span></div>`;
+                    }
+                });
+                html += '</div>';
+                timeline.innerHTML = html;
+            }
+            overlay.classList.add('show');
+        }
+
+        function openCityMiniMap(event, cityKey, cityName) {
+            event.stopPropagation();
+            const overlay = document.getElementById('mapOverlay');
+            const mapTitle = document.getElementById('mapTitle');
+            const container = document.getElementById('mapTimeline');
+            const mapIcon = document.getElementById('mapIcon');
+            
+            mapIcon.className = "city-flag " + event.target.closest('tr').querySelector('.city-flag').className.split(' ')[1];
+            mapTitle.innerText = `${cityName} · 20核心地标分布雷达图`;
+
+            const spots = citySpotsDb[cityKey] || [];
+            if(spots.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding: 20px;">暂无景点数据</p>';
+                overlay.classList.add('show');
+                return;
+            }
+
+            let html = `<div class="city-minimap-box">`;
+            spots.forEach((spot, idx) => {
+                if(idx < minimapScatterCoords.length) {
+                    const pos = minimapScatterCoords[idx];
+                    html += `
+                        <div class="minimap-pin" style="top: ${pos.y}%; left: ${pos.x}%;" title="${spot.name}">
+                            <div class="minimap-label">${spot.name.split(' ')[0]}</div>
+                        </div>`;
+                }
+            });
+            html += `</div>
+                <div class="minimap-legend">
+                    <span>🔴 20处热门核心地标打卡点 (悬浮可高亮放大)</span>
+                    <span>🗺️ 拓扑星图相对位置 (以主站为原点辐射分布)</span>
+                </div>`;
+
+            container.innerHTML = html;
+            overlay.classList.add('show');
+        }
+
+        function openSpotSelector(event, cityKey, cityName) {
+            event.stopPropagation();
+            currentCityKey = cityKey;
+            currentCityName = cityName;
+
+            const overlay = document.getElementById('mapOverlay');
+            const mapTitle = document.getElementById('mapTitle');
+            const container = document.getElementById('mapTimeline');
+            const mapIcon = document.getElementById('mapIcon');
+            
+            mapIcon.className = event.target.className;
+            mapTitle.innerText = `${cityName} · 20大景点自由挑选与规划`;
+
+            const spots = citySpotsDb[cityKey] || [];
+            if(spots.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding: 20px;">暂无景点数据</p>';
+                overlay.classList.add('show');
+                return;
+            }
+
+            let html = `
+                <div class="spot-search-box">
+                    <input type="text" id="spotSearchInput" placeholder="🔍 检索想去的景点关键词 (如: 城堡、教堂、博物馆、公园)..." oninput="filterSpots()" />
+                </div>
+                <div class="spot-select-intro">
+                    <span>勾选想去的景点组合 (为您自动规避回头路):</span>
+                    <div class="spot-tools">
+                        <a onclick="toggleAllSpots(true)">全选</a>
+                        <a onclick="toggleAllSpots(false)">清空</a>
+                    </div>
+                </div>
+                <div class="spot-grid">`;
+
+            spots.forEach((spot, idx) => {
+                const isChecked = idx < 4 ? 'checked' : '';
+                const isSelectedClass = idx < 4 ? 'selected' : '';
+                html += `
+                    <div class="spot-item ${isSelectedClass}" onclick="toggleSpotCheckbox('${spot.id}', event)">
+                        <input type="checkbox" id="${spot.id}" value="${spot.id}" ${isChecked} onclick="event.stopPropagation(); updateSpotItemClass('${spot.id}')">
+                        <div class="spot-item-content">
+                            <div class="spot-item-name">
+                                <span>${idx + 1}. ${spot.name}</span>
+                                <span style="font-size:11px; color:#888; font-weight:400;">⏱️ ${spot.dur}</span>
+                            </div>
+                            <div class="spot-item-desc">${spot.desc}</div>
+                        </div>
+                    </div>`;
+            });
+
+            html += `</div><button class="btn-plan" onclick="generateOptimalTour()">🚀 自动生成最优不走回头路路线</button>`;
+            
+            container.innerHTML = html;
+            overlay.classList.add('show');
+        }
+
+        function toggleSpotCheckbox(id, event) {
+            const cb = document.getElementById(id);
+            cb.checked = !cb.checked;
+            updateSpotItemClass(id);
+        }
+
+        function updateSpotItemClass(id) {
+            const cb = document.getElementById(id);
+            const parent = cb.closest('.spot-item');
+            if(cb.checked) { parent.classList.add('selected'); }
+            else { parent.classList.remove('selected'); }
+        }
+
+        function toggleAllSpots(check) {
+            const cbs = document.querySelectorAll('.spot-grid input[type="checkbox"]');
+            cbs.forEach(cb => {
+                cb.checked = check;
+                updateSpotItemClass(cb.id);
+            });
+        }
+
+        function generateOptimalTour() {
+            const cbs = document.querySelectorAll('.spot-grid input[type="checkbox"]:checked');
+            const selectedIds = Array.from(cbs).map(c => c.value);
+            
+            if(selectedIds.length === 0) {
+                alert('请至少勾选 1 个想去的景点！');
+                return;
+            }
+
+            const allSpots = citySpotsDb[currentCityKey] || [];
+            const selectedSpots = allSpots.filter(s => selectedIds.includes(s.id));
+
+            const container = document.getElementById('mapTimeline');
+            const mapTitle = document.getElementById('mapTitle');
+            mapTitle.innerText = `${currentCityName} · 专属定制最优路线 (${selectedSpots.length}个景点)`;
+
+            let html = `
+                <a class="btn-back-select" onclick="openSpotSelector(event, '${currentCityKey}', '${currentCityName}')">← 重新挑选景点</a>
+                <div class="timeline">
+                    <div class="tl-node">
+                        <div class="tl-dot"></div>
+                        <div class="tl-text">
+                            <div class="tl-station-row"><span class="tl-station-name">${currentCityName} 主火车站 / 交通枢纽</span></div>
+                            <div class="tl-desc">📍 游玩行程起点</div>
+                        </div>
+                    </div>`;
+
+            selectedSpots.forEach((spot, idx) => {
+                let transitTag = '步行 (8-12分钟)';
+                let transitClass = 't-walk';
+                if(idx === 0) {
+                    transitTag = '市内公交 / Tram (10-15分钟)';
+                    transitClass = 't-other';
+                } else if(idx % 2 === 1) {
+                    transitTag = '步行连线 (10-15分钟)';
+                    transitClass = 't-walk';
+                } else {
+                    transitTag = 'Tram / 巴士换乘 (10分钟)';
+                    transitClass = 't-other';
+                }
+
+                html += `<div class="tl-segment"><span class="t-tag ${transitClass}">${transitTag}</span></div>`;
+
+                const isEnd = (idx === selectedSpots.length - 1);
+                const dotClass = isEnd ? 'tl-dot dest' : 'tl-dot';
+                const navHtml = `<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.nav)}" target="_blank" class="tl-nav">↗ 导航</a>`;
+                let restHtml = spot.rest ? `<div class="tl-rest"><span>🍴 途经美食:</span>${spot.rest}</div>` : '';
+
+                html += `
+                    <div class="tl-node">
+                        <div class="${dotClass}"></div>
+                        <div class="tl-text">
+                            <div class="tl-station-row"><span class="tl-station-name">${idx + 1}. ${spot.name}</span> ${navHtml}</div>
+                            <div class="tl-desc">⏱️ 建议游玩 ${spot.dur} · ${spot.desc}</div>
+                            ${restHtml}
+                        </div>
+                    </div>`;
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        async function openDbBoard(event, destId, destName) {
+            event.stopPropagation();
+            document.getElementById('dbOverlay').classList.add('show');
+            document.getElementById('dbTitle').innerText = `卡尔斯鲁厄 Hbf → ${destName}`;
+            
+            const container = document.getElementById('dbContainer');
+            container.innerHTML = `
+                <div style="text-align:center; padding:40px 20px;">
+                    <div class="loader"></div>
+                    <p style="color:#666; font-size:14px; margin-top:16px;">正在通过 DB 开放接口请求实时数据...</p>
+                </div>`;
+
+            try {
+                const response = await fetch(`https://v6.db.transport.rest/journeys?from=8000191&to=${destId}&results=3&departure=now`);
+                const data = await response.json();
+
+                if (data && data.journeys && data.journeys.length > 0) {
+                    let html = '';
+                    data.journeys.forEach(j => {
+                        const firstLeg = j.legs[0];
+                        const deptTime = new Date(firstLeg.departure);
+                        const plannedTime = firstLeg.plannedDeparture ? new Date(firstLeg.plannedDeparture) : deptTime;
+                        const delayMins = firstLeg.departureDelay ? Math.round(firstLeg.departureDelay / 60) : 0;
+                        const delayHtml = delayMins > 0 ? `<span class="db-delay">晚点 +${delayMins}分</span>` : '';
+                        const timeStr = plannedTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                        const trainName = firstLeg.line ? firstLeg.line.name : (firstLeg.train ? firstLeg.train.name : '区域列车');
+                        const plat = firstLeg.departurePlatform || '--';
+                        const transfers = j.legs.length - 1;
+                        
+                        const arrivalTime = new Date(j.legs[j.legs.length - 1].arrival);
+                        const durationMins = Math.round((arrivalTime - plannedTime) / 60000);
+                        const durHrs = Math.floor(durationMins / 60);
+                        const durMin = durationMins % 60;
+                        const durationStr = durHrs > 0 ? `${durHrs}h ${durMin}m` : `${durMin}m`;
+
+                        html += `
+                        <div class="db-train-row">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <span class="db-time">${timeStr}</span>
+                                    ${delayHtml}
+                                </div>
+                                <div><span class="db-train">${trainName}</span></div>
+                            </div>
+                            <div class="db-meta">
+                                <span>站台: <span class="db-plat">${plat}</span> &nbsp;|&nbsp; 换乘: <strong>${transfers}</strong> 次</span>
+                                <span>预计耗时: <strong>${durationStr}</strong></span>
+                            </div>
+                        </div>`;
+                    });
+
+                    const fallbackUrl = `https://int.bahn.de/zh/buchung/fahrplan/suche#sts=true&so=Karlsruhe%20Hbf&zo=${encodeURIComponent(destName)}&soid=8000191&zoid=${destId}`;
+                    html += `<a href="${fallbackUrl}" target="_blank" class="db-ext-btn">前往 DB 官网查询完整日历排班 ↗</a>`;
+                    container.innerHTML = `<div class="db-board-container">${html}</div>`;
+                } else {
+                    throw new Error("No journey data found");
+                }
+            } catch (error) {
+                const fallbackUrl = `https://int.bahn.de/zh/buchung/fahrplan/suche#sts=true&so=Karlsruhe%20Hbf&zo=${encodeURIComponent(destName)}&soid=8000191&zoid=${destId}`;
+                container.innerHTML = `
+                    <div style="text-align:center; padding:30px 20px;">
+                        <span style="font-size:32px;">⚠️</span>
+                        <h4 style="color:var(--bh-red); margin: 12px 0 8px 0;">无法直连 DB 开放数据接口</h4>
+                        <p style="color:#666; font-size:13px; margin:0 0 20px 0;">可能是由于当前网络环境限制或 API 频控保护。</p>
+                        <a href="${fallbackUrl}" target="_blank" class="db-ext-btn" style="display:inline-block; padding:12px 24px;">点击此处直通 DB 官网查询 ↗</a>
+                    </div>`;
+            }
+        }
+
+        // ================= 关闭弹窗函数 =================
+        function closeMap() {
+            document.getElementById('mapOverlay').classList.remove('show');
+        }
+
+        function closeDbBoard() {
+            document.getElementById('dbOverlay').classList.remove('show');
+        }
+    </script>
+</body>
+</html>
