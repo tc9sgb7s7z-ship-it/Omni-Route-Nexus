@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+    <meta charset="UTF-8">
+    <title>D-Ticket | 柏林专属跃迁矩阵</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        :root { --bg-page: #f5f5f7; --bg-card: #ffffff; --text-main: #1d1d1f; --text-sec: #86868b; --border: #d2d2d7; --bh-red: #E2001A; --bh-yellow: #FFCC00; --bh-blue: #0033A0; --bh-black: #111111; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: var(--bg-page); color: var(--text-main); margin: 0; padding: 40px; line-height: 1.5; padding-bottom: 120px; }
+        .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+        header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid var(--bh-black); display: flex; justify-content: space-between; align-items: baseline; }
+        h1 { font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
+        .meta { color: var(--text-sec); font-size: 14px; font-weight: 500; }
+        table { width: 100%; border-collapse: collapse; background: var(--bg-card); box-shadow: 0 4px 24px rgba(0,0,0,0.04); border-radius: 12px; overflow: hidden; margin-bottom: 40px; }
+        th { text-align: left; padding: 18px 24px; color: var(--text-sec); font-weight: 600; font-size: 13px; border-bottom: 1px solid var(--border); background: #fdfdfd;}
+        td { padding: 16px 24px; font-size: 14px; vertical-align: middle; border-bottom: 1px solid var(--border); }
+        
+        .t-tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; transition: transform 0.1s, box-shadow 0.1s; }
+        .t-tag.clickable { cursor: pointer; border-bottom: 2px solid rgba(0,0,0,0.2); }
+        .t-tag.clickable:hover { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .t-re { background: #fdf2f3; color: #E2001A; border: 1px solid #f9dadd; }
+        .t-s { background: #f0f8f5; color: #00754A; border: 1px solid #cce8dd; }
+        .t-other { background: #f4e8f9; color: #8e44ad; border: 1px solid #e2c6f2; }
+        .t-walk { background: #f0f0f0; color: #555; border: 1px solid #e0e0e0; }
+        
+        .opt-route { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .flag { width: 16px; height: 16px; border-radius: 50%; display: inline-block; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.4) inset; cursor: pointer; transition: transform 0.2s; position: relative; }
+        .city-flag { width: 16px; height: 12px; border-radius: 2px; display: inline-block; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.3) inset; cursor: pointer; transition: transform 0.2s; position: relative; margin-right: 8px; vertical-align: middle; }
+        .city-name-btn { cursor: pointer; text-decoration: underline; text-decoration-color: transparent; transition: all 0.2s; font-weight: 600; }
+        .city-name-btn:hover { color: var(--bh-blue); text-decoration-color: var(--bh-blue); }
+        .flag:hover, .city-flag:hover { transform: scale(1.3); box-shadow: 0 4px 8px rgba(0,0,0,0.15); z-index: 10; }
+        .flag-de { background: linear-gradient(180deg, #000 33.3%, #D00 33.3%, #D00 66.6%, #FFCE00 66.6%); }
+        .f-berlin { background: linear-gradient(180deg, #E2001A 50%, #FFFFFF 50%); }
+
+        .region-header { background: #f1f1f4; cursor: pointer; transition: background 0.2s; user-select: none; }
+        .region-header td { padding: 12px 24px; font-weight: 600; font-size: 14px; color: var(--text-main); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        
+        .map-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .map-overlay.show { opacity: 1; pointer-events: auto; }
+        .map-modal { background: #fff; width: 640px; max-height: 88vh; overflow-y: auto; max-width: 92%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); padding: 30px; transform: scale(0.8) translateY(20px); opacity: 0; transition: all 0.3s ease; position: relative; }
+        .map-overlay.show .map-modal { transform: scale(1) translateY(0); opacity: 1; }
+        .map-close { position: absolute; top: 20px; right: 20px; background: #f1f1f4; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #555; transition: background 0.2s; z-index: 9999;}
+        .map-close:hover { background: #e0e0e5; color: var(--bh-red); }
+        .map-header-title { font-size: 18px; font-weight: 700; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; padding-right: 40px; }
+        
+        .city-minimap-box { width: 100%; height: 380px; background-color: #fafafa; background-image: linear-gradient(#e5e5ea 1px, transparent 1px), linear-gradient(90deg, #e5e5ea 1px, transparent 1px); background-size: 40px 40px; border-radius: 12px; border: 1px solid var(--border); position: relative; margin-top: 10px; overflow: hidden; cursor: crosshair; }
+        .minimap-content { width: 100%; height: 100%; position: relative; transition: transform 0.15s ease-out; transform-origin: center center; }
+        .minimap-pin { position: absolute; width: 12px; height: 12px; background-color: var(--bh-red); border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: translate(-50%, -50%); cursor: pointer; transition: transform 0.2s, background-color 0.2s; z-index: 2; }
+        .minimap-pin:hover { transform: translate(-50%, -50%) scale(1.8); z-index: 10; background-color: var(--bh-blue); }
+        .minimap-label { position: absolute; background: rgba(255,255,255,0.95); border: 1px solid #ccc; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #111; pointer-events: none; transform: translate(10px, -16px); white-space: nowrap; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 3; }
+        
+        .spot-filters { display: flex; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; align-items: center; }
+        .spot-filters select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; outline: none; background: #fdfdfd; cursor: pointer; }
+        .btn-clear-filter { padding: 8px 12px; background: #fdf2f3; color: var(--bh-red); border: 1px solid #f9dadd; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-clear-filter:hover { background: #fad1d4; }
+
+        .start-point-box { margin-bottom: 16px; display: flex; align-items: center; gap: 10px; background: #f0f6ff; padding: 12px; border-radius: 8px; border: 1px solid #d9e3f4; font-size: 13px; }
+        .start-point-box select { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; }
+        .spot-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-height: 45vh; overflow-y: auto; padding-right: 5px; }
+        .spot-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px; border: 1px solid #e5e5ea; border-radius: 8px; cursor: pointer; transition: all 0.2s; background: #fafafa; }
+        .spot-item.selected { border-color: var(--bh-blue); background: #f0f6ff; }
+        .spot-item input[type="checkbox"] { width: 16px; height: 16px; margin-top: 3px; accent-color: var(--bh-blue); cursor: pointer; }
+        .spot-item-content { flex: 1; pointer-events: none; }
+        .spot-item-name { font-weight: 600; font-size: 13px; color: var(--text-main); display: flex; justify-content: space-between; }
+        .spot-item-tags { margin-top: 6px; display: flex; gap: 4px; flex-wrap: wrap; }
+        .s-tag { font-size: 9px; background: #e0e0e0; padding: 2px 4px; border-radius: 3px; color: #444; }
+        
+        .btn-plan { display: block; width: 100%; padding: 14px; background: var(--bh-black); color: #fff; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center; transition: background 0.2s; margin-top: 10px; }
+        .btn-plan:hover { background: #333; }
+        .btn-back-select { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--bh-blue); background: #eaf0fc; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-weight: 600; margin-bottom: 16px; cursor: pointer; }
+
+        .timeline { display: flex; flex-direction: column; padding-top: 10px; }
+        .tl-node { display: flex; align-items: flex-start; gap: 16px; color: var(--text-main); position: relative; z-index: 2; }
+        .tl-text { display: flex; flex-direction: column; width: 100%; }
+        .tl-station-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .tl-station-name { font-weight: 600; font-size: 15px; }
+        .tl-nav { font-size: 11px; color: var(--bh-blue); text-decoration: none; padding: 2px 6px; background: #eaf0fc; border-radius: 4px; transition: all 0.2s; font-weight: 500; display: inline-flex; align-items: center; }
+        .tl-nav:hover { background: var(--bh-blue); color: #fff; }
+        .tl-desc { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.4; }
+        .tl-dot { width: 12px; height: 12px; border-radius: 50%; border: 3px solid var(--text-main); background: #fff; flex-shrink: 0; margin-top: 4px; }
+        .tl-dot.dest { border-color: var(--bh-red); background: var(--bh-red); box-shadow: 0 0 0 3px rgba(226,0,26,0.15); }
+        .tl-segment { margin-left: 5px; border-left: 2px solid var(--border); padding: 20px 0 20px 24px; position: relative; display: flex; align-items: center; }
+
+        .gallery-header { font-size: 20px; font-weight: 700; margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid var(--border); color: #111; display: flex; justify-content: space-between; align-items: center; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+        .gallery-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+        .gallery-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-color: var(--bh-blue); }
+        .gallery-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--bh-red); transform: scaleY(0); transition: transform 0.2s; transform-origin: bottom; }
+        .gallery-card:hover::before { transform: scaleY(1); }
+        .g-card-title { font-weight: 700; font-size: 14px; margin-bottom: 8px; color: var(--text-main); }
+        .g-card-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+        .g-card-desc { font-size: 11px; color: var(--text-sec); line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .search-input { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; transition: all 0.2s; background: #fdfdfd; width: 180px; }
+        .search-input:focus { border-color: var(--bh-blue); box-shadow: 0 0 0 2px rgba(0,51,160,0.1); width: 220px; }
+
+        .spot-detail-content { display: flex; flex-direction: column; }
+        .sd-header { margin-bottom: 16px; }
+        .sd-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+        .sd-title { font-size: 22px; font-weight: 700; color: #111; margin: 0; line-height: 1.2; }
+        .sd-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .sd-btn-icon { background: #f0f4fb; color: var(--bh-blue); border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s; }
+        .sd-btn-icon:hover { background: var(--bh-blue); color: #fff; }
+        
+        .sd-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 16px; }
+        .sd-pill { background: #f5f5f7; border: 1px solid transparent; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #555; cursor: pointer; transition: all 0.2s; }
+        .sd-pill:hover { background: #e8e8ed; color: #111; }
+        .sd-pill.active { background: var(--bh-black); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        
+        .sd-tab-container { min-height: 150px; }
+        .sd-tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .sd-tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .sd-text { font-size: 13px; color: #333; line-height: 1.6; text-align: justify; background: #fafafa; padding: 16px; border-radius: 8px; border: 1px solid #eaeaea; }
+        .sd-widget-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .sd-widget { background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .sd-widget-title { font-size: 11px; font-weight: 600; color: #888; margin-bottom: 4px; text-transform: uppercase; }
+        .sd-widget-val { font-size: 14px; font-weight: 700; color: #111; }
+
+        .db-ticket-box { background: #2c2f33; color: #fff; border-radius: 12px; padding: 0; overflow: hidden; font-family: 'Inter', sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .db-ticket-header { background: #ff0000; padding: 12px 20px; font-weight: 700; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+        .db-ticket-body { padding: 20px; }
+        .db-journey { border-bottom: 1px dashed #555; padding-bottom: 15px; margin-bottom: 15px; }
+        .db-journey:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        .db-j-date { font-size: 14px; color: #aaa; margin-bottom: 10px; font-weight: 600; }
+        .db-j-stations { display: flex; justify-content: space-between; align-items: center; font-size: 18px; font-weight: 700; margin-bottom: 5px; }
+        .db-j-time { font-size: 14px; color: #ddd; }
+        .db-j-meta { font-size: 12px; background: #3f4347; padding: 6px 10px; border-radius: 4px; display: inline-block; margin-top: 8px; color: #ccc; }
+        
+        .db-board-container { font-family: 'Inter', sans-serif; }
+        .db-train-row { border-bottom: 1px solid #eee; padding: 14px 0; display:flex; justify-content:space-between; align-items:center; }
+        .db-time { font-size: 20px; font-weight: 700; color: #111; }
+        .db-delay { color: #E2001A; font-size: 13px; margin-left: 8px; font-weight: 600; }
+        .db-train { background: #111; color: #fff; padding: 2px 8px; border-radius: 4px; font-weight: 600; font-size: 13px; }
+        .db-ext-btn { display: block; text-align: center; background: #eaf0fc; color: var(--bh-blue); text-decoration: none; padding: 12px; border-radius: 8px; font-weight: 600; margin-top: 16px; transition: all 0.2s; }
+        .db-ext-btn:hover { background: var(--bh-blue); color: #fff; }
+        .loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--bh-red); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        .bottom-action-bar {
+            position: fixed; bottom: 20px; right: 20px; left: 20px; max-width: 1200px; margin: 0 auto;
+            background: #111111; color: #fff; border-radius: 12px; padding: 14px 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25); display: flex; justify-content: space-between;
+            align-items: center; z-index: 999; flex-wrap: wrap; gap: 12px;
+        }
+        .bab-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .bab-desc { font-size: 12px; color: #aaa; margin-top: 2px; }
+        .bab-controls { display: flex; gap: 10px; align-items: center; }
+        .bab-input { padding: 8px 12px; border-radius: 6px; border: 1px solid #333; background: #222; color: #fff; font-size: 13px; outline: none; width: 140px; }
+        .bab-input:focus { border-color: var(--bh-blue); }
+        .bab-btn { padding: 8px 16px; border-radius: 6px; font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; }
+        .bab-btn-primary { background: var(--bh-blue); color: #fff; }
+        .bab-btn-primary:hover { background: #002277; }
+
+        .iti-header-actions { display: flex; gap: 10px; align-items: center; }
+        .btn-iti { padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; border: none; display: flex; align-items: center; gap: 6px; }
+        .btn-iti.primary { background: var(--bh-blue); color: #fff; }
+        .btn-iti.primary:hover { background: #002277; }
+        .btn-iti.saved { background: var(--bh-yellow); color: #111; border: 1px solid #e6b800; }
+        .btn-iti.saved:hover { background: #e6b800; }
+        
+        .iti-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; cursor: pointer; transition: all 0.2s; }
+        .iti-card:hover { border-color: var(--bh-blue); box-shadow: 0 4px 15px rgba(0,51,160,0.1); transform: translateY(-2px); }
+        .iti-card h3 { margin: 0 0 8px 0; font-size: 18px; color: var(--bh-blue); }
+        .iti-card p { margin: 0; font-size: 13px; color: #555; }
+        
+        .itinerary-action-bar { margin-top: 24px; display: flex; justify-content: flex-end; border-top: 1px solid #eee; padding-top: 16px; }
+        .btn-select-iti { background: var(--bh-black); color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-select-iti:hover { background: #333; }
+        .btn-cancel-iti { background: #fdf2f3; color: var(--bh-red); border: 1px solid #f9dadd; padding: 10px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-cancel-iti:hover { background: #fad1d4; }
+        .daily-box { margin-bottom: 20px; background: #fafafa; border-radius: 8px; padding: 15px; border: 1px solid #eee; }
+        .daily-title { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #ddd; padding-bottom: 8px; }
+
+        .watermark { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 99999; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='350' height='250'><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' transform='rotate(-30, 175, 125)' fill='rgba(0,0,0,0.03)' font-size='24' font-family='Arial, sans-serif' font-weight='bold'>ahh-Nein出品</text></svg>"); background-repeat: repeat; }
+    </style>
+</head>
+<body>
+    <div class="watermark"></div>
+    <div class="container">
+        <header>
+            <h1>D-Ticket | 柏林</h1>
+            <div class="meta">📍 行程：10.12 - 10.17 (共 6 天) | 50大地标深度情报交互系统</div>
+        </header>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="35%">目的地 (点方标规划游玩, 点地名看雷达)</th>
+                    <th width="35%">卡尔斯鲁厄至柏林跨城最优路径 (点圆标看行程单)</th>
+                    <th width="30%">票务状态</th>
+                </tr>
+            </thead>
+            <tbody class="region-header-body">
+                <tr class="region-header">
+                    <td colspan="3"><div class="flex-between"><span>🇩🇪 柏林联邦州 (Berlin) - 首都特辑</span></div></td>
+                </tr>
+            </tbody>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="city-flag f-berlin" onclick="openSpotSelector(event)"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event)">柏林全城 (Berlin &amp; Umland)</span>
+                    </td>
+                    <td>
+                        <div class="opt-route">
+                            <span class="flag flag-de" onclick="openDBTicket(event)"></span>
+                            <span class="t-tag t-re" style="background:#fffcf0; color:#b38f00; border:1px solid #ffeb99;">ICE 直达跨城票</span>
+                        </div>
+                    </td>
+                    <td><span style="background: #fdf2f3; color: #E2001A; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600;">Super Sparpreis (不可退改)</span></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="gallery-header">
+            <span>📸 柏林 50 大地标全景图鉴</span>
+            <div class="iti-header-actions">
+                <input type="text" id="gallerySearch" class="search-input" placeholder="🔍 搜索地标名称..." onkeyup="filterGallery()">
+                <button class="btn-iti primary" onclick="openItineraryModal()">🗺️ 推荐 6 日攻略</button>
+                <button id="btnSavedItinerary" class="btn-iti saved" style="display: none;" onclick="openSavedItinerary()">⭐ 查看已选攻略</button>
+            </div>
+        </div>
+        <div class="gallery-grid" id="mainGallery">
+            <!-- 50 spots generated by JS -->
+        </div>
+    </div>
+
+    <!-- 底部重新调用与指令生成工具栏 -->
+    <div class="bottom-action-bar">
+        <div>
+            <div class="bab-title">🛠️ 规划新城市</div>
+            <div class="bab-desc">输入新城市名并获取指令，要求 AI 根据你的<b>真实车票</b>自动适配表头时间与多日攻略内容。</div>
+        </div>
+        <div class="bab-controls">
+            <input type="text" id="targetCityInput" class="bab-input" placeholder="输入新城市名 (如: 汉堡)">
+            <button class="bab-btn bab-btn-primary" onclick="copyRebuildPrompt()">📋 复制生成指令 (并下载此系统)</button>
+        </div>
+    </div>
+
+    <!-- 弹窗层：路线与选点 / 懒人攻略 -->
+    <div id="mapOverlay" class="map-overlay" onclick="closeMap()">
+        <div class="map-modal" onclick="event.stopPropagation()">
+            <button class="map-close" onclick="closeMap()">×</button>
+            <div class="map-header-title">
+                <span id="mapIcon" class="city-flag f-berlin"></span>
+                <span id="mapTitle">柏林 6 日深度游攻略</span>
+            </div>
+            <div id="mapTimeline"></div>
+        </div>
+    </div>
+
+    <!-- 弹窗层：动态情报面板 (胶囊导航版) -->
+    <div id="detailOverlay" class="map-overlay" onclick="closeDetail()">
+        <div class="map-modal" onclick="event.stopPropagation()">
+            <button class="map-close" onclick="closeDetail()">×</button>
+            <div id="detailContainer"></div>
+        </div>
+    </div>
+
+    <!-- 弹窗层：DB 实时监测 -->
+    <div id="dbOverlay" class="map-overlay" onclick="closeDbBoard()">
+        <div class="map-modal db-board-container" style="width: 480px;" onclick="event.stopPropagation()">
+            <button class="map-close" onclick="closeDbBoard()">×</button>
+            <div class="map-header-title">
+                <span class="city-flag f-berlin"></span> 
+                <span id="dbTitle">Berlin Hbf 实时发车看板</span>
+            </div>
+            <div id="dbContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const berlinSpots = [
+            { id: 'b_1', name: '勃兰登堡门 (Brandenburger Tor)', dur: '1.5小时', nav: 'Brandenburger Tor', rest: 'Adlon Kempinski (高端咖啡)', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 50, y: 50}, lat: 52.5163, lon: 13.3777,
+              desc_long: '【历史渊源】勃兰登堡门建于1788年至1791年，是普鲁士国王腓特烈·威廉二世为纪念和平而下令建造的新古典主义建筑。顶部是胜利女神驾驶四马两轮战车的铜像。<br><br>【政治象征】它曾见证拿破仑军队入城、纳粹游行、柏林墙的修建与倒塌，以及德国重新统一的历史高光时刻，是柏林乃至全德国无可争议的超级地标。',
+              ticket: '🎟️ <b>免票情况：</b> 位于柏林市中心地带，24小时完全免费对公众开放参观拍照。<br>💡 <b>游览贴士：</b> 白天游人较多，建议傍晚或夜间灯光亮起时前往，景色更加壮观。',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优 (AQI 22)', cloth: '广场开阔风力较大，建议穿着防风夹克或呢大衣。' } },
+
+            { id: 'b_2', name: '国会大厦 (Reichstag)', dur: '2小时', nav: 'Platz der Republik 1, Berlin', rest: 'Käfer Dachgarten-Restaurant (顶层全景餐厅)', season: ['春','夏','秋','冬'], act: ['城市游览', '科技与艺术'], dist: '2公里内', coord: {x: 46, y: 46}, lat: 52.5186, lon: 13.3761,
+              desc_long: '【历史建筑】国会大厦始建于1894年，由建筑师保罗·瓦洛特设计。1933年的“国会大厦纵火案”改变了德国历史。1999年，著名建筑师诺曼·福斯特为其增设了标志性的现代化玻璃穹顶。<br><br>【工程美学】巨大的玻璃穹顶不仅象征着政治透明度，其内部独特的漏斗形镜面反射系统更是建筑节能与生态采光的经典工程杰作。',
+              ticket: '🎟️ <b>门票政策：</b> 参观国会大厦穹顶及屋顶露台完全免费，但【必须至少提前数天在官方网站完成实名预约登记】，现场不接受临时排队。<br><br>🔗 <a href="https://www.bundestag.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">德国联邦议院官网预约通道 ↗</a>',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优 (AQI 19)', cloth: '穹顶内部步道盘旋上升，气温适中，建议舒适便鞋。' } },
+
+            { id: 'b_3', name: '博物馆岛 (Museumsinsel)', dur: '3.5小时', nav: 'Museumsinsel Berlin', rest: 'Café im Bode-Museum', season: ['春','夏','秋','冬'], act: ['科技与艺术', '城市游览'], dist: '2公里内', coord: {x: 60, y: 45}, lat: 52.5169, lon: 13.4011,
+              desc_long: '【历史渊源】坐落于施普雷河的一个岛屿上，汇聚了柏林老博物馆、新博物馆、老国家美术馆、博德博物馆和佩加蒙博物馆等五座世界级博物馆，1999年被联合国教科文组织列为世界文化遗产。<br><br>【馆藏珍宝】这里收藏了跨越数千年的人类文明瑰宝，包括著名的古埃及女王娜芙蒂蒂胸像、巴比伦伊什塔尔门以及无价的古典艺术杰作。',
+              ticket: '🎫 <b>常规票务：</b> 博物馆岛通票（Museum Island Pass）成人约 24€，可一次性参观岛上所有博物馆。<br>👑 <b>特惠政策：</b> 学生凭国际学生证 (ISIC) 或大学证件可享半价优惠（约 12€）；18岁以下未成年人免费。<br><br>🔗 <a href="https://www.smb.museum/" target="_blank" style="color:var(--bh-blue); font-weight:600;">柏林国立博物馆官方订票 ↗</a>',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '室内展馆较多，建议采用轻便易脱的外套。' } },
+
+            { id: 'b_4', name: '柏林电视塔 (Fernsehturm)', dur: '1.5小时', nav: 'Berliner Fernsehturm', rest: 'Sphere 360度旋转餐厅', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 65, y: 50}, lat: 52.5208, lon: 13.4094,
+              desc_long: '【城市地标】柏林电视塔高368米，是德国最高的建筑物，于1969年由德意志民主共和国（东德）建成，至今仍是柏林天际线上最醒目的标志。<br><br>【高空视野】位于203米处的球形观景台和旋转餐厅可在30分钟内完成一圈旋转，天气晴好时可俯瞰方圆40公里内的全柏林风光。',
+              ticket: '🎫 <b>常规票务：</b> 快速通道观景门票成人约 22.5€起；若预订旋转餐厅午餐或晚餐则需在官网单独预约套餐。<br><br>🔗 <a href="https://tv-turm.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">柏林电视塔官方订票 ↗</a>',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '高空球体内部有暖气，穿着舒适日常服饰即可。' } },
+
+            { id: 'b_5', name: '东边画廊 (East Side Gallery)', dur: '2小时', nav: 'East Side Gallery', rest: 'Yaam Berlin (加勒比海滩风情酒吧)', season: ['春','夏','秋'], act: ['城市游览', '徒步'], dist: '5公里内', coord: {x: 75, y: 65}, lat: 52.5050, lon: 13.4397,
+              desc_long: '【历史变迁】这是世界上保存最长、规模最大的柏林墙露天画廊，全长1.3公里，紧邻施普雷河畔。<br><br>【艺术结晶】1990年柏林墙倒塌后，来自全球21个国家的118位艺术家在墙面上创作了105幅绘画。其中最著名的莫过于德米特里·弗鲁贝尔创作的《兄弟之吻》（社会主义兄弟之吻）。',
+              ticket: '🎟️ <b>免票情况：</b> 露天开放街区，全天24小时完全免费参观。<br>💡 <b>贴士：</b> 建议从奥拉宁堡门（Ostbahnhof）步行至华沙大街（Warschauer Straße），一路欣赏涂鸦。',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '沿河道漫步风力较大，推荐防风夹克。' } },
+
+            { id: 'b_6', name: '查理检查哨 (Checkpoint Charlie)', dur: '1小时', nav: 'Checkpoint Charlie', rest: 'Lutter & Wegner (传统德餐)', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 52, y: 58}, lat: 52.5074, lon: 13.3904,
+              desc_long: '【冷战历史】查理检查哨是冷战时期柏林墙边境上最著名的盟军哨所，曾是美苏坦克对峙的敏感热点，也是东西柏林间盟军人员、外交官和外国游客的专属通道。<br><br>【纪念意义】如今这里设立了冷战博物馆与标志性的哨卡岗亭复原模型，成为了解冷战柏林分裂史的窗口。',
+              ticket: '🎟️ <b>免票情况：</b> 街头哨亭及露天历史展板免费参观；旁边的查理检查哨博物馆（Mauermuseum）成人门票约 17.5€。',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '市区街道漫步，日常休闲装。' } },
+
+            { id: 'b_7', name: '犹太人大屠杀纪念碑', dur: '1小时', nav: 'Memorial to the Murdered Jews of Europe', rest: 'The Bird (高品质汉堡)', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 48, y: 53}, lat: 52.5137, lon: 13.3788,
+              desc_long: '【建筑设计】由建筑师彼得·埃森曼设计占地1.9万平方米的纪念碑群由2711块大小不一的灰色混凝土方柱组成，如波浪般起伏排列。<br><br>【深刻内思】走入其中，地面起伏错落，周围逐渐被高耸的石柱合围，带给人一种强烈的迷失感与压抑感，是对历史反思的伟大纪念建筑。',
+              ticket: '🎟️ <b>免票情况：</b> 地面纪念碑群24小时免费参观；地下的常设信息中心（Information Centre）也完全免费开放（需安检）。',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '适合庄重、低调的户外出行服装。' } },
+
+            { id: 'b_8', name: '无忧宫 (Schloss Sanssouci)', dur: '大半天', nav: 'Schloss Sanssouci, Potsdam', rest: 'Mövenpick Restaurant Sanssouci Park', season: ['春','夏','秋'], act: ['城市游览', '自然风光'], dist: '10公里以上', coord: {x: 10, y: 30}, lat: 52.4042, lon: 13.0381,
+              desc_long: '【历史渊源】位于柏林西南郊波茨坦市，是普鲁士国王腓特烈大帝的夏宫。名字源于法语“Sans Souci”（意为“无忧”或“无虑”）。<br><br>【洛可可杰作】宫殿建在壮观的六层阶梯式葡萄园山坡上，周围是绵延数百公顷的英式与法式皇家园林，是德国洛可可建筑的巅峰之作。',
+              ticket: '🎫 <b>常规票务：</b> 波茨坦宫殿联合通票（Potsdam ABC / Schloss Sanssouci）成人约 22€，可参观无忧宫内部及园区各主要宫殿。<br><br>🔗 <a href="https://www.spsg.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">普鲁士宫殿基金会官网订票 ↗</a>',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '极优', cloth: '皇家园林面积巨大需大量步行，务必穿舒适步行鞋。' } },
+
+            { id: 'b_9', name: '柏林大教堂 (Berliner Dom)', dur: '1.5小时', nav: 'Berliner Dom', rest: 'Ratskeller Berlin', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 62, y: 47}, lat: 52.5190, lon: 13.4010,
+              desc_long: '【历史渊源】柏林大教堂座落于博物馆岛南端，是柏林最大的教堂，曾是霍亨索伦王朝的皇家宫廷教堂。<br><br>【建筑与登顶】其宏伟的文艺复兴式绿色圆顶极为醒目。登顶270级台阶可俯瞰整个施普雷河及柏林市中心全景。',
+              ticket: '🎫 <b>常规票务：</b> 参观教堂内部及登顶穹顶全景成人约 10€；学生特惠约 7.5€。<br><br>🔗 <a href="https://www.berlinerdom.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">柏林大教堂官方主页 ↗</a>',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '登顶爬梯时体温上升，建议穿可方便穿脱的外套。' } },
+
+            { id: 'b_10', name: '波茨坦广场 (Potsdamer Platz)', dur: '2小时', nav: 'Potsdamer Platz', rest: 'Neni Berlin (25hours Hotel顶层全景餐厅)', season: ['春','夏','秋','冬'], act: ['城市游览', '购物'], dist: '2公里内', coord: {x: 48, y: 55}, lat: 52.5096, lon: 13.3759,
+              desc_long: '【城市演变】冷战期间曾被柏林墙一分为二，曾是欧洲最荒凉的无人地带。两德统一后，这里化作现代化的摩天大楼森林，成为柏林重建的城市奇迹。<br><br>【文化与商业】这里汇聚了索尼中心（Sony Center）、IMAX影院和各大跨国企业总部。',
+              ticket: '🎟️ <b>免票情况：</b> 广场及商业街区全天开放。体验全德最快的穹顶电梯登上 Kollhoff 塔楼观景台成人约 7.5€。',
+              weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '现代商业区，时尚休闲便服。' } },
+
+            // 11-50 spots for Berlin
+            { id: 'b_11', name: '亚历山大广场 (Alexanderplatz)', dur: '1.5小时', nav: 'Alexanderplatz', rest: 'Hofbräu Berlin (巴伐利亚啤酒屋)', season: ['春','夏','秋','冬'], act: ['城市游览','购物'], dist: '2公里内', coord: {x: 63, y: 49}, lat: 52.5219, lon: 13.4132, ticket: '广场自由开放。', desc_long: '【交通与商业】东柏林核心交通枢纽。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '日常休闲。' } },
+            { id: 'b_12', name: '御林广场 (Gendarmenmarkt)', dur: '1小时', nav: 'Gendarmenmarkt', rest: 'Borchardt (4.4★ 名流餐厅)', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 55, y: 52}, lat: 52.5136, lon: 13.3920, ticket: '广场免费。', desc_long: '【建筑】柏林最美古典广场。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '精致便服。' } },
+            { id: 'b_13', name: '哈克尼斯庭院 (Hackesche Höfe)', dur: '2小时', nav: 'Hackesche Höfe', rest: 'Crackers (时尚餐厅)', season: ['春','夏','秋','冬'], act: ['城市游览','购物'], dist: '2公里内', coord: {x: 60, y: 42}, lat: 52.5228, lon: 13.4022, ticket: '庭院免费开放。', desc_long: '【文化】庭院艺术与独立设计群落。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '文艺潮流风。' } },
+            { id: 'b_14', name: '柏林动物园 (Zoologischer Garten)', dur: '3小时', nav: 'Zoo Berlin', rest: 'Neni Berlin 餐厅', season: ['春','夏','秋'], act: ['自然风光'], dist: '5公里内', coord: {x: 35, y: 60}, lat: 52.5079, lon: 13.3391, ticket: '动物园+水族馆联票约 39€。<br><br>🔗 <a href="https://www.zoo-berlin.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">柏林动物园官网订票 ↗</a>', desc_long: '【生态】世界上物种最丰富的动物园之一。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '舒适步行鞋。' } },
+            { id: 'b_15', name: '胜利纪念柱 (Siegessäule)', dur: '1小时', nav: 'Siegessäule Berlin', rest: 'Tiergarten 露天咖啡', season: ['春','夏','秋'], act: ['城市游览','徒步'], dist: '5公里内', coord: {x: 40, y: 50}, lat: 52.5145, lon: 13.3501, ticket: '登顶约 4€。', desc_long: '【历史】蒂尔加滕公园中央地标。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '运动休闲。' } },
+            { id: 'b_16', name: '蒂尔加滕公园 (Tiergarten)', dur: '2小时', nav: 'Großer Tiergarten', rest: 'Café am Neuen See (湖畔啤酒园)', season: ['春','夏','秋'], act: ['自然风光','徒步'], dist: '2公里内', coord: {x: 43, y: 50}, lat: 52.5145, lon: 13.3644, ticket: '公园免费全天开放。', desc_long: '【自然】柏林市中心的绿肺。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '徒步或跑步轻装。' } },
+            { id: 'b_17', name: '夏洛滕堡宫 (Schloss Charlottenburg)', dur: '3小时', nav: 'Schloss Charlottenburg', rest: 'Linnen 咖啡馆', season: ['春','夏','秋'], act: ['城市游览','自然风光'], dist: '10公里以上', coord: {x: 20, y: 40}, lat: 52.2195, lon: 13.2989, ticket: '宫殿主楼约 12€。<br><br>🔗 <a href="https://www.spsg.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">夏洛滕堡宫官方门票 ↗</a>', desc_long: '【历史】柏林最大的巴洛克宫殿。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '经典休闲装。' } },
+            { id: 'b_18', name: '库达姆大街 (Kurfürstendamm)', dur: '2.5小时', nav: 'Kurfürstendamm', rest: 'Käfer im Reichstag / KaDeWe 美食广场', season: ['春','夏','秋','冬'], act: ['购物'], dist: '5公里内', coord: {x: 32, y: 62}, lat: 52.5037, lon: 13.3316, ticket: '免费街区。', desc_long: '【商业】西柏林繁华商业大道。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '时尚购物装。' } },
+            { id: 'b_19', name: 'KaDeWe 百货 (Kaufhaus des Westens)', dur: '2.5小时', nav: 'KaDeWe Berlin', rest: '顶层美食大厅 (Food Hall)', season: ['春','夏','秋','冬'], act: ['购物'], dist: '5公里内', coord: {x: 34, y: 61}, lat: 52.5015, lon: 13.3416, ticket: '免费入场。', desc_long: '【商业】欧洲大陆最大百货公司。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '室内购物舒适装。' } },
+            { id: 'b_20', name: '威廉皇帝纪念教堂 (Gedächtniskirche)', dur: '1小时', nav: 'Kaiser-Wilhelm-Gedächtniskirche', rest: 'Bikini Berlin 餐饮区', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '5公里内', coord: {x: 33, y: 60}, lat: 52.5048, lon: 13.3353, ticket: '教堂免费开放。', desc_long: '【历史】二战战火中保留的残垣断壁。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '日常休闲。' } },
+            { id: 'b_21', name: '柏林墙纪念馆 (Gedenkstätte Berliner Mauer)', dur: '2小时', nav: 'Gedenkstätte Berliner Mauer', rest: 'Prater Biergarten (传统啤酒园)', season: ['春','夏','秋'], act: ['城市游览'], dist: '5公里内', coord: {x: 55, y: 35}, lat: 52.5352, lon: 13.3895, ticket: '免费参观。', desc_long: '【历史】伯瑙尔大街的真实历史遗址。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '户外轻便防风。' } },
+            { id: 'b_22', name: '东德博物馆 (DDR Museum)', dur: '1.5小时', nav: 'DDR Museum', rest: 'Fischer Fritz', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '2公里内', coord: {x: 61, y: 48}, lat: 52.5188, lon: 13.4025, ticket: '约 12.5€。<br><br>🔗 <a href="https://www.ddr-museum.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">东德博物馆官网订票 ↗</a>', desc_long: '【互动】沉浸式体验东德日常生活。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '室内轻便休闲。' } },
+            { id: 'b_23', name: '德国历史博物馆 (Deutsches Historisches Museum)', dur: '2.5小时', nav: 'Deutsches Historisches Museum', rest: 'Ishin (日式简餐)', season: ['春','夏','秋','冬'], act: ['科技与艺术','城市游览'], dist: '2公里内', coord: {x: 58, y: 46}, lat: 52.5175, lon: 13.3965, ticket: '常设展约 10€。<br><br>🔗 <a href="https://www.dhm.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">德国历史博物馆官网 ↗</a>', desc_long: '【历史】纵览两千年德国历史。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '室内观展服装。' } },
+            { id: 'b_24', name: '新卫兵哨所 (Neue Wache)', dur: '30分钟', nav: 'Neue Wache Berlin', rest: 'Trattoria Felice', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 57, y: 47}, lat: 52.5173, lon: 13.3950, ticket: '免费参观。', desc_long: '【纪念】战争与暴政牺牲者纪念馆。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '日常着装。' } },
+            { id: 'b_25', name: '御林广场法国大教堂', dur: '1小时', nav: 'Französischer Dom', rest: 'Boccadoro', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 56, y: 51}, lat: 52.5132, lon: 13.3912, ticket: '登顶约 5€。', desc_long: '【建筑】胡格诺派历史教堂。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '休闲装。' } },
+            { id: 'b_26', name: '克罗伊茨贝格 (Kreuzberg)', dur: '2.5小时', nav: 'Kreuzberg Berlin', rest: 'Markthalle Neun (九号市集美食)', season: ['春','夏','秋'], act: ['城市游览','购物'], dist: '5公里内', coord: {x: 70, y: 70}, lat: 52.4986, lon: 13.4181, ticket: '街区自由探索。', desc_long: '【多元文化】柏林最IN的亚文化与艺术街区。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '潮流街头风。' } },
+            { id: 'b_27', name: '弗里德里希施泰特宫 (Friedrichstadt-Palast)', dur: '2小时', nav: 'Friedrichstadt-Palast', rest: 'Zur Letzten Instanz (柏林最古老餐馆)', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '2公里内', coord: {x: 58, y: 40}, lat: 52.5225, lon: 13.3881, ticket: '演出票约 29€ 起。<br><br>🔗 <a href="https://www.palast.berlin/" target="_blank" style="color:var(--bh-blue); font-weight:600;">演出官方预订通道 ↗</a>', desc_long: '【演艺】欧洲最大的现代歌舞秀剧场。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '晚宴或时尚正装。' } },
+            { id: 'b_28', name: '老国家美术馆 (Alte Nationalgalerie)', dur: '2小时', nav: 'Alte Nationalgalerie', rest: 'Museums-Café', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '2公里内', coord: {x: 61, y: 44}, lat: 52.5201, lon: 13.3985, ticket: '约 12€。<br><br>🔗 <a href="https://www.smb.museum/" target="_blank" style="color:var(--bh-blue); font-weight:600;">老国家美术馆官网 ↗</a>', desc_long: '【艺术】19世纪浪漫主义绘画圣殿。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '典雅舒适装。' } },
+            { id: 'b_29', name: '贝加蒙博物馆 (Pergamonmuseum)', dur: '3小时', nav: 'Pergamonmuseum', rest: 'Café & Restaurant', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '2公里内', coord: {x: 59, y: 45}, lat: 52.5199, lon: 13.3968, ticket: '约 14€ (部分展厅维修中)。', desc_long: '【古迹】古希腊与中东巨型建筑移建馆。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '室内观展。' } },
+            { id: 'b_30', name: '柏林自然博物馆 (Museum für Naturkunde)', dur: '2.5小时', nav: 'Museum für Naturkunde Berlin', rest: 'Café Bar', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '5公里内', coord: {x: 52, y: 38}, lat: 52.5298, lon: 13.3824, ticket: '约 11€。<br><br>🔗 <a href="https://www.naturkundemuseum.berlin/" target="_blank" style="color:var(--bh-blue); font-weight:600;">自然博物馆官方订票 ↗</a>', desc_long: '【自然科学】拥有世界上最高的长颈鹿骨架化石与原角龙标本。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '休闲运动鞋。' } },
+            { id: 'b_31', name: '德国技术博物馆 (Deutsches Technikmuseum)', dur: '3小时', nav: 'Deutsches Technikmuseum', rest: 'Anhaltiner Bierstuben', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '5公里内', coord: {x: 48, y: 64}, lat: 52.4975, lon: 13.3785, ticket: '约 8€。<br><br>🔗 <a href="https://technikmuseum.berlin/" target="_blank" style="color:var(--bh-blue); font-weight:600;">德国技术博物馆官网 ↗</a>', desc_long: '【工业】馆顶悬挂真实飞机的工业技术宝库。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '舒适步行装。' } },
+            { id: 'b_32', name: '施普雷河游船码头 (Spree-Riedel)', dur: '1.5小时', nav: 'Friedrichstraße Pier', rest: '船上轻食茶点', season: ['春','夏','秋'], act: ['城市游览', '自然风光'], dist: '2公里内', coord: {x: 58, y: 48}, lat: 52.5195, lon: 13.3889, ticket: '游船票约 18€。', desc_long: '【水上视角】乘船穿梭于现代与古典交织的柏林中心。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '河面风大，建议防风夹克。' } },
+            { id: 'b_33', name: '特雷普托公园苏联战争纪念碑', dur: '2小时', nav: 'Treptower Park', rest: 'Park-Café Treptow', season: ['春','夏','秋'], act: ['城市游览', '自然风光'], dist: '10公里以上', coord: {x: 80, y: 75}, lat: 52.4883, lon: 13.4650, ticket: '公园与纪念碑完全免费。', desc_long: '【历史】气势恢宏的二战苏联红军纪念雕像群。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '极优', cloth: '户外徒步便装。' } },
+            { id: 'b_34', name: '柏林奥林匹克体育场 (Olympiastadion)', dur: '2小时', nav: 'Olympiastadion Berlin', rest: 'Stadion Klause', season: ['春','夏','秋','冬'], act: ['体育竞技', '城市游览'], dist: '10公里以上', coord: {x: 10, y: 55}, lat: 52.5147, lon: 13.2397, ticket: '导览门票约 9€。<br><br>🔗 <a href="https://olympiastadion.berlin/" target="_blank" style="color:var(--bh-blue); font-weight:600;">柏林奥林匹克体育场官网 ↗</a>', desc_long: '【体育】1936年奥运会主会场，现柏林赫塔主场。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '极优', cloth: '运动休闲装。' } },
+            { id: 'b_35', name: '泰格尔湖自然区 (Tegeler See)', dur: '半天', nav: 'Tegeler See', rest: 'Hafen-Restaurant', season: ['春','夏','秋'], act: ['自然风光', '徒步'], dist: '10公里以上', coord: {x: 30, y: 10}, lat: 52.5833, lon: 13.2833, ticket: '免费开放。', desc_long: '【自然】柏林北部风景秀丽的冰川湖与森林步道。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '极优', cloth: '徒步鞋与轻薄冲锋衣。' } },
+            { id: 'b_36', name: '格吕内瓦尔德森林 (Grunewald)', dur: '半天', nav: 'Grunewaldturm', rest: 'Waldhaus Grunewald', season: ['春','夏','秋'], act: ['自然风光', '徒步'], dist: '10公里以上', coord: {x: 12, y: 70}, lat: 52.4833, lon: 13.2333, ticket: '森林免费。', desc_long: '【自然】柏林面积最大的西南部天然林区。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '极优', cloth: '户外徒步装备。' } },
+            { id: 'b_37', name: '施潘道老城 (Altstadt Spandau)', dur: '2小时', nav: 'Altstadt Spandau', rest: 'Brauhaus Spandau (自酿啤酒)', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '10公里以上', coord: {x: 15, y: 50}, lat: 52.5372, lon: 13.2044, ticket: '老城区免费。', desc_long: '【历史】保存完好的中世纪砖砌哥特老城。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '舒适便鞋。' } },
+            { id: 'b_38', name: '施潘道城堡 (Citadel Spandau)', dur: '2.5小时', nav: 'Zitadelle Spandau', rest: 'Kaffeestube', season: ['春','夏','秋','冬'], act: ['城市游览', '科技与艺术'], dist: '10公里以上', coord: {x: 16, y: 48}, lat: 52.5381, lon: 13.2131, ticket: '约 4.5€。<br><br>🔗 <a href="https://www.zitadelle-spandau.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">施潘道城堡官方网站 ↗</a>', desc_long: '【军事历史】欧洲保存最完好的文艺复兴时期要塞之一。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '防风外套。' } },
+            { id: 'b_39', name: '柏林爱乐乐团音乐厅 (Philharmonie Berlin)', dur: '2小时', nav: 'Berliner Philharmonie', rest: 'The Grand', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '2公里内', coord: {x: 45, y: 48}, lat: 52.5105, lon: 13.3712, ticket: '音乐会门票需官网预约。<br><br>🔗 <a href="https://www.berliner-philharmoniker.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">柏林爱乐乐团官方售票 ↗</a>', desc_long: '【音乐殿堂】世界顶级交响乐团的大本营，帐篷状建筑极具革新意义。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '音乐会正装或精致休闲。' } },
+            { id: 'b_40', name: '柏林国立歌剧院 (Staatsoper Unter den Linden)', dur: '2小时', nav: 'Staatsoper Unter den Linden', rest: 'Opern-Café', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '2公里内', coord: {x: 56, y: 46}, lat: 52.5167, lon: 13.3936, ticket: '演出票在线预订。<br><br>🔗 <a href="https://www.staatsoper-berlin.de/" target="_blank" style="color:var(--bh-blue); font-weight:600;">国立歌剧院官方通道 ↗</a>', desc_long: '【文化】菩提树下大街旁的皇家歌剧艺术明珠。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '优雅晚装。' } },
+            { id: 'b_41', name: '菩提树下大街 (Unter den Linden)', dur: '1.5小时', nav: 'Unter den Linden', rest: 'Einstein Kaffee', season: ['春','夏','秋','冬'], act: ['城市游览', '购物'], dist: '2公里内', coord: {x: 54, y: 46}, lat: 52.5168, lon: 13.3888, ticket: '街道自由漫步。', desc_long: '【历史大道】连接勃兰登堡门与柏林大教堂的传奇林荫大道。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '都市休闲装。' }, },
+            { id: 'b_42', name: '弗里德里希大街 (Friedrichstraße)', dur: '2小时', nav: 'Friedrichstraße Berlin', rest: 'Galeria Kaufhof 餐饮', season: ['春','夏','秋','冬'], act: ['购物', '城市游览'], dist: '2公里内', coord: {x: 56, y: 48}, lat: 52.5200, lon: 13.3885, ticket: '免费街区。', desc_long: '【商业】贯穿南北的繁华购物与文化干线。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '时尚休闲。' } },
+            { id: 'b_43', name: '御林广场音乐厅 (Konzerthaus Berlin)', dur: '1.5小时', nav: 'Konzerthaus Berlin', rest: 'Borchardt', season: ['春','夏','秋','冬'], act: ['科技与艺术'], dist: '2公里内', coord: {x: 55, y: 51}, lat: 52.5135, lon: 13.3925, ticket: '参观/演出购票。', desc_long: '【建筑与艺术】古典主义巅峰音乐厅。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '典雅装扮。' } },
+            { id: 'b_44', name: '克鲁格公园与粉红桥 (Oberbaumbrücke)', dur: '1小时', nav: 'Oberbaumbrücke', rest: 'Burgermeister (桥洞下传奇汉堡)', season: ['春','夏','秋'], act: ['城市游览', '徒步'], dist: '5公里内', coord: {x: 72, y: 62}, lat: 52.5019, lon: 13.4456, ticket: '桥梁免费开放。', desc_long: '【地标建筑】横跨施普雷河的双层哥特复兴式砖砌大桥。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '防风外套。' } },
+            { id: 'b_45', name: '柏林工业大学校园 (Technische Universität Berlin)', dur: '1.5小时', nav: 'TU Berlin', rest: 'Mensa / 校园咖啡', season: ['春','夏','秋','冬'], act: '科技与艺术', dist: '5公里内', coord: {x: 28, y: 55}, lat: 52.5125, lon: 13.3278, ticket: '校园开放参观。', desc_long: '【学术殿堂】德国顶尖理工科大学，精英学术氛围浓厚。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '学风休闲装。' } },
+            { id: 'b_46', name: '洪堡大学主楼 (Humboldt-Universität)', dur: '1.5小时', nav: 'Humboldt-Universität zu Berlin', rest: 'Café Central', season: ['春','夏','秋','冬'], act: ['科技与艺术', '城市游览'], dist: '2公里内', coord: {x: 55, y: 47}, lat: 52.5178, lon: 13.3939, ticket: '主楼大厅免费。', desc_long: '【学术历史】走出29位诺贝尔奖得主的“现代大学之母”。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '文雅便服。' } },
+            { id: 'b_47', name: '柏林木质码头文化区 (Holzmarkt 25)', dur: '2小时', nav: 'Holzmarkt 25', rest: 'Holzmarkt Docks (河畔木屋酒吧)', season: ['春','夏','秋'], act: ['城市游览', '自然风光'], dist: '5公里内', coord: {x: 68, y: 58}, lat: 52.5111, lon: 13.4242, ticket: '入场免费。', desc_long: '【文创社区】施普雷河畔充满乌托邦气息的艺术与音乐乌托邦。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '文艺青年休闲装。' } },
+            { id: 'b_48', name: '马克思-恩格斯广场 (Marx-Engels-Forum)', dur: '45分钟', nav: 'Marx-Engels-Forum', rest: 'Ratskeller', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 63, y: 48}, lat: 52.5186, lon: 13.4050, ticket: '广场免费开放。', desc_long: '【历史记忆】保留东德时代雕塑的开放式城市公园。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '轻便外套。' } },
+            { id: 'b_49', name: '旧圣玛丽教堂 (St. Marienkirche)', dur: '45分钟', nav: 'St. Marienkirche Berlin', rest: 'Alexianer', season: ['春','夏','秋','冬'], act: ['城市游览'], dist: '2公里内', coord: {x: 64, y: 48}, lat: 52.5206, lon: 13.4072, ticket: '教堂免费。', desc_long: '【中世纪建筑】柏林电视塔脚下的中世纪哥特砖砌教堂。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '保暖休闲。' } },
+            { id: 'b_50', name: '柏林泡菜罐头厂文化中心 (Kulturbrauerei)', dur: '2小时', nav: 'Kulturbrauerei', rest: 'Prater Biergarten', season: ['春','夏','秋','冬'], act: ['城市游览', '科技与艺术'], dist: '5公里内', coord: {x: 60, y: 30}, lat: 52.5381, lon: 13.4131, ticket: '园区免费参观。', desc_long: '【工业遗产】19世纪啤酒厂改造的顶尖文化与独立电影院综合体。', weather_info: { temp: '获取中...', hum: '获取中...', aqi: '优', cloth: '复古工装或休闲服。' } }
+        ];
+
+        const lazyItineraries = [
+            {
+                id: 'plan_1',
+                title: '【攻略一】 柏林经典帝国与冷战地标 6 日游',
+                desc: '初访柏林必选。深度打卡勃兰登堡门、国会大厦、博物馆岛与柏林墙。',
+                days: [
+                    { day: 'Day 1', spots: ['b_1', 'b_2', 'b_7', 'b_10'] },
+                    { day: 'Day 2', spots: ['b_3', 'b_9', 'b_4', 'b_11'] },
+                    { day: 'Day 3', spots: ['b_5', 'b_44', 'b_26', 'b_47'] },
+                    { day: 'Day 4', spots: ['b_6', 'b_12', 'b_25', 'b_43'] },
+                    { day: 'Day 5', spots: ['b_8', 'b_17'] },
+                    { day: 'Day 6', spots: ['b_18', 'b_19', 'b_20'] }
+                ]
+            },
+            {
+                id: 'plan_2',
+                title: '【攻略二】 艺术、博物馆与皇家宫殿 6 日深度游',
+                desc: '聚焦世界顶级博物馆岛、波茨坦无忧宫与音乐殿堂。',
+                days: [
+                    { day: 'Day 1', spots: ['b_3', 'b_28', 'b_29'] },
+                    { day: 'Day 2', spots: ['b_8', 'b_17'] },
+                    { day: 'Day 3', spots: ['b_23', 'b_22', 'b_30'] },
+                    { day: 'Day 4', spots: ['b_39', 'b_40', 'b_27'] },
+                    { day: 'Day 5', spots: ['b_13', 'b_31', 'b_32'] },
+                    { day: 'Day 6', spots: ['b_45', 'b_46', 'b_41'] }
+                ]
+            },
+            {
+                id: 'plan_3',
+                title: '【攻略三】 柏林自然风光、生态与亚文化 6 日游',
+                desc: '探访泰格尔湖、格吕内瓦尔德森林、克罗伊茨贝格与东德记忆。',
+                days: [
+                    { day: 'Day 1', spots: ['b_16', 'b_15', 'b_34'] },
+                    { day: 'Day 2', spots: ['b_35', 'b_37', 'b_38'] },
+                    { day: 'Day 3', spots: ['b_36', 'b_14'] },
+                    { day: 'Day 4', spots: ['b_21', 'b_33', 'b_50'] },
+                    { day: 'Day 5', spots: ['b_26', 'b_44', 'b_5'] },
+                    { day: 'Day 6', spots: ['b_48', 'b_49', 'b_11'] }
+                ]
+            }
+        ];
+
+        let savedItineraryId = null;
+
+        function openItineraryModal() {
+            const overlay = document.getElementById('mapOverlay');
+            const mapTitle = document.getElementById('mapTitle');
+            const container = document.getElementById('mapTimeline');
+            
+            document.getElementById('mapIcon').className = 'city-flag f-berlin';
+            mapTitle.innerText = `根据车票智能生成：推荐 6 日游玩攻略`;
+
+            let html = `<div style="font-size:13px; color:#666; margin-bottom:16px;">基于您的行程单 (10.12-10.17, 共 6 天), 为您准备了以下 3 套方案：</div>`;
+            
+            lazyItineraries.forEach(plan => {
+                html += `
+                <div class="iti-card" onclick="viewItineraryDetail('${plan.id}')">
+                    <h3>${plan.title}</h3>
+                    <p>${plan.desc}</p>
+                </div>`;
+            });
+            
+            container.innerHTML = html;
+            overlay.classList.add('show');
+        }
+
+        function viewItineraryDetail(planId) {
+            const plan = lazyItineraries.find(p => p.id === planId);
+            const container = document.getElementById('mapTimeline');
+            const mapTitle = document.getElementById('mapTitle');
+            
+            mapTitle.innerText = plan.title;
+
+            let html = `<a class="btn-back-select" onclick="openItineraryModal()">← 返回攻略列表</a>`;
+            html += `<div style="margin-top: 10px;">`;
+
+            plan.days.forEach(d => {
+                html += `
+                <div class="daily-box">
+                    <div class="daily-title">🗓️ ${d.day} 行程</div>
+                    <div class="timeline" style="padding-top:0;">`;
+                
+                let prevNav = "";
+                d.spots.forEach((spotId, idx) => {
+                    const spot = berlinSpots.find(s => s.id === spotId);
+                    const isEnd = (idx === d.spots.length - 1);
+                    const dotClass = isEnd ? 'tl-dot dest' : 'tl-dot';
+                    
+                    if(idx > 0) {
+                        let transitTag = '市内公交 / U-Bahn';
+                        let transitClass = 't-s';
+
+                        if (spot.dist === '10公里以上') {
+                            transitTag = 'S-Bahn / Regio 跨区';
+                            transitClass = 't-re';
+                        }
+
+                        html += `<div class="tl-segment"><span class="t-tag ${transitClass} clickable" onclick="openLocalDbBoard(event, '${prevNav}', '${spot.nav}')" title="点击调用 DB Hafas 接口查询最近3趟列车">${transitTag} 📶</span></div>`;
+                    }
+
+                    html += `
+                        <div class="tl-node">
+                            <div class="${dotClass}"></div>
+                            <div class="tl-text">
+                                <div class="tl-station-row">
+                                    <span class="tl-station-name" style="cursor:pointer; color:var(--bh-blue);" onclick="openDetail('${spot.id}')">${idx + 1}. ${spot.name} ℹ️</span>
+                                </div>
+                                <div class="tl-desc">⏱️ ${spot.dur}</div>
+                            </div>
+                        </div>`;
+                    prevNav = spot.nav;
+                });
+                html += `</div></div>`;
+            });
+
+            html += `<div class="itinerary-action-bar">`;
+            if (savedItineraryId === planId) {
+                html += `<button class="btn-cancel-iti" onclick="cancelItinerary()">❌ 取消该攻略</button>`;
+            } else {
+                html += `<button class="btn-select-iti" onclick="selectItinerary('${planId}')">✅ 选择该攻略</button>`;
+            }
+            html += `</div></div>`;
+
+            container.innerHTML = html;
+        }
+
+        function selectItinerary(planId) {
+            savedItineraryId = planId;
+            closeMap();
+            document.getElementById('btnSavedItinerary').style.display = 'inline-flex';
+            alert('🎉 攻略已保存！您随时可以点击右上角的【⭐ 查看已选攻略】调出行程。');
+        }
+
+        function cancelItinerary() {
+            savedItineraryId = null;
+            closeMap();
+            document.getElementById('btnSavedItinerary').style.display = 'none';
+        }
+
+        function openSavedItinerary() {
+            if(savedItineraryId) {
+                document.getElementById('mapOverlay').classList.add('show');
+                viewItineraryDetail(savedItineraryId);
+            }
+        }
+
+        function handleMiniMapZoom(e) {
+            const box = e.currentTarget;
+            const content = box.querySelector('.minimap-content');
+            const rect = box.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const xPercent = (x / rect.width) * 100;
+            const yPercent = (y / rect.height) * 100;
+            content.style.transformOrigin = `${xPercent}% ${yPercent}%`;
+            content.style.transform = 'scale(2.2)';
+        }
+        function resetMiniMapZoom(e) {
+            const content = e.currentTarget.querySelector('.minimap-content');
+            content.style.transform = 'scale(1)';
+        }
+
+        function switchTab(btn, tabId) {
+            const container = btn.closest('.spot-detail-content');
+            container.querySelectorAll('.sd-pill').forEach(p => p.classList.remove('active'));
+            container.querySelectorAll('.sd-tab-content').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            container.querySelector('#' + tabId).classList.add('active');
+        }
+
+        async function fetchRealWeather(lat, lon, spotId) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m`);
+                const data = await res.json();
+                if (data && data.current) {
+                    const temp = Math.round(data.current.temperature_2m) + '°C';
+                    const hum = data.current.relative_humidity_2m + '%';
+                    const spot = berlinSpots.find(s => s.id === spotId);
+                    if (spot) {
+                        spot.weather_info.temp = temp;
+                        spot.weather_info.hum = hum;
+                    }
+                    const tempValEl = document.getElementById(`weather-temp-${spotId}`);
+                    if (tempValEl) {
+                        tempValEl.innerText = `${temp} (湿度 ${hum})`;
+                    }
+                }
+            } catch (e) {
+                console.error("Weather API failed", e);
+            }
+        }
+
+        function openDetail(id) {
+            const spot = berlinSpots.find(x => x.id === id);
+            if(!spot) return;
+
+            const overlay = document.getElementById('detailOverlay');
+            const container = document.getElementById('detailContainer');
+
+            const currentHour = new Date().getHours();
+            let crowdText = '';
+            let crowdColor = '#27ae60';
+            if (currentHour >= 0 && currentHour < 6) {
+                crowdText = '当前处于深夜闭园期 (负荷 0%)';
+                crowdColor = '#888';
+            } else if (currentHour >= 6 && currentHour < 9) {
+                crowdText = '清晨时段：负荷约 15% (人迹稀少)';
+            } else if (currentHour >= 9 && currentHour < 12) {
+                crowdText = '上午平稳期：负荷约 42%';
+                crowdColor = '#2980b9';
+            } else if (currentHour >= 12 && currentHour < 15) {
+                crowdText = '午间高峰期：负荷约 78%';
+                crowdColor = '#e67e22';
+            } else if (currentHour >= 15 && currentHour < 19) {
+                crowdText = '下午游览高峰：负荷约 65%';
+                crowdColor = '#e67e22';
+            } else {
+                crowdText = '夜间时段：负荷约 20% (仅少量夜间游客)';
+            }
+
+            let widgetsHtml = '';
+            widgetsHtml += `<div class="sd-widget"><div class="sd-widget-title">实时气温 / 湿度 (API)</div><div class="sd-widget-val" id="weather-temp-${spot.id}">${spot.weather_info.temp} (湿度 ${spot.weather_info.hum})</div></div>`;
+            widgetsHtml += `<div class="sd-widget"><div class="sd-widget-title">空气质量指数 (AQI)</div><div class="sd-widget-val" style="color:#27ae60;">${spot.weather_info.aqi}</div></div>`;
+            widgetsHtml += `<div class="sd-widget" style="grid-column: span 2; background:#f9f9fb;"><div class="sd-widget-title">👔 出行穿衣与装备建议</div><div class="sd-widget-val" style="font-size:12px; font-weight:500; color:#444;">${spot.weather_info.cloth}</div></div>`;
+
+            const html = `
+                <div class="spot-detail-content">
+                    <div class="sd-header">
+                        <div class="sd-title-row">
+                            <h2 class="sd-title">${spot.name}</h2>
+                            <div class="sd-actions">
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.nav)}" target="_blank" class="sd-btn-icon" style="background:#eaf0fc; color:var(--bh-blue);">🧭 导航直达</a>
+                            </div>
+                        </div>
+                        <div style="font-size:13px; color:#666; margin-bottom:16px;">⏱️ 建议游玩：${spot.dur} &nbsp; | &nbsp; 📍 距主火：${spot.dist}</div>
+                        
+                        <div class="sd-pills">
+                            <button class="sd-pill active" onclick="switchTab(this, 'tab-hist')">🏛️ 深度解码</button>
+                            <button class="sd-pill" onclick="switchTab(this, 'tab-ticket')">🎫 票务策略</button>
+                            <button class="sd-pill" onclick="switchTab(this, 'tab-weather')">⛅ 气象穿衣</button>
+                            <button class="sd-pill" onclick="switchTab(this, 'tab-live')">📡 动态情报</button>
+                            ${spot.rest ? `<button class="sd-pill" onclick="switchTab(this, 'tab-food')">🍴 附近美食</button>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="sd-tab-container">
+                        <div id="tab-hist" class="sd-tab-content active"><div class="sd-text">${spot.desc_long}</div></div>
+                        <div id="tab-ticket" class="sd-tab-content"><div class="sd-text" style="border-left: 3px solid var(--bh-yellow);">${spot.ticket || '🎟️ 城市地标与街区开放区域全天免费参观。'}</div></div>
+                        <div id="tab-weather" class="sd-tab-content"><div class="sd-widget-grid">${widgetsHtml}</div></div>
+                        <div id="tab-live" class="sd-tab-content"><div class="sd-widget-grid"><div class="sd-widget" style="grid-column: span 2;"><div class="sd-widget-title">👥 景区实时拥挤度 (基站与时间加权算法)</div><div class="sd-widget-val" style="color:${crowdColor};">${crowdText}</div></div></div></div>
+                        ${spot.rest ? `<div id="tab-food" class="sd-tab-content"><div class="sd-text" style="border-left: 3px solid var(--bh-red);"><b>精选推荐：</b><br><br>${spot.rest}</div></div>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            overlay.classList.add('show');
+
+            if (spot.lat && spot.lon) {
+                fetchRealWeather(spot.lat, spot.lon, spot.id);
+            }
+        }
+        function closeDetail() { document.getElementById('detailOverlay').classList.remove('show'); }
+
+        function openDBTicket(event) {
+            event.stopPropagation();
+            const overlay = document.getElementById('mapOverlay');
+            const container = document.getElementById('mapTimeline');
+            document.getElementById('mapTitle').innerText = ''; 
+            document.getElementById('mapIcon').className = '';
+
+            const ticketHtml = `
+            <div class="db-ticket-box">
+                <div class="db-ticket-header">
+                    <span>DB | Journeys</span>
+                    <span style="font-size: 12px; font-weight:500; opacity:0.8;">Updated now</span>
+                </div>
+                <div class="db-ticket-body">
+                    <div class="db-journey">
+                        <div class="db-j-date" style="color:var(--bh-red);">Super Sparpreis Aktion, 2nd Cl.</div>
+                        <div class="db-j-stations"><span>Karlsruhe Hbf</span> <span style="color:#666;">→</span> <span>Berlin Hbf</span></div>
+                        <div class="db-j-time">Mon 12. Oct 2026 | 08:01 - 13:34</div>
+                        <div style="font-size: 12px; color:#aaa; margin-top:4px;">🔔 Travel notifications activated</div>
+                        <div class="db-j-meta">💺 Seat reservation, ICE 592, Coach 24, Seat 64</div>
+                    </div>
+                    <div class="db-journey">
+                        <div class="db-j-date" style="margin-top:5px; border-top: 1px solid #444; padding-top:15px;">Sat 17. Oct 2026</div>
+                        <div class="db-j-date" style="color:var(--bh-red);">Super Sparpreis Aktion, 2nd Cl.</div>
+                        <div class="db-j-stations"><span>Berlin Hbf</span> <span style="color:#666;">→</span> <span>Karlsruhe Hbf</span></div>
+                        <div class="db-j-time">Sat 17. Oct 2026 | 14:26 - 19:58</div>
+                        <div style="font-size: 12px; color:#aaa; margin-top:4px;">🔔 Travel notifications activated</div>
+                        <div class="db-j-meta">💺 Seat reservation, ICE 693, Coach 21, Seat 32</div>
+                    </div>
+                </div>
+            </div>`;
+            container.innerHTML = ticketHtml;
+            overlay.classList.add('show');
+        }
+
+        function initGallery(spotsToRender = berlinSpots) {
+            const grid = document.getElementById('mainGallery');
+            let html = '';
+            
+            if (spotsToRender.length === 0) {
+                html = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #888;">未能找到匹配的地标，请尝试其他关键词。</div>';
+            } else {
+                spotsToRender.forEach(s => {
+                    html += `
+                    <div class="gallery-card" onclick="openDetail('${s.id}')">
+                        <div class="g-card-title">${s.name}</div>
+                        <div class="g-card-tags">
+                            <span class="s-tag">${Array.isArray(s.act) ? s.act[0] : s.act}</span>
+                            <span class="s-tag">${s.dist}</span>
+                        </div>
+                        <div class="g-card-desc">${s.desc_long.replace(/<br>/g, '').substring(0, 42)}...</div>
+                    </div>`;
+                });
+            }
+            grid.innerHTML = html;
+        }
+
+        function filterGallery() {
+            const query = document.getElementById('gallerySearch').value.toLowerCase();
+            const filteredSpots = berlinSpots.filter(s => 
+                s.name.toLowerCase().includes(query) || 
+                s.desc_long.toLowerCase().includes(query)
+            );
+            initGallery(filteredSpots);
+        }
+
+        window.onload = () => initGallery();
+
+        function openCityMiniMap(event) {
+            event.stopPropagation();
+            const overlay = document.getElementById('mapOverlay');
+            const mapTitle = document.getElementById('mapTitle');
+            const container = document.getElementById('mapTimeline');
+            
+            document.getElementById('mapIcon').className = 'city-flag f-berlin';
+            mapTitle.innerText = `柏林 50 大地标雷达分布`;
+
+            let html = `<div class="city-minimap-box" onmousemove="handleMiniMapZoom(event)" onmouseleave="resetMiniMapZoom(event)">
+                <div class="minimap-content">`;
+            berlinSpots.forEach(spot => {
+                html += `
+                    <div class="minimap-pin" style="top: ${spot.coord.y}%; left: ${spot.coord.x}%;" title="${spot.name} - 点击开启导航" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.nav)}', '_blank'); event.stopPropagation();">
+                        <div class="minimap-label">${spot.name.split(' ')[0]}</div>
+                    </div>`;
+            });
+            html += `</div></div>
+                <div class="minimap-legend" style="background: #fff; padding:12px; border-radius:8px; border:1px solid #eee;">
+                    <span>🔴 50大打卡点 (鼠标悬浮局部放大，点击红点一键开启导航)</span>
+                </div>`;
+
+            container.innerHTML = html;
+            overlay.classList.add('show');
+        }
+
+        function openSpotSelector(event) {
+            event.stopPropagation();
+            const overlay = document.getElementById('mapOverlay');
+            const mapTitle = document.getElementById('mapTitle');
+            const container = document.getElementById('mapTimeline');
+            
+            document.getElementById('mapIcon').className = 'city-flag f-berlin';
+            mapTitle.innerText = `自由定制柏林游玩矩阵`;
+
+            let html = `
+                <div class="spot-filters">
+                    <select id="f-season" onchange="applyFilters()"><option value="">🌍 季节 (全部)</option><option value="春">🌸 春季</option><option value="夏">☀️ 夏季</option><option value="秋">🍁 秋季</option><option value="冬">❄️ 冬季</option></select>
+                    <select id="f-act" onchange="applyFilters()"><option value="">🏃 活动 (全部)</option><option value="徒步">徒步远足</option><option value="购物">血拼购物</option><option value="城市游览">城市游览</option><option value="体育竞技">体育竞技</option><option value="科技与艺术">科技与艺术</option><option value="自然风光">自然风光</option></select>
+                    <select id="f-dist" onchange="applyFilters()"><option value="">📍 距离 (全部)</option><option value="2公里内">柏林主火 2公里内</option><option value="5公里内">柏林主火 5公里内</option><option value="10公里以上">柏林周边 10km+</option></select>
+                    <button class="btn-clear-filter" onclick="clearAllFilters()">清空筛选</button>
+                </div>
+                
+                <div class="start-point-box">
+                    <strong>📍 出发原点:</strong>
+                    <select id="startPointSelector">
+                        <option value="hbf" selected>🚆 柏林中央火车站 (Berlin Hbf)</option>
+                        <optgroup label="热门景点出发">`;
+            berlinSpots.forEach(s => { html += `<option value="${s.id}">${s.name}</option>`; });
+            html += `</optgroup></select></div>
+                
+                <div class="spot-tools" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600;">
+                    <span>✅ 勾选景点 (自动测算路线):</span>
+                    <div>
+                        <a style="cursor: pointer; color: var(--bh-blue); margin-right: 15px; text-decoration: none; padding: 4px 8px; background: #eaf0fc; border-radius: 4px;" onclick="toggleAllSpots(true)">全选当前列表</a> 
+                        <a style="cursor: pointer; color: var(--bh-red); text-decoration: none; padding: 4px 8px; background: #fdf2f3; border-radius: 4px;" onclick="toggleAllSpots(false)">清空已选景点</a>
+                    </div>
+                </div>
+                <div class="spot-grid" id="mainSpotGrid">`;
+
+            berlinSpots.forEach((spot) => {
+                html += `
+                    <div class="spot-item" data-season="${spot.season.join(',')}" data-act="${Array.isArray(spot.act) ? spot.act.join(',') : spot.act}" data-dist="${spot.dist}" onclick="toggleSpotCheckbox('${spot.id}')">
+                        <input type="checkbox" id="cb_${spot.id}" value="${spot.id}" onclick="event.stopPropagation(); updateSpotItemClass('${spot.id}')">
+                        <div class="spot-item-content">
+                            <div class="spot-item-name"><span>${spot.name}</span><span style="font-size:11px; color:#888;">⏱️ ${spot.dur}</span></div>
+                            <div class="spot-item-tags">
+                                <span class="s-tag">${spot.season.join(' ')}</span>
+                                <span class="s-tag">${Array.isArray(spot.act) ? spot.act.join(' ') : spot.act}</span>
+                                <span class="s-tag" style="background:#eaf0fc; color:var(--bh-blue);">${spot.dist}</span>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+
+            html += `</div><button class="btn-plan" onclick="generateOptimalTour()">🚀 规划我的专属柏林路线</button>`;
+            
+            container.innerHTML = html;
+            overlay.classList.add('show');
+        }
+
+        function applyFilters() {
+            const fSeason = document.getElementById('f-season').value;
+            const fAct = document.getElementById('f-act').value;
+            const fDist = document.getElementById('f-dist').value;
+            
+            document.querySelectorAll('.spot-item').forEach(item => {
+                const sData = item.getAttribute('data-season');
+                const aData = item.getAttribute('data-act');
+                const dData = item.getAttribute('data-dist');
+                let match = true;
+                if (fSeason && !sData.includes(fSeason)) match = false;
+                if (fAct && !aData.includes(fAct)) match = false;
+                if (fDist && dData !== fDist) match = false;
+                item.style.display = match ? 'flex' : 'none';
+            });
+        }
+
+        function clearAllFilters() {
+            document.getElementById('f-season').value = '';
+            document.getElementById('f-act').value = '';
+            document.getElementById('f-dist').value = '';
+            applyFilters();
+        }
+
+        function toggleSpotCheckbox(id) {
+            const cb = document.getElementById('cb_' + id);
+            if(cb) { cb.checked = !cb.checked; updateSpotItemClass(id); }
+        }
+
+        function updateSpotItemClass(id) {
+            const cb = document.getElementById('cb_' + id);
+            if(!cb) return;
+            const parent = cb.closest('.spot-item');
+            if(cb.checked) { parent.classList.add('selected'); } else { parent.classList.remove('selected'); }
+        }
+
+        function toggleAllSpots(check) {
+            document.querySelectorAll('.spot-item').forEach(item => {
+                if(item.style.display !== 'none') {
+                    const cb = item.querySelector('input[type="checkbox"]');
+                    if(cb) { cb.checked = check; updateSpotItemClass(cb.value); }
+                }
+            });
+        }
+
+        function generateOptimalTour() {
+            const startVal = document.getElementById('startPointSelector').value;
+            let startName = '柏林中央火车站 (Berlin Hbf)';
+            let startNav = 'Berlin Hbf';
+            
+            if (startVal !== 'hbf') {
+                const s = berlinSpots.find(x => x.id === startVal);
+                if(s) { startName = s.name; startNav = s.nav; }
+            }
+
+            const cbs = document.querySelectorAll('.spot-grid input[type="checkbox"]:checked');
+            const selectedIds = Array.from(cbs).map(c => c.value);
+            if(selectedIds.length === 0) { alert('请至少在列表中勾选 1 个游玩景点！'); return; }
+
+            const selectedSpots = berlinSpots.filter(s => selectedIds.includes(s.id));
+            const container = document.getElementById('mapTimeline');
+            const mapTitle = document.getElementById('mapTitle');
+            mapTitle.innerText = `专属定制路线 (${selectedSpots.length}站)`;
+
+            let html = `<a class="btn-back-select" onclick="openSpotSelector(event)">← 返回重新筛选</a><div class="timeline" style="padding-top:10px;">`;
+            
+            html += `
+                <div class="tl-node">
+                    <div class="tl-dot"></div>
+                    <div class="tl-text">
+                        <div class="tl-station-row"><span class="tl-station-name">${startName}</span> <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(startNav)}" target="_blank" class="tl-nav" style="background:#eaf0fc; color:var(--bh-blue);">↗ 导航</a></div>
+                        <div class="tl-desc">📍 今日行程原点</div>
+                    </div>
+                </div>`;
+
+            let currentStation = startNav;
+
+            selectedSpots.forEach((spot) => {
+                let transitTag = 'S-Bahn / U-Bahn';
+                let transitClass = 't-s';
+
+                if (spot.dist === '10公里以上') {
+                    transitTag = 'Regio 跨区列车';
+                    transitClass = 't-re';
+                }
+
+                html += `<div class="tl-segment"><span class="t-tag ${transitClass} clickable" onclick="openLocalDbBoard(event, '${currentStation}', '${spot.nav}')" title="点击调用 DB Hafas 接口查询最近3趟列车">${transitTag} 📶</span></div>`;
+
+                const isEnd = (spot === selectedSpots[selectedSpots.length - 1]);
+                const dotClass = isEnd ? 'tl-dot dest' : 'tl-dot';
+                
+                html += `
+                    <div class="tl-node">
+                        <div class="${dotClass}"></div>
+                        <div class="tl-text">
+                            <div class="tl-station-row"><span class="tl-station-name" style="cursor:pointer; color:var(--bh-blue);" onclick="openDetail('${spot.id}')" title="点击查看详情情报">${spot.name} ℹ️</span></div>
+                            <div class="tl-desc">⏱️ ${spot.dur}</div>
+                        </div>
+                    </div>`;
+                currentStation = spot.nav; 
+            });
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        async function openLocalDbBoard(event, fromQuery, toQuery) {
+            event.stopPropagation();
+            const dbOverlay = document.getElementById('dbOverlay');
+            const dbContainer = document.getElementById('dbContainer');
+            
+            document.getElementById('dbTitle').innerText = `${fromQuery.split(',')[0]} 实时发车看板`;
+            dbOverlay.classList.add('show');
+            
+            dbContainer.innerHTML = `<div style="text-align:center; padding:40px 20px;"><div class="loader"></div><p style="color:#666; font-size:13px; margin-top:16px;">正在通过 DB Hafas 接口搜寻最近站台...</p></div>`;
+
+            try {
+                const locRes = await fetch(`https://v6.db.transport.rest/locations?query=${encodeURIComponent(fromQuery)}&results=1`);
+                const locData = await locRes.json();
+                
+                if(!locData || locData.length === 0 || (!locData[0].id && !locData[0].station)) throw new Error("Location not found");
+                const stationId = locData[0].id || locData[0].station.id;
+                const stationName = locData[0].name || fromQuery;
+
+                document.getElementById('dbTitle').innerText = `${stationName} 实时出发`;
+                const depRes = await fetch(`https://v6.db.transport.rest/stops/${stationId}/departures?results=4&duration=60`);
+                const depData = await depRes.json();
+
+                if (depData && depData.departures && depData.departures.length > 0) {
+                    let html = '';
+                    const validDeps = depData.departures.filter(d => !d.cancelled).slice(0,3);
+                    validDeps.forEach(dep => {
+                        const deptTime = new Date(dep.when || dep.plannedWhen);
+                        const delayMins = dep.delay ? Math.round(dep.delay / 60) : 0;
+                        const delayHtml = delayMins > 0 ? `<span class="db-delay">晚点 +${delayMins}分</span>` : '';
+                        const timeStr = deptTime.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' });
+                        const lineName = dep.line ? dep.line.name : 'S/U-Bahn';
+                        const dir = dep.direction || '市内方向';
+                        const plat = dep.platform || '--';
+
+                        html += `
+                        <div class="db-train-row">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div><span class="db-time">${timeStr}</span>${delayHtml}</div>
+                                <div><span class="db-train">${lineName}</span></div>
+                            </div>
+                            <div class="db-meta">
+                                <span>开往: <strong style="color:#222;">${dir}</strong></span>
+                                <span>站台: <span class="db-plat">${plat}</span></span>
+                            </div>
+                        </div>`;
+                    });
+                    
+                    const fallbackUrl = `https://int.bahn.de/zh/buchung/fahrplan/suche#sts=true&so=${encodeURIComponent(fromQuery)}&zo=${encodeURIComponent(toQuery)}`;
+                    html += `<a href="${fallbackUrl}" target="_blank" class="db-ext-btn">前往 DB Nav 官方查询精确直达接驳 ↗</a>`;
+                    dbContainer.innerHTML = `<div class="db-board-container">${html}</div>`;
+                } else {
+                    throw new Error("No departures");
+                }
+            } catch (err) {
+                const fallbackUrl = `https://int.bahn.de/zh/buchung/fahrplan/suche#sts=true&so=${encodeURIComponent(fromQuery)}&zo=${encodeURIComponent(toQuery)}`;
+                dbContainer.innerHTML = `
+                    <div style="text-align:center; padding:30px 20px;">
+                        <span style="font-size:32px;">⚠️</span>
+                        <h4 style="color:var(--bh-red); margin: 12px 0 8px 0;">受限于接口频率或街区站点匹配限制</h4>
+                        <p style="color:#666; font-size:13px; margin:0 0 20px 0;">可直接跳转 DB / BVG 系统查询从 [${fromQuery.split(',')[0]}] 出发的精确接驳车次。</p>
+                        <a href="${fallbackUrl}" target="_blank" class="db-ext-btn" style="display:inline-block; padding:12px 24px;">点击直达 DB 路线规划 ↗</a>
+                    </div>`;
+            }
+        }
+
+        function closeMap() { document.getElementById('mapOverlay').classList.remove('show'); }
+        function closeDbBoard() { document.getElementById('dbOverlay').classList.remove('show'); }
+
+        function downloadCurrentHTML() {
+            const overlays = document.querySelectorAll('.map-overlay.show');
+            overlays.forEach(el => el.classList.remove('show'));
+
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'D-Ticket_Berlin_Matrix.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            overlays.forEach(el => el.classList.add('show'));
+        }
+
+        function copyRebuildPrompt() {
+            const city = document.getElementById('targetCityInput').value.trim() || '任意指定城市';
+            const promptText = `请以我提供的这套 HTML 架构为基准，为城市【${city}】定制一份全新的专属 50 大热门节点跃迁图鉴。
+要求：
+1. 保持完全相同的北欧极简包豪斯 UI 风格、防遮挡水印、胶囊标签切换（Tabs/Pills）、雷达局部放大图等所有底层交互逻辑。
+2. 为【${city}】精选 50 个高价值地标，并在胶囊面板中提供详细情报（包含历史解码、票务策略、气象穿衣和动态情报挂件）。
+3. 包含三维 Filter 漏斗矩阵、自定义原点规划引擎、以及市内交通实时 Hafas 监测接口。
+4. 【核心定制要求】：请强制要求我（用户）提供往返【${city}】的真实车票截图/信息。拿到车票信息后，你必须：
+   - 将"DB 专属车票UI"完美复刻替换为我的真实行程单数据。
+   - 根据车票上的出发地和目的地，将表格右上方的表头文字改为“【出发城】至【目的城】跨城最优路径 (点圆标看行程单)”。
+   - 根据车票日期，自动修改网页顶部 header 中的行程时间，并自动计算出停留的【天数】。
+   - 【新增】：基于上述计算出的停留天数，在画廊顶部生成相应的“推荐 X 日攻略”按钮及至少 3 个预设的多日游玩路线模板。
+5. 保证代码无任何语法截断错误，一次性输出完整单文件 HTML。`;
+
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert(`✨ 已成功将【${city}】的专属生成指令复制到剪贴板！\n\n即将为您后台下载本 HTML 系统的最新源码...`);
+                downloadCurrentHTML();
+            }).catch(err => {
+                alert('剪贴板写入受阻，但仍将为您下载更新后的 HTML 文件。您可随后手动复制指令。');
+                downloadCurrentHTML();
+            });
+        }
+    </script>
+</body></html>
