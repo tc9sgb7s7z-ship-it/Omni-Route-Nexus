@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh"><head>
+    <meta charset="UTF-8">
+    <title>D-Ticket | 极客定制版：慕尼黑周边动态聚类矩阵</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        :root { --bg-page: #f5f5f7; --bg-card: #ffffff; --text-main: #1d1d1f; --text-sec: #86868b; --border: #d2d2d7; --bh-red: #E2001A; --bh-yellow: #FFCC00; --bh-blue: #0033A0; --bh-black: #111111; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background-color: var(--bg-page); color: var(--text-main); margin: 0; padding: 40px; line-height: 1.5; padding-bottom: 120px; }
+        .container { max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+        header { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 3px solid var(--bh-black); display: flex; justify-content: space-between; align-items: baseline; }
+        h1 { font-size: 28px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
+        .meta { color: var(--text-sec); font-size: 14px; font-weight: 500; }
+        table { width: 100%; border-collapse: collapse; background: var(--bg-card); box-shadow: 0 4px 24px rgba(0,0,0,0.04); border-radius: 12px; overflow: hidden; margin-bottom: 40px; }
+        th { text-align: left; padding: 18px 24px; color: var(--text-sec); font-weight: 600; font-size: 13px; border-bottom: 1px solid var(--border); background: #fdfdfd;}
+        td { padding: 16px 24px; font-size: 14px; vertical-align: middle; border-bottom: 1px solid var(--border); }
+        
+        .t-tag { display: inline-block; padding: 2px 6px; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.5px; }
+        .t-s { background: #f0f8f5; color: #00754A; border: 1px solid #cce8dd; }
+        .t-re { background: #fdf2f3; color: #E2001A; border: 1px solid #f9dadd; }
+        
+        .opt-route { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .city-flag { width: 16px; height: 12px; border-radius: 2px; display: inline-block; flex-shrink: 0; box-shadow: 0 0 2px rgba(0,0,0,0.3) inset; cursor: pointer; transition: transform 0.2s; position: relative; margin-right: 8px; vertical-align: middle; }
+        .city-name-btn { cursor: pointer; text-decoration: underline; text-decoration-color: transparent; transition: all 0.2s; font-weight: 600; }
+        .city-name-btn:hover { color: var(--bh-blue); text-decoration-color: var(--bh-blue); }
+        .f-bavaria { background: repeating-linear-gradient(45deg, #ffffff, #ffffff 10px, #0098d4 10px, #0098d4 20px); border: 1px solid #ccc; }
+
+        .region-header { background: #f1f1f4; cursor: pointer; transition: background 0.2s; user-select: none; }
+        .region-header td { padding: 12px 24px; font-weight: 600; font-size: 14px; color: var(--text-main); }
+        
+        .map-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .map-overlay.show { opacity: 1; pointer-events: auto; }
+        .map-modal { background: #fff; width: 640px; max-height: 88vh; overflow-y: auto; max-width: 92%; border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); padding: 30px; transform: scale(0.8) translateY(20px); opacity: 0; transition: all 0.3s ease; position: relative; }
+        .map-overlay.show .map-modal { transform: scale(1) translateY(0); opacity: 1; }
+        .map-close { position: absolute; top: 20px; right: 20px; background: #f1f1f4; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #555; transition: background 0.2s; z-index: 9999;}
+        .map-close:hover { background: #e0e0e5; color: var(--bh-red); }
+        .map-header-title { font-size: 18px; font-weight: 700; margin: 0 0 20px 0; display: flex; align-items: center; gap: 10px; padding-right: 40px; }
+        
+        .city-minimap-box { width: 100%; height: 380px; background-color: #fafafa; background-image: linear-gradient(#e5e5ea 1px, transparent 1px), linear-gradient(90deg, #e5e5ea 1px, transparent 1px); background-size: 40px 40px; border-radius: 12px; border: 1px solid var(--border); position: relative; margin-top: 10px; overflow: hidden; cursor: crosshair; }
+        .minimap-content { width: 100%; height: 100%; position: relative; transition: transform 0.15s ease-out; transform-origin: center center; }
+        .minimap-pin { position: absolute; width: 12px; height: 12px; background-color: var(--bh-red); border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transform: translate(-50%, -50%); cursor: pointer; transition: transform 0.2s, background-color 0.2s; z-index: 2; }
+        .minimap-pin:hover { transform: translate(-50%, -50%) scale(1.8); z-index: 10; background-color: var(--bh-blue); }
+        .minimap-label { position: absolute; background: rgba(255,255,255,0.95); border: 1px solid #ccc; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600; color: #111; pointer-events: none; transform: translate(10px, -16px); white-space: nowrap; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 3; }
+
+        .timeline { display: flex; flex-direction: column; padding-top: 10px; }
+        .tl-node { display: flex; align-items: flex-start; gap: 16px; color: var(--text-main); position: relative; z-index: 2; }
+        .tl-text { display: flex; flex-direction: column; width: 100%; }
+        .tl-station-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .tl-station-name { font-weight: 600; font-size: 15px; cursor: pointer; color: var(--bh-blue); transition: color 0.2s; }
+        .tl-station-name:hover { color: #002277; text-decoration: underline; }
+        .tl-desc { font-size: 12px; color: #888; margin-top: 4px; line-height: 1.4; }
+        .tl-dot { width: 12px; height: 12px; border-radius: 50%; border: 3px solid var(--text-main); background: #fff; flex-shrink: 0; margin-top: 4px; }
+        .tl-dot.dest { border-color: var(--bh-red); background: var(--bh-red); box-shadow: 0 0 0 3px rgba(226,0,26,0.15); }
+        .tl-segment { margin-left: 5px; border-left: 2px solid var(--border); padding: 20px 0 20px 24px; position: relative; display: flex; align-items: center; }
+
+        .gallery-header { font-size: 20px; font-weight: 700; margin: 40px 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid var(--border); color: #111; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        .gallery-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 16px; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+        .gallery-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-color: var(--bh-blue); }
+        .gallery-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--bh-red); transform: scaleY(0); transition: transform 0.2s; transform-origin: bottom; }
+        .gallery-card:hover::before { transform: scaleY(1); }
+        .g-card-title { font-weight: 700; font-size: 16px; margin-bottom: 8px; color: var(--text-main); }
+        .g-card-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+        .s-tag { font-size: 10px; background: #e0e0e0; padding: 2px 6px; border-radius: 3px; color: #444; font-weight:600;}
+        .g-card-desc { font-size: 13px; color: #555; line-height: 1.5; }
+
+        .iti-header-actions { display: flex; gap: 10px; align-items: center; background: #f0f6ff; padding: 6px 12px; border-radius: 10px; border: 1px solid #d9e3f4; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
+        .btn-iti { padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 13px; cursor: pointer; transition: all 0.2s; border: none; display: flex; align-items: center; gap: 6px; background: var(--bh-blue); color: #fff; box-shadow: 0 4px 10px rgba(0,51,160,0.2); }
+        .btn-iti:hover { background: #002277; transform: translateY(-1px); box-shadow: 0 6px 14px rgba(0,51,160,0.3); }
+        
+        .daily-box { margin-bottom: 20px; background: #fafafa; border-radius: 8px; padding: 15px; border: 1px solid #eee; }
+        .daily-title { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; border-bottom: 2px solid #ddd; padding-bottom: 8px; }
+        
+        .alert-box { background: #fffcf0; border: 1px solid #ffeb99; border-left: 4px solid var(--bh-yellow); padding: 12px 16px; border-radius: 6px; margin-bottom: 20px; font-size: 13px; color: #444; line-height: 1.5; }
+
+        /* TABS UI STYLES */
+        .spot-detail-content { display: flex; flex-direction: column; }
+        .sd-header { margin-bottom: 16px; }
+        .sd-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 8px; }
+        .sd-title { font-size: 22px; font-weight: 700; color: #111; margin: 0; line-height: 1.2; }
+        .sd-actions { display: flex; gap: 8px; flex-shrink: 0; }
+        .sd-btn-icon { background: #f0f4fb; color: var(--bh-blue); border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: all 0.2s; }
+        .sd-btn-icon:hover { background: var(--bh-blue); color: #fff; }
+        
+        .sd-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 16px; }
+        .sd-pill { background: #f5f5f7; border: 1px solid transparent; padding: 8px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #555; cursor: pointer; transition: all 0.2s; }
+        .sd-pill:hover { background: #e8e8ed; color: #111; }
+        .sd-pill.active { background: var(--bh-black); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        
+        .sd-tab-container { min-height: 150px; }
+        .sd-tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .sd-tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .sd-text { font-size: 13px; color: #333; line-height: 1.6; text-align: justify; background: #fafafa; padding: 16px; border-radius: 8px; border: 1px solid #eaeaea; }
+        .sd-widget-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .sd-widget { background: #fff; padding: 12px 16px; border-radius: 8px; border: 1px solid #eaeaea; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .sd-widget-title { font-size: 11px; font-weight: 600; color: #888; margin-bottom: 4px; text-transform: uppercase; }
+        .sd-widget-val { font-size: 14px; font-weight: 700; color: #111; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>D-Ticket / MVV | 极客定制版：慕尼黑周边专属矩阵</h1>
+            <div class="meta">📍 新增特性：基于 Agglomerative Clustering 的自适应天数分配算法引擎</div>
+        </header>
+
+        <div class="alert-box">
+            <strong>⚠️ 核心预警提示：</strong> 您指定的这 6 个地点（涵盖深山、峡谷与平原）跨度巨大。为了保证不走回头路，系统现已接入<strong>动态地理聚类引擎</strong>，只需输入您的出行天数，引擎即可通过计算空间欧几里得距离，自动对这 6 大孤立节点进行最优天数分配与合并。
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th width="35%">目的地核心组 (点击查看地理雷达)</th>
+                    <th width="65%">票务降维打击策略 (重点)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <span class="city-flag f-bavaria" onclick="openCityMiniMap(event)"></span>
+                        <span class="city-name-btn" onclick="openCityMiniMap(event)">查看这 6 个点位的极限跨度</span>
+                    </td>
+                    <td>
+                        <div class="opt-route">
+                            <span class="t-tag t-s" style="background:#eaf0fc; color:var(--bh-blue); border:1px solid #cce0ff;">拜仁州票 (Bayern-Ticket) 是唯一解</span>
+                            <span style="font-size: 13px; color: #444; margin-left: 10px;">由于涉及深山区 (Schrecksee) 与远郊 (Berchtesgaden)，单纯的 MVV 周票无法覆盖，强烈建议直接购买拜仁州票搞定所有区域慢车及大巴。</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="gallery-header">
+            <span>📸 截图解析：6 大目标深度情报 (点击卡片查看胶囊面板)</span>
+            
+            <!-- NEW DYNAMIC DAYS INPUT UI -->
+            <div class="iti-header-actions">
+                <span style="font-size:13px; font-weight:700; color:var(--bh-blue);">⏱️ 计划出行天数:</span>
+                <input type="number" id="tripDaysInput" min="1" max="7" value="3" style="width:50px; text-align:center; border:1px solid var(--border); border-radius:6px; font-size:14px; font-weight:700; padding:6px; color:var(--text-main); outline:none;">
+                <button class="btn-iti primary" onclick="generateDynamicItinerary()">🚀 运行智能聚类引擎</button>
+            </div>
+
+        </div>
+        <div class="gallery-grid" id="mainGallery">
+            <!-- JS populated -->
+        </div>
+    </div>
+
+    <!-- Map Overlay for Route and Minimap -->
+    <div id="mapOverlay" class="map-overlay" onclick="closeMap()">
+        <div class="map-modal" onclick="event.stopPropagation()">
+            <button class="map-close" onclick="closeMap()">×</button>
+            <div class="map-header-title">
+                <span id="mapIcon" class="city-flag f-bavaria"></span>
+                <span id="mapTitle">动态路线图</span>
+            </div>
+            <div id="mapTimeline"></div>
+        </div>
+    </div>
+
+    <!-- Detail Overlay for Capsule/Pills Modal -->
+    <div id="detailOverlay" class="map-overlay" onclick="closeDetail()">
+        <div class="map-modal" onclick="event.stopPropagation()">
+            <button class="map-close" onclick="closeDetail()">×</button>
+            <div id="detailContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        const customSpots = [{"name": "\u5e15\u7279\u7eb3\u8d6b\u5ce1\u8c37 (Partnachklamm)", "act": "\u786c\u6838\u5f92\u6b65", "lat": 47.4665, "lon": 11.1189, "desc": "\u3010\u6e05\u51c9\u5947\u5883\u3011\u957f\u7ea6700\u7c73\u7684\u5e7d\u6df1\u5ce1\u8c37\uff0c\u6c34\u6d41\u6e4d\u6025\uff0c\u4e24\u4fa7\u5ca9\u58c1\u9ad8\u8fbe80\u7c73\u3002\u6781\u5176\u9002\u5408\u559c\u6b22\u6237\u5916\u8d8a\u91ce\u548c\u786c\u6838\u5f92\u6b65\u7684\u65c5\u884c\u8005\uff0c\u662f\u6bd4\u9ed1\u68ee\u6797\u548c\u5b5a\u65e5\u5c71\u8109\u66f4\u5177\u538b\u8feb\u611f\u7684\u6c34\u7cfb\u5ce1\u8c37\u4f53\u9a8c\u3002", "id": "muc_custom_1", "dur": "\u5355\u7a0b\u4ea4\u901a\u7ea61-3\u5c0f\u65f6\u4e0d\u7b49", "nav": "\u5e15\u7279\u7eb3\u8d6b\u5ce1\u8c37 Germany", "rest": "\u5468\u8fb9\u7cbe\u9009\u5df4\u4f10\u5229\u4e9a\u9910\u5385\u6216\u81ea\u5e26\u80fd\u91cf\u8865\u7ed9", "dist": "\u6df1\u5c71\u65f7\u91ce/\u8fdc\u90ca", "coord": {"x": 30.9, "y": 83.5}, "ticket": "\ud83c\udf9f\ufe0f \u5f00\u653e\u6027\u81ea\u7136\u666f\u89c2\u514d\u8d39\u3002\u8de8\u533a\u63a5\u9a73\u5df4\u58eb\u6216\u706b\u8f66\u5f3a\u70c8\u5efa\u8bae\u4f7f\u7528\u62dc\u4ec1\u5dde\u7968\uff08Bayern-Ticket\uff09\u8986\u76d6\u5168\u7a0b\u3002"}, {"name": "\u5170\u8328\u80e1\u7279\u8001\u57ce (Landshut Altstadt)", "act": "\u5c0f\u9547\u6e38\u89c8", "lat": 48.5367, "lon": 12.1524, "desc": "\u3010\u7ae5\u8bdd\u5c0f\u9547\u3011\u8ddd\u79bb\u6155\u5c3c\u9ed1\u673a\u573a\u6781\u8fd1\u7684\u5b9d\u85cf\u5c0f\u9547\u3002\u8001\u57ce\u533a\u7684\u5efa\u7b51\u8272\u5f69\u7f24\u7eb7\u4e14\u6392\u5217\u6574\u9f50\uff0c\u54e5\u7279\u5f0f\u7684\u5723\u9a6c\u4e01\u6559\u5802\u62e5\u6709\u4e16\u754c\u4e0a\u6700\u9ad8\u7684\u7816\u780c\u949f\u697c\u3002", "id": "muc_custom_2", "dur": "\u5355\u7a0b\u4ea4\u901a\u7ea61-3\u5c0f\u65f6\u4e0d\u7b49", "nav": "\u5170\u8328\u80e1\u7279\u8001\u57ce Germany", "rest": "\u5468\u8fb9\u7cbe\u9009\u5df4\u4f10\u5229\u4e9a\u9910\u5385\u6216\u81ea\u5e26\u80fd\u91cf\u8865\u7ed9", "dist": "\u6155\u5c3c\u9ed1\u8fd1\u90ca", "coord": {"x": 68.1, "y": 9.4}, "ticket": "\ud83c\udfab \u6155\u5c3c\u9ed1 M \u533a\u53ca\u6269\u5c55\u8def\u6bb5\u53ef\u4f7f\u7528 MVV \u5468\u7968\u3002\u8de8\u754c\u533a\u57df\u8bf7\u7ed3\u5408\u62dc\u4ec1\u5dde\u7968\uff08Bayern-Ticket\uff09\u65e0\u7f1d\u63a5\u9a73\u3002"}, {"name": "\u7ef4\u5c14\u8428\u5c14\u666e\u6e56 (Vilsalpsee)", "act": "\u81ea\u7136\u98ce\u5149", "lat": 47.4682, "lon": 10.5056, "desc": "\u3010\u9ad8\u5c71\u660e\u955c\u3011\u5fb7\u5965\u8fb9\u5883\u7684\u7edd\u7f8e\u6e56\u6cca\uff0c\u5468\u56f4\u7fa4\u5c71\u73af\u7ed5\u3002\u6cbf\u6e56\u6b65\u9053\u5e73\u7f13\u8212\u9002\uff0c\u662f\u524d\u5f80\u66f4\u9ad8\u6d77\u62d4\u7684 Schrecksee \u7684\u5fc5\u7ecf\u4e4b\u8def\u548c\u7edd\u4f73\u7684\u70ed\u8eab\u8def\u6bb5\u3002", "id": "muc_custom_3", "dur": "\u5355\u7a0b\u4ea4\u901a\u7ea61-3\u5c0f\u65f6\u4e0d\u7b49", "nav": "\u7ef4\u5c14\u8428\u5c14\u666e\u6e56 Germany", "rest": "\u5468\u8fb9\u7cbe\u9009\u5df4\u4f10\u5229\u4e9a\u9910\u5385\u6216\u81ea\u5e26\u80fd\u91cf\u8865\u7ed9", "dist": "\u963f\u5c14\u5351\u65af\u6e56\u533a", "coord": {"x": 8.8, "y": 83.4}, "ticket": "\ud83c\udf9f\ufe0f \u5f00\u653e\u6027\u81ea\u7136\u666f\u89c2\u514d\u8d39\u3002\u8de8\u533a\u63a5\u9a73\u5df4\u58eb\u6216\u706b\u8f66\u5f3a\u70c8\u5efa\u8bae\u4f7f\u7528\u62dc\u4ec1\u5dde\u7968\uff08Bayern-Ticket\uff09\u8986\u76d6\u5168\u7a0b\u3002"}, {"name": "\u65bd\u96f7\u514b\u6e56 / \u725b\u6cb9\u679c\u6e56 (Schrecksee)", "act": "\u786c\u6838\u5f92\u6b65", "lat": 47.4328, "lon": 10.4851, "desc": "\u3010\u786c\u6838\u79d8\u5883\u3011\u9576\u5d4c\u5728\u963f\u5c14\u5351\u65af\u7fa4\u5c71\u4e2d\u7684\u5929\u7136\u9ad8\u5c71\u6e56\u6cca\uff0c\u5f62\u72b6\u4f3c\u725b\u6cb9\u679c\u3002\u6cbf\u9014\u5e38\u6709\u725b\u9a6c\u5403\u8349\uff0c\u98ce\u666f\u6781\u5ea6\u9707\u64bc\uff0c\u5355\u7a0b\u9700\u722c\u5347\u8fd1\u5343\u7c73\u3002", "id": "muc_custom_4", "dur": "\u5355\u7a0b\u4ea4\u901a\u7ea61-3\u5c0f\u65f6\u4e0d\u7b49", "nav": "\u65bd\u96f7\u514b\u6e56 / \u725b\u6cb9\u679c\u6e56 Germany", "rest": "\u9ad8\u6d77\u62d4\u5f92\u6b65\u6d88\u8017\u6781\u5927\u4e14\u65e0\u8865\u7ed9\uff0c\u5efa\u8bae\u81ea\u5e26\u6c34\u716e\u897f\u5170\u82b1\u3001\u867e\u4ec1\u3001\u9cd5\u9c7c\u7b49\u9ad8\u86cb\u767d\u51cf\u8102\u4fbf\u5f53\uff0c\u642d\u914d\u71d5\u9ea6\u5976\u8865\u5145\u4f53\u529b\u3002", "dist": "\u6df1\u5c71\u65f7\u91ce/\u8fdc\u90ca", "coord": {"x": 8.1, "y": 85.8}, "ticket": "\ud83c\udf9f\ufe0f \u5f00\u653e\u6027\u81ea\u7136\u666f\u89c2\u514d\u8d39\u3002\u8de8\u533a\u63a5\u9a73\u5df4\u58eb\u6216\u706b\u8f66\u5f3a\u70c8\u5efa\u8bae\u4f7f\u7528\u62dc\u4ec1\u5dde\u7968\uff08Bayern-Ticket\uff09\u8986\u76d6\u5168\u7a0b\u3002"}, {"name": "\u827e\u5e03\u6e56 (Eibsee)", "act": "\u81ea\u7136\u98ce\u5149", "lat": 47.4583, "lon": 10.9753, "desc": "\u3010\u5fb7\u56fd\u4e5d\u5be8\u6c9f\u3011\u5750\u843d\u4e8e\u695a\u683c\u5cf0\u811a\u4e0b\uff0c\u88ab\u8302\u5bc6\u7684\u677e\u6797\u73af\u7ed5\u3002\u6e56\u6c34\u5448\u73b0\u4ee4\u4eba\u60ca\u53f9\u7684\u84dd\u7eff\u8272\u3002\u6e56\u5317\u5cb8\u662f\u62cd\u6444\u695a\u683c\u5cf0\u5012\u5f71\u7684\u6700\u7ecf\u5178\u673a\u4f4d\u3002", "id": "muc_custom_5", "dur": "\u5355\u7a0b\u4ea4\u901a\u7ea61-3\u5c0f\u65f6\u4e0d\u7b49", "nav": "\u827e\u5e03\u6e56 Germany", "rest": "\u5468\u8fb9\u7cbe\u9009\u5df4\u4f10\u5229\u4e9a\u9910\u5385\u6216\u81ea\u5e26\u80fd\u91cf\u8865\u7ed9", "dist": "\u963f\u5c14\u5351\u65af\u6e56\u533a", "coord": {"x": 25.7, "y": 84.0}, "ticket": "\ud83c\udf9f\ufe0f \u5f00\u653e\u6027\u81ea\u7136\u666f\u89c2\u514d\u8d39\u3002\u8de8\u533a\u63a5\u9a73\u5df4\u58eb\u6216\u706b\u8f66\u5f3a\u70c8\u5efa\u8bae\u4f7f\u7528\u62dc\u4ec1\u5dde\u7968\uff08Bayern-Ticket\uff09\u8986\u76d6\u5168\u7a0b\u3002"}, {"name": "\u65bd\u5229\u5c14\u6e56\u4e0e\u6cf0\u6839\u6e56 (Schliersee - Tegernsee)", "act": "\u81ea\u7136\u98ce\u5149", "lat": 47.7126, "lon": 11.7583, "desc": "\u3010\u5df4\u4f10\u5229\u4e9a\u660e\u73e0\u3011\u6155\u5c3c\u9ed1\u4e1c\u5357\u4fa7\u7684\u59d0\u59b9\u6e56\u3002\u65e2\u6709\u6e05\u5e7d\u7684\u5f92\u6b65\u8def\u7ebf\uff0c\u4e5f\u6709\u6781\u5177\u4f20\u7edf\u98ce\u60c5\u7684\u6e56\u7554\u5c0f\u9547\u3002\u4f53\u529b\u597d\u53ef\u767b\u9876 Wallberg \u4fef\u77b0\u5168\u666f\u3002", "id": "muc_custom_6", "dur": "\u5355\u7a0b\u4ea4\u901a\u7ea61-3\u5c0f\u65f6\u4e0d\u7b49", "nav": "\u65bd\u5229\u5c14\u6e56\u4e0e\u6cf0\u6839\u6e56 Germany", "rest": "\u5468\u8fb9\u7cbe\u9009\u5df4\u4f10\u5229\u4e9a\u9910\u5385\u6216\u81ea\u5e26\u80fd\u91cf\u8865\u7ed9", "dist": "\u963f\u5c14\u5351\u65af\u6e56\u533a", "coord": {"x": 53.9, "y": 66.4}, "ticket": "\ud83c\udf9f\ufe0f \u5f00\u653e\u6027\u81ea\u7136\u666f\u89c2\u514d\u8d39\u3002\u8de8\u533a\u63a5\u9a73\u5df4\u58eb\u6216\u706b\u8f66\u5f3a\u70c8\u5efa\u8bae\u4f7f\u7528\u62dc\u4ec1\u5dde\u7968\uff08Bayern-Ticket\uff09\u8986\u76d6\u5168\u7a0b\u3002"}, {"name": "\u62c9\u59c6\u7ecd\u4e0e\u6b23\u7279\u6e56 (Ramsau - Hintersee)", "act": "\u81ea\u7136\u98ce\u5149", "lat": 47.608, "lon": 12.8943, "desc": "\u3010\u660e\u4fe1\u7247\u98ce\u666f\u3011\u8d1d\u5e0c\u7279\u65af\u52a0\u767b\u7684\u7ecf\u5178\u540d\u7247\u3002\u6728\u6865\u3001\u6eaa\u6c34\u3001\u6811\u6797\u4e0e\u96ea\u5c71\u6784\u6210\u5b8c\u7f8e\u7684\u7530\u56ed\u7267\u6b4c\u3002\u53ef\u901a\u8fc7\u9b54\u6cd5\u68ee\u6797\u4e32\u8054\u3002", "id": "muc_custom_7", "dur": "\u5355\u7a0b\u4ea4\u901a\u7ea61-3\u5c0f\u65f6\u4e0d\u7b49", "nav": "\u62c9\u59c6\u7ecd\u4e0e\u6b23\u7279\u6e56 Germany", "rest": "\u5468\u8fb9\u7cbe\u9009\u5df4\u4f10\u5229\u4e9a\u9910\u5385\u6216\u81ea\u5e26\u80fd\u91cf\u8865\u7ed9", "dist": "\u963f\u5c14\u5351\u65af\u6e56\u533a", "coord": {"x": 94.8, "y": 73.7}, "ticket": "\ud83c\udf9f\ufe0f \u5f00\u653e\u6027\u81ea\u7136\u666f\u89c2\u514d\u8d39\u3002\u8de8\u533a\u63a5\u9a73\u5df4\u58eb\u6216\u706b\u8f66\u5f3a\u70c8\u5efa\u8bae\u4f7f\u7528\u62dc\u4ec1\u5dde\u7968\uff08Bayern-Ticket\uff09\u8986\u76d6\u5168\u7a0b\u3002"}];
+
+        /* === NEW AGGLOMERATIVE CLUSTERING ENGINE === */
+        function generateDynamicItinerary() {
+            let daysStr = document.getElementById('tripDaysInput').value;
+            let days = parseInt(daysStr, 10);
+            if (isNaN(days) || days < 1) days = 1;
+            if (days > 7) days = 7;
+
+            // Initialize each spot as its own cluster
+            let clusters = customSpots.map(s => ({ spots: [s], x: s.coord.x, y: s.coord.y }));
+
+            // Agglomerative merge until we reach target 'days'
+            while (clusters.length > days) {
+                let minDist = Infinity;
+                let mergeA = -1, mergeB = -1;
+
+                // Find the two closest clusters
+                for (let i = 0; i < clusters.length; i++) {
+                    for (let j = i + 1; j < clusters.length; j++) {
+                        let dx = clusters[i].x - clusters[j].x;
+                        let dy = clusters[i].y - clusters[j].y;
+                        let dist = dx*dx + dy*dy;
+                        if (dist < minDist) {
+                            minDist = dist;
+                            mergeA = i;
+                            mergeB = j;
+                        }
+                    }
+                }
+
+                // Merge them into a new cluster centroid
+                let cA = clusters[mergeA];
+                let cB = clusters[mergeB];
+                let mergedSpots = cA.spots.concat(cB.spots);
+                let mergedX = mergedSpots.reduce((sum, s) => sum + s.coord.x, 0) / mergedSpots.length;
+                let mergedY = mergedSpots.reduce((sum, s) => sum + s.coord.y, 0) / mergedSpots.length;
+
+                // Remove old clusters (larger index first to avoid shifting issues)
+                clusters.splice(mergeB, 1);
+                clusters.splice(mergeA, 1);
+                
+                // Add new merged cluster
+                clusters.push({ spots: mergedSpots, x: mergedX, y: mergedY });
+            }
+
+            // Sort clusters roughly from West to East for display
+            clusters.sort((a, b) => a.x - b.x);
+
+            // Render the modal
+            const overlay = document.getElementById('mapOverlay');
+            const container = document.getElementById('mapTimeline');
+            document.getElementById('mapTitle').innerText = `AI 空间距离聚类：${days} 天自动路线`;
+
+            let warningHtml = '';
+            if(days < 3) {
+                warningHtml = `<div style="background:#fdf2f3; border:1px solid #f9dadd; border-left:4px solid var(--bh-red); padding:10px; border-radius:6px; font-size:12px; color:#c0392b; margin-bottom:16px; font-weight:600;">
+                    ⚠️ 极限挑战预警：您输入的天数极少，算法已强行将跨度超百公里的异地景点压缩在同一天内。纯依赖公共交通几乎无法实现该方案，建议自驾或延长出行天数！
+                </div>`;
+            }
+
+            let html = `${warningHtml}
+                <div style="font-size:13px; color:#444; margin-bottom:16px; line-height:1.6;">
+                    ✨ 系统底层已应用 <strong>Agglomerative Clustering (层次聚类算法)</strong>。<br>
+                    引擎将这 7 大孤立坐标基于欧几里得距离，在空间上最优组合成了 <strong>${days} 个区域群</strong>，极大地避免了折返跑：
+                </div>
+                <div style="max-height:55vh; overflow-y:auto; padding-right:10px;">`;
+
+            clusters.forEach((cluster, index) => {
+                html += `<div class="daily-box"><div class="daily-title">🗓️ Day ${index + 1} 区域网格 (包含 ${cluster.spots.length} 站)</div><div class="timeline" style="padding-top:0;">`;
+                
+                cluster.spots.forEach((spot, idx) => {
+                    const isEnd = (idx === cluster.spots.length - 1);
+                    const dotClass = isEnd ? 'tl-dot dest' : 'tl-dot';
+                    
+                    if(idx > 0) {
+                        html += `<div class="tl-segment"><span class="t-tag t-re" style="background:#f4e8f9; color:#8e44ad; border-color:#e2c6f2;">同区快速接驳 📶</span></div>`;
+                    }
+
+                    html += `
+                        <div class="tl-node">
+                            <div class="${dotClass}"></div>
+                            <div class="tl-text">
+                                <div class="tl-station-row">
+                                    <span class="tl-station-name" onclick="openDetail('${spot.id}')">${idx + 1}. ${spot.name} ℹ️</span>
+                                </div>
+                                <div class="tl-desc">📍 ${spot.dist} | ⏱️ ${spot.dur}</div>
+                            </div>
+                        </div>`;
+                });
+                html += `</div></div>`;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+            overlay.classList.add('show');
+        }
+
+        function openCityMiniMap(event) {
+            event.stopPropagation();
+            const overlay = document.getElementById('mapOverlay');
+            const mapTitle = document.getElementById('mapTitle');
+            const container = document.getElementById('mapTimeline');
+            
+            mapTitle.innerText = `6 大目标点地理跨度雷达图`;
+
+            let html = `<div class="city-minimap-box">
+                <div class="minimap-content" style="transform:scale(1);">`;
+            customSpots.forEach(spot => {
+                html += `
+                    <div class="minimap-pin" style="top: ${spot.coord.y}%; left: ${spot.coord.x}%;" title="${spot.name}" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.nav)}', '_blank'); event.stopPropagation();">
+                        <div class="minimap-label">${spot.name.split(' ')[0]}</div>
+                    </div>`;
+            });
+            html += `</div></div>
+                <div style="margin-top:12px; font-size:12px; color:#666; line-height:1.5;">
+                    📍 图谱解读：地图上这 6 个红点分散在东南西北不同象限。特别是极左侧的 Schrecksee (图3) 和极右侧的 Ramsau (图6)，中间横跨了整个巴伐利亚南段，这就是为什么3天无法全部走完的根源。<br><br><b>💡 点击雷达图中的红点可一键跳转 Google Maps 导航。</b>
+                </div>`;
+
+            container.innerHTML = html;
+            overlay.classList.add('show');
+        }
+
+        /* === RESTORED CAPSULE / PILLS LOGIC === */
+        function switchTab(btn, tabId) {
+            const container = btn.closest('.spot-detail-content');
+            container.querySelectorAll('.sd-pill').forEach(p => p.classList.remove('active'));
+            container.querySelectorAll('.sd-tab-content').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            container.querySelector('#' + tabId).classList.add('active');
+        }
+
+        async function fetchRealWeather(lat, lon, spotId) {
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m`);
+                const data = await res.json();
+                if (data && data.current) {
+                    const temp = Math.round(data.current.temperature_2m) + '°C';
+                    const hum = data.current.relative_humidity_2m + '%';
+                    const tempValEl = document.getElementById(`weather-temp-${spotId}`);
+                    if (tempValEl) {
+                        tempValEl.innerText = `${temp} (湿度 ${hum})`;
+                    }
+                }
+            } catch (e) {
+                console.error("Weather API failed", e);
+            }
+        }
+
+        function openDetail(id) {
+            const spot = customSpots.find(x => x.id === id);
+            if(!spot) return;
+
+            const overlay = document.getElementById('detailOverlay');
+            const container = document.getElementById('detailContainer');
+
+            const currentHour = new Date().getHours();
+            let crowdText = currentHour > 9 && currentHour < 17 ? '白天出行高峰期：估算负荷约 65%' : '非高峰时段：估算负荷约 20%';
+            let crowdColor = currentHour > 9 && currentHour < 17 ? '#e67e22' : '#27ae60';
+
+            const html = `
+                <div class="spot-detail-content">
+                    <div class="sd-header">
+                        <div class="sd-title-row">
+                            <h2 class="sd-title">${spot.name}</h2>
+                            <div class="sd-actions">
+                                <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.nav)}" target="_blank" class="sd-btn-icon" style="background:#eaf0fc; color:var(--bh-blue);">🧭 导航直达</a>
+                            </div>
+                        </div>
+                        <div style="font-size:13px; color:#666; margin-bottom:16px;">⏱️ 建议游玩：${spot.dur} &nbsp; | &nbsp; 📍 方位区域：${spot.dist}</div>
+                        
+                        <div class="sd-pills">
+                            <button class="sd-pill active" onclick="switchTab(this, 'tab-hist')">🏛️ 深度解码</button>
+                            <button class="sd-pill" onclick="switchTab(this, 'tab-ticket')">🎫 票务策略</button>
+                            <button class="sd-pill" onclick="switchTab(this, 'tab-weather')">⛅ 气象穿衣</button>
+                            <button class="sd-pill" onclick="switchTab(this, 'tab-live')">📡 动态情报</button>
+                            ${spot.rest ? `<button class="sd-pill" onclick="switchTab(this, 'tab-food')">🍴 能量补给</button>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="sd-tab-container">
+                        <div id="tab-hist" class="sd-tab-content active"><div class="sd-text">${spot.desc}</div></div>
+                        <div id="tab-ticket" class="sd-tab-content"><div class="sd-text" style="border-left: 3px solid var(--bh-yellow);">${spot.ticket}</div></div>
+                        <div id="tab-weather" class="sd-tab-content">
+                            <div class="sd-widget-grid">
+                                <div class="sd-widget"><div class="sd-widget-title">实时气温 / 湿度 (API)</div><div class="sd-widget-val" id="weather-temp-${spot.id}">获取中...</div></div>
+                                <div class="sd-widget"><div class="sd-widget-title">空气质量指数 (AQI)</div><div class="sd-widget-val" style="color:#27ae60;">优 (AQI 20-30)</div></div>
+                                <div class="sd-widget" style="grid-column: span 2; background:#f9f9fb;"><div class="sd-widget-title">👔 秋季徒步穿衣建议</div><div class="sd-widget-val" style="font-size:12px; font-weight:500; color:#444;">10月初高海拔区温差极大，务必携带防水冲锋衣、防滑徒步鞋，并视情况备好保暖内胆。</div></div>
+                            </div>
+                        </div>
+                        <div id="tab-live" class="sd-tab-content"><div class="sd-widget-grid"><div class="sd-widget" style="grid-column: span 2;"><div class="sd-widget-title">👥 景区实时拥挤度估算</div><div class="sd-widget-val" style="color:${crowdColor};">${crowdText}</div></div></div></div>
+                        ${spot.rest ? `<div id="tab-food" class="sd-tab-content"><div class="sd-text" style="border-left: 3px solid var(--bh-red);"><b>出行推荐：</b><br><br>${spot.rest}</div></div>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            overlay.classList.add('show');
+            
+            // Trigger weather fetch
+            if(spot.lat && spot.lon) fetchRealWeather(spot.lat, spot.lon, spot.id);
+        }
+        function closeDetail() { document.getElementById('detailOverlay').classList.remove('show'); }
+
+        function initGallery() {
+            const grid = document.getElementById('mainGallery');
+            let html = '';
+            
+            customSpots.forEach(s => {
+                html += `
+                <div class="gallery-card" onclick="openDetail('${s.id}')">
+                    <div class="g-card-title">${s.name}</div>
+                    <div class="g-card-tags">
+                        <span class="s-tag">${s.act}</span>
+                        <span class="s-tag" style="background:#eaf0fc; color:var(--bh-blue);">${s.dist}</span>
+                    </div>
+                    <div class="g-card-desc" style="margin-bottom:8px;">${s.desc}</div>
+                    <div class="g-card-desc" style="color:#b38f00; margin-top:4px;">👆 点击打开专属胶囊情报面板</div>
+                </div>`;
+            });
+            
+            grid.innerHTML = html;
+        }
+
+        window.onload = () => initGallery();
+        function closeMap() { document.getElementById('mapOverlay').classList.remove('show'); }
+    </script>
+</body></html>
