@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>米滕瓦尔德 ➔ 克莱斯 0.5日极速穿越</title>
+    <style>
+        :root {
+            --bavaria-blue: #0066b2; /* 巴伐利亚蓝 */
+            --aus-white: #FFFFFF;
+            --royal-gold: #C5A059; /* 皇室金 */
+            --alpine-green: #2B4E38; /* 阿尔卑斯深绿 */
+            --bg-color: #F4F7FA;
+            --text-color: #2C2C2C;
+        }
+        body {
+            font-family: 'Georgia', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            margin: 0; padding: 0; line-height: 1.8;
+        }
+        
+        header {
+            background: linear-gradient(rgba(0, 102, 178, 0.75), rgba(43, 78, 56, 0.85)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Mittenwald_and_Karwendel.jpg/1920px-Mittenwald_and_Karwendel.jpg') center/cover;
+            color: var(--aus-white); text-align: center; padding: 4.5rem 1rem 3.5rem;
+            border-bottom: 6px solid var(--royal-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        header h1 { margin: 0; font-size: 2.6rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); letter-spacing: 1px; color: #fff;}
+        header p { font-size: 1.2rem; font-weight: bold; margin-top: 15px; color: #FFF3CD; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);}
+
+        .q-bar {
+            display: flex; justify-content: center; gap: 25px; flex-wrap: wrap;
+            padding: 20px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .q-icon {
+            font-size: 2.2rem; cursor: pointer; background: var(--bg-color); 
+            border: 2px solid var(--royal-gold); border-radius: 50%; 
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;
+        }
+        .q-icon:hover { transform: scale(1.15) translateY(-5px); background: #E6F0F9; box-shadow: 0 8px 15px rgba(0, 102, 178, 0.3); }
+        .q-icon::after {
+            content: attr(data-tooltip); position: absolute; bottom: -30px;
+            font-size: 0.85rem; color: var(--bavaria-blue); font-weight: bold; white-space: nowrap;
+            opacity: 0; transition: opacity 0.3s; background: #fff; padding: 3px 10px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid var(--bavaria-blue);
+        }
+        .q-icon:hover::after { opacity: 1; }
+
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
+        .day-header {
+            background: var(--bavaria-blue); color: white; padding: 12px 25px; border-radius: 8px; 
+            margin: 40px 0 20px; display: inline-block; font-size: 1.6rem;
+            border-left: 8px solid var(--royal-gold); box-shadow: 0 4px 10px rgba(0, 102, 178, 0.3);
+        }
+
+        .route-timeline {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            background: #fff; padding: 25px 20px 15px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; position: relative; overflow-x: auto;
+        }
+        .route-timeline::before {
+            content: ''; position: absolute; top: 41px; left: 50px; right: 50px;
+            height: 3px; background: var(--royal-gold); z-index: 1; opacity: 0.8;
+        }
+        .rt-step { position: relative; z-index: 2; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 80px; }
+        .rt-icon {
+            width: 36px; height: 36px; background: var(--alpine-green); color: white; border-radius: 50%;
+            line-height: 36px; font-size: 1.1rem; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-bottom: 10px;
+        }
+        .rt-text { font-size: 0.95rem; font-weight: bold; color: var(--alpine-green); line-height: 1.2; }
+        .rt-sub { font-size: 0.75rem; color: var(--bavaria-blue); margin-top: 6px; background: #E6F0F9; padding: 3px 8px; border-radius: 12px; font-weight: bold; white-space: nowrap;}
+
+        .spot-card {
+            background: #fff; padding: 30px; border-radius: 12px; margin-bottom: 30px;
+            border-top: 6px solid var(--alpine-green); box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+        .spot-time { color: var(--bavaria-blue); font-weight: bold; font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 8px; display: inline-block; margin-bottom: 20px; }
+        .spot-title { margin: 0 0 15px; color: var(--alpine-green); font-size: 1.8rem; font-weight: bold; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center;
+            z-index: 1000; backdrop-filter: blur(8px);
+        }
+        .modal {
+            background: var(--bg-color); width: 95%; max-width: 950px; max-height: 88vh;
+            border-radius: 16px; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            border: 2px solid var(--royal-gold);
+        }
+        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 40px; color: #fff; cursor: pointer; z-index: 10; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+        .modal-header { height: 320px; background-size: cover; background-position: center; position: relative; border-radius: 14px 14px 0 0; background-color: #eee; }
+        .modal-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
+        .modal-title { position: absolute; bottom: 25px; left: 30px; color: var(--royal-gold); margin: 0; font-size: 2.3rem; z-index: 2; text-shadow: 0 2px 4px #000; }
+        .modal-body { padding: 40px; font-size: 1.1rem; }
+
+        .transit-node {
+            display: flex; align-items: center; margin: 15px 0 25px 25px;
+            border-left: 3px dashed var(--royal-gold); padding-left: 35px; position: relative;
+        }
+        .time-icon {
+            position: absolute; left: -24px; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px; line-height: 44px; text-align: center;
+            background: #fff; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 0 0 4px var(--bg-color), 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.2s; z-index: 2;
+        }
+        .time-icon:hover { transform: translateY(-50%) scale(1.15); box-shadow: 0 0 0 4px #E6F0F9, 0 4px 12px rgba(0,102,178,0.4); }
+        
+        .transit-info {
+            background: #E6F0F9; border: 1px solid var(--bavaria-blue); border-radius: 8px; 
+            padding: 15px 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05); width: 100%;
+        }
+        .transit-mode { font-weight: bold; color: var(--alpine-green); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+        .transit-time { color: var(--bavaria-blue); font-weight: bold; background: #fff; padding: 4px 12px; border-radius: 20px; border: 1px solid #B3D7FF; font-size: 0.95rem; }
+        .transit-dest { color:#2B4E38; font-weight:bold; margin-left:auto; }
+        .ticket-notice {
+            flex-basis: 100%; margin-top: 10px; font-size: 0.95rem; color: #004085; background: #CCE5FF; 
+            padding: 10px 12px; border-radius: 6px; border-left: 5px solid #0056b3; line-height: 1.6;
+        }
+
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .map-btn, .db-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px;
+            text-decoration: none; font-weight: bold; font-size: 1rem; transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); border-bottom: 3px solid; cursor: pointer;
+        }
+        .map-btn { background: linear-gradient(135deg, var(--alpine-green), #0F2916); color: white; border-bottom-color: #08170C; }
+        .map-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(43,78,56,0.4); color: white; }
+        .db-btn { background: linear-gradient(135deg, var(--bavaria-blue), #004085); color: white; border-bottom-color: #002752; border: none; }
+        .db-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,102,178,0.4); color: white; border-bottom: 3px solid #002752; }
+
+        .accordion-item { border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .accordion-header {
+            background: #fdfbf7; padding: 22px 25px; cursor: pointer; font-weight: bold; font-size: 1.25rem;
+            color: var(--alpine-green); display: flex; justify-content: space-between; align-items: center;
+            border-left: 6px solid var(--royal-gold); transition: background 0.2s;
+        }
+        .accordion-header:hover { background: #F4F7FA; }
+        .header-title-box { display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 15px; }
+        .step-time-badge { background: #E6F0F9; color: var(--bavaria-blue); font-size: 0.9rem; padding: 4px 12px; border-radius: 15px; border: 1px solid #B3D7FF; font-weight: bold; }
+
+        .accordion-content { display: none; padding: 30px; border-top: 1px solid #eee; }
+        .accordion-item.active .accordion-content { display: block; animation: fadeIn 0.4s; }
+        .accordion-content img { width: 100%; border-radius: 10px; margin-bottom: 25px; max-height: 450px; object-fit: cover; border: 1px solid #eee; background-color: #eee; }
+        .notice { background: #FFF3CD; color: #856404; padding: 18px; border-left: 5px solid #FFC107; margin-top: 25px; border-radius: 6px; font-size: 1.05rem; line-height: 1.7; }
+        
+        .main-btn {
+            display: inline-block; font-size: 1.05rem; color: #fff; background: linear-gradient(135deg, var(--bavaria-blue), #004085); 
+            padding: 12px 30px; border-radius: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 102, 178, 0.4); 
+            transition: all 0.2s; cursor: pointer; border: none; margin-top: 15px; border-bottom: 3px solid #002752; text-align: center;
+        }
+        .main-btn:hover { background: #0056b3; transform: translateY(-2px); }
+
+        .q-sub-tabs { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+        .q-sub-btn { 
+            background: #eee; border: 2px solid transparent; padding: 10px 20px; font-size: 1.05rem; 
+            border-radius: 30px; cursor: pointer; font-weight: bold; color: #333; transition: all 0.2s;
+        }
+        .q-sub-btn.active { background: #E6F0F9; border-color: var(--bavaria-blue); color: var(--bavaria-blue); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .q-sub-content { display: none; padding: 30px; background: #fff; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .q-sub-content.active { display: block; animation: fadeIn 0.4s; }
+
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 102, 178, 0.95); color: white; padding: 15px 30px; border-radius: 30px;
+            font-size: 1.05rem; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; border: 2px solid var(--royal-gold); text-align: center;
+        }
+        #toast.show { bottom: 40px; }
+
+        /* AI 生成器悬浮按钮及模态框 */
+        #ai-generator-btn {
+            position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--royal-gold), #A67C00);
+            color: #fff; padding: 15px 25px; border-radius: 30px; font-weight: bold; font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 999; border: 2px solid #fff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        #ai-generator-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(197,160,89,0.4); }
+        .ai-modal { background: #fff; max-width: 550px; padding: 30px; max-height: 90vh; overflow-y: auto;}
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body style="overflow: auto;">
+
+<header>
+    <h1>慕尼黑 ⇌ 米滕瓦尔德 0.5日极速穿越</h1>
+    <p>湿壁画老城漫步 × 冰川丘陵徒步穿越 × 绝不走回头路</p>
+</header>
+
+<div class="q-bar">
+    <div class="q-icon" data-tooltip="小提琴之乡" onclick="openQModal('violin')">🎻</div>
+    <div class="q-icon" data-tooltip="湿壁画艺术" onclick="openQModal('fresco')">🎨</div>
+    <div class="q-icon" data-tooltip="卡尔文德尔山" onclick="openQModal('alps')">🏔️</div>
+    <div class="q-icon" data-tooltip="巴伐利亚美食" onclick="openQModal('food')">🥨</div>
+    <div class="q-icon" data-tooltip="冰川丘陵遗迹" onclick="openQModal('meadow')">🌲</div>
+</div>
+
+<div class="container">
+    <h2 class="day-header">0.5日精华路线：慕尼黑 ➔ 米滕瓦尔德 ➔ 徒步穿越至 Klais ➔ 返回慕尼黑</h2>
+    
+    <div class="spot-card">
+        <span class="spot-time">08:00 - 15:50 | 半日特种兵黄金路线</span>
+        <h3 class="spot-title">🥾 路线 A：老城文化与最美草甸徒步无缝衔接</h3>
+        <p>完美适配只有半天时间的你！早上从慕尼黑直达米滕瓦尔德，漫步在“活生生的图画书”老城中。随后沿着著名的冰川丘陵（Buckelwiesen）一路向北徒步，最终抵达隐秘的克莱斯（Klais）火车站，直接乘车返回慕尼黑，不走一点回头路！</p>
+        <button class="main-btn" onclick="openModal('route_half_day')">展开 0.5日 极速穿越时间轴与导航 ➔</button>
+    </div>
+</div>
+
+<!-- AI 拓展生成器入口 -->
+<div id="ai-generator-btn" onclick="openAIGenerator()">
+    🌍 生成新城市攻略
+</div>
+
+<!-- AI 拓展生成器模态框 -->
+<div class="modal-overlay" id="aiModalOverlay" onclick="closeAIModal(event)">
+    <div class="modal ai-modal" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeAIModal(event)" style="color:#333; text-shadow:none; top:10px; right:15px;">×</span>
+        <h2 style="color: var(--bavaria-blue); margin-top:0;">🌍 一键生成新城市攻略</h2>
+        <p style="color: #666; font-size: 0.95rem;">输入目的地、天数（支持半天）和您的特殊要求，系统将自动生成最强 AI 提示词，并下载当前的 HTML 模板文件。您只需在 Gemini 中上传模板并粘贴提示词即可！</p>
+        
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">📍 目的城市：</label>
+            <input type="text" id="ai-city" placeholder="例如：巴黎、维也纳、因斯布鲁克..." style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box;">
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">📅 游玩天数（支持0.5天单位）：</label>
+            <input type="number" id="ai-days" step="0.5" min="0.5" placeholder="例如：1.5" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box;">
+        </div>
+
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">✍️ 自定义行程描述（选填）：</label>
+            <textarea id="ai-custom" rows="3" placeholder="例如：从慕尼黑出发到Mittenwald，然后徒步回Klais，再坐车回慕尼黑" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box; resize:vertical;"></textarea>
+        </div>
+
+        <button class="main-btn" style="width:100%; display:block;" onclick="executeAIGen()">🚀 复制提示词、下载模板并跳转 Gemini</button>
+    </div>
+</div>
+
+<!-- 原有的模态框 -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modalContent" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeModal(event)">×</span>
+        <div class="modal-header" id="modalHeader">
+            <h2 class="modal-title" id="modalTitle">标题</h2>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+    var qData = {
+        'violin': {
+            title: "🎻 米滕瓦尔德：阿尔卑斯深处的小提琴之乡",
+            tabs: ["1. 制琴历史的起源", "2. 小提琴制造博物馆", "3. 优质木材的秘密", "4. 手工制琴坊", "5. 琴音绕梁的小镇"],
+            contents: [
+                "<b>制琴历史的起源与发展：</b> 米滕瓦尔德（Mittenwald）被称为“千把小提琴的村庄”。1684年，本地人马蒂亚斯·克洛茨（Matthias Klotz）将在意大利克雷莫纳学到的精湛制琴技艺带回了家乡。在此之前，这里只是一个普通的贸易中转站。克洛茨不仅自己制琴，还将技艺传授给镇上的居民。几代人之后，米滕瓦尔德成为了整个欧洲乃至全世界极其重要的高级弦乐器制造中心，为这座巴伐利亚边境小镇带来了极高的声誉和文化底蕴。",
+                "<b>小提琴制造博物馆 (Geigenbaumuseum)：</b> 如果你对音乐和手工艺感兴趣，位于老城区核心的这家博物馆是绝对不可错过的朝圣地。博物馆坐落在一栋极其古老的巴伐利亚传统建筑内，通过详尽的实物、工作台还原以及历史文献，全面展示了米滕瓦尔德长达 300 多年的小提琴制作史。你不仅能看到从17世纪至今的珍贵古董提琴，还能通过多媒体展示了解一把顶级提琴从砍伐木材、自然风干到手工雕刻、上漆的极其繁复考究的几百道工序。",
+                "<b>卡尔文德尔山优质木材的秘密：</b> 为什么马蒂亚斯·克洛茨会选择在家乡制琴？答案在于周围的自然环境。高耸入云的卡尔文德尔山脉由于海拔极高、气候严寒且生长周期长，这里孕育出的高山云杉（Fichte）和枫木（Ahorn）木质极其致密、年轮分布异常均匀。这种极其优质的“共鸣木材”是制作顶级小提琴面板和背板的绝佳材料，能够赋予提琴极具穿透力且温暖醇厚的音色，这也是米滕瓦尔德提琴能够享誉世界的地理密码。",
+                "<b>散落街头的手工制琴坊：</b> 直至今日，制琴依然不是米滕瓦尔德的过去式，而是鲜活的现在进行时。镇上仍然活跃着十几家独立的高级手工制琴坊，以及全德国唯一一所国立小提琴制作学校。当你漫步在小镇幽静的后街小巷时，经常能透过那些半开的木质窗户，看到制琴师正戴着围裙，用极其精细的刻刀手工削切提琴的面板，空气中甚至弥漫着特殊的木材清香和天然清漆的味道。这些手工制作的提琴往往需要提前数年预订，价值不菲。",
+                "<b>琴音绕梁的文化活动：</b> 在这座与音乐深度绑定的城市，提琴元素无处不在。从小镇入口处巨大的巨型小提琴木雕，到餐馆和酒店墙上精美的提琴湿壁画，甚至连当地的门牌号都带有高音谱号的装饰。每年夏天，米滕瓦尔德都会举办高水准的室内乐音乐节和街头古典音乐会。坐在广场的咖啡馆里，听着来自世界各地的音乐家演奏弦乐四重奏，背景是雄伟的高山，这种听觉与视觉的极致享受是这座小镇最迷人的灵魂所在。"
+            ]
+        },
+        'fresco': {
+            title: "🎨 湿壁画艺术：活生生的图画书",
+            tabs: ["1. 什么是湿壁画？", "2. 歌德的极高赞誉", "3. 宗教与世俗的融合", "4. 奥伯马克特大街", "5. 错视画法的三维魔法"],
+            contents: [
+                "<b>什么是湿壁画 (Lüftlmalerei)？</b> 当你走进米滕瓦尔德，立刻会被两旁房屋外墙上巨大、色彩极其鲜艳的绘画所震撼，这就是巴伐利亚山区独有的建筑装饰艺术——Lüftlmalerei（湿壁画或空气画）。这种艺术形式起源于18世纪的巴洛克时期，画师必须在建筑外墙的石灰泥抹灰还处于“潮湿”状态时迅速作画。颜料会随着石灰的干燥过程发生化学反应，深深渗入并永久固定在墙体内部，因此哪怕经历了数百年的风吹日晒，色彩依然鲜亮如初。",
+                "<b>大文豪歌德的极高赞誉：</b> 1786 年，德国最伟大的诗人歌德在前往意大利旅行的途中经过米滕瓦尔德。当他看到这满城色彩斑斓、栩栩如生的壁画时，被深深震撼，并在他的著名游记中写下了一句流传至今的名言：“米滕瓦尔德简直就是一本活生生的图画书！”从那时起，这座小镇因为壁画艺术名扬欧洲。几百年后的今天，这句话依然是对米滕瓦尔德老城区最精准、最浪漫的概括。",
+                "<b>宗教信仰与世俗生活的完美融合：</b> 仔细观察这些壁画的内容，你会发现它们是当地人生活与信仰的百科全书。绝大多数壁画描绘了天主教的圣经故事、守护神（如保护房屋免受火灾的圣弗洛里安），用以祈求神明的庇佑。同时，你也能在墙上看到大量描绘世俗生活的画面，比如背着木材的伐木工、喝啤酒的农夫、极其精致的花卉藤蔓，甚至是代表屋主职业的图腾。这些壁画是屋主财富和地位的象征，画得越大越精美，代表这户人家越富有。",
+                "<b>奥伯马克特大街 (Obermarkt)：</b> 要欣赏最精华的湿壁画，你只需沿着小镇的主街——奥伯马克特大街从头走到尾。这条步行街两侧林立着 18 和 19 世纪的古老商宅。其中最著名的包括“新霍恩豪斯”（Neunerhaus）和邮局大楼，它们的外墙几乎被极其繁复的壁画完全覆盖。在清晨或傍晚柔和的阳光照射下，街道两旁鲜艳的壁画与远处巍峨灰白的卡尔文德尔石灰岩山峰形成了极其强烈的色彩对比，随手一拍都是令人惊叹的风光大片。",
+                "<b>极其巧妙的错视画法 (Trompe-l'œil)：</b> 米滕瓦尔德壁画的另一大看点是其极其高超的“错视画法”。画师们利用高超的透视学原理和阴影技巧，在完全平面的墙壁上画出了极具立体感的希腊式圆柱、凸出的阳台、带有精美雕花的窗框，甚至还有从“假窗户”里探出头来的人像！如果不走近仔细观察，你甚至很难分辨出哪些是真实的建筑结构，哪些是画出来的幻觉。这种充满巴洛克式幽默感的三维魔法，让人在老城漫步时充满了发现的乐趣。"
+            ]
+        },
+        'alps': {
+            title: "🏔️ 卡尔文德尔山：石灰岩巨壁",
+            tabs: ["1. 震撼的石灰岩巨壁", "2. 德国极高的高山缆车", "3. 望远镜自然信息中心", "4. 绝美的徒步与攀岩", "5. 独特的高山微气候"],
+            contents: [
+                "<b>极其震撼的石灰岩巨壁 (Karwendelgebirge)：</b> 当你站在米滕瓦尔德小镇的任何一个角落，只要一抬头，绝对会被那堵犹如一堵巨大城墙般拔地而起的灰白色山脉所震撼。这就是阿尔卑斯山脉中极其著名的卡尔文德尔山脉。与圆润的山峰不同，卡尔文德尔主要由极其陡峭、锋利的石灰岩峭壁组成。它的山体极其险峻，最高峰海拔超过 2700 米。这种独特的灰白岩石在日出和日落时分，会被阳光染成极其夺目的金红色，是风光摄影的顶级题材。",
+                "<b>全德国极高的高山缆车 (Karwendelbahn)：</b> 想要征服这座险峻的高山，最轻松的方式就是乘坐著名的卡尔文德尔缆车。这也是全德国海拔第二高的高山缆车系统。红色的缆车车厢会在短短几分钟内，跨越极其巨大的落差，将你从海拔 900 多米的镇中心直接拉升到海拔 2244 米的 Bergstation（高山站）。在上升的过程中，你可以透过玻璃 360 度俯瞰脚下的伊萨尔河谷和如同玩具积木般的米滕瓦尔德小镇，视觉冲击力极其强烈，恐高者慎入！",
+                "<b>巨大的“望远镜”自然信息中心：</b> 乘坐缆车到达山顶后，你不仅能饱览无限风光，还能参观一个造型极其奇特的建筑——卡尔文德尔自然信息中心。这座建筑被巧妙地设计成了一个巨大的、伸出悬崖边缘的望远镜形状！内部免费展示了关于阿尔卑斯山脉高山动植物群的详尽知识。走到巨大“望远镜”的尽头透明玻璃处，低头就是万丈深渊，刺激感十足，是绝对不能错过的打卡点。",
+                "<b>绝美的徒步与专业攀岩圣地：</b> 卡尔文德尔不仅仅是坐缆车观光的去处，它更是全球高级徒步爱好者和专业攀岩者的圣地。从缆车山顶站出发，有多条标记清晰的高山步道。其中最著名的是通往 Dammkar（达姆卡尔）的路线。在冬季，这里拥有全德国最陡峭的自然滑雪道。夏季时，穿行在布满碎石的极其荒凉的石灰岩月球地貌中，偶尔还能与极度擅长攀岩的野生阿尔卑斯岩羊（Steinbock）不期遇。",
+                "<b>瞬息万变的高山微气候：</b> 卡尔文德尔山脉由于巨大的落差和特殊的地形，形成了极其独特且瞬息万变的高山微气候。山脚下可能还是艳阳高照的夏日，而海拔两千多米的山顶可能已经狂风大作，气温骤降至个位数，甚至在盛夏时节山阴处依然有厚厚的积雪未融化。因此，无论你在小镇上感觉多热，只要决定乘坐缆车上山，都必须在背包里准备一件防风防水的厚冲锋衣，并戴好防紫外线极强的墨镜，大自然的威力绝对不容小觑。"
+            ]
+        },
+        'food': {
+            title: "🥨 巴伐利亚硬核美食与酒馆文化",
+            tabs: ["1. 烤猪肘与脆皮的艺术", "2. 传统巴伐利亚白香肠", "3. 浓郁的面团子 (Knödel)", "4. 啤酒花园与黑啤", "5. 舒适的 Gasthof 体验"],
+            contents: [
+                "<b>烤猪肘与脆皮的终极艺术 (Schweinshaxe)：</b> 来到巴伐利亚，不吃一顿正宗的烤猪肘简直是犯罪。与德国北部喜欢水煮的做法不同，南部的巴伐利亚人将“烤”的艺术发挥到了极致。极其巨大的带骨猪后肘被放入烤箱中长时间慢烤，在这个过程中不断地向外壳浇洒啤酒。最终的成品是一盘重量级肉食：最外面是一层烤得爆开、极其酥脆的焦糖色脆皮，而内部的猪肉却极其软烂多汁。这是一道需要极高热量消耗才能毫无负罪感享用的硬核大餐。",
+                "<b>传统巴伐利亚白香肠的严格规矩 (Weißwurst)：</b> 这是一道极其经典、且规矩森严的巴伐利亚传统早餐。白香肠主要由极细的小牛肉和猪肉泥制成，加入香料，颜色呈现灰白色。关键在于它的吃法：首先，巴伐利亚人认为“白香肠不能听到中午 12 点的教堂钟声”，这意味着它只能在上午作为早午餐食用；其次，绝对不能连着肠衣吃！你必须从中间划开，或者熟练地“吸”出里面的肉。配上甜芥末酱和一个碱水结，绝配！",
+                "<b>浓郁管饱的配菜：面团子 (Knödel)：</b> 在巴伐利亚的餐桌上，除了肉，最常见的配菜绝不是米饭，而是像拳头一样大的面团子（Knödel）。最常见的有两种：土豆面团子和面包面团子。这些面团子本身味道并不重，但它们极其擅长吸收烤猪肘或烤肉盘底那层极其浓郁、用啤酒和肉汁熬制而成的棕色酱汁（Bratensoße）。用切开的团子蘸满酱汁送入口中，碳水与油脂的快乐瞬间爆发。",
+                "<b>啤酒花园与极其醇厚的黑啤 (Dunkles Bier)：</b> 米滕瓦尔德不仅有山水，也有着极好的啤酒酿造传统。在老城的传统酒馆或户外的啤酒花园里，点一杯当地酿造的新鲜生啤是必修课。巴伐利亚除了著名的小麦白啤外，极其推荐你尝试本地产的黑啤酒（Dunkles Bier）。这种啤酒采用烘焙过的深色麦芽酿造，颜色深棕透亮，入口没有丝毫的苦涩，反而带着极其浓郁的焦糖、坚果甚至咖啡的醇香甜味，是搭配厚重烤肉的不二之选。",
+                "<b>极其舒适的传统客栈体验 (Gasthof)：</b> 在米滕瓦尔德，最好的餐厅往往都叫“Gasthof”或“Wirtshaus”（传统客栈/酒馆）。这里的服务员通常穿着极其传统的巴伐利亚民族服饰（女士穿 Dirndl，男士穿皮短裤 Lederhosen）。内部装修通常是全木质的墙壁、低矮的天花板、鹿角装饰以及绿色的瓷砖烤炉（Kachelofen）。在这种极其温馨、略带嘈杂但充满生活气息的环境里，碰起一升装玻璃酒杯大喊一声“Prost!”，你才能真正体会到巴伐利亚人的舒适感。"
+            ]
+        },
+        'meadow': {
+            title: "🌲 冰川丘陵遗迹：高山草甸的神奇地貌",
+            tabs: ["1. 冰川丘陵形成史", "2. 珍稀高山植物", "3. 徒步体验", "4. Klais小镇历史", "5. 环保法则"],
+            contents: [
+                "<b>冰川丘陵 (Buckelwiesen) 的形成史：</b> 在克莱斯（Klais）与米滕瓦尔德之间，隐藏着一片极其罕见的地貌奇观——冰川丘陵（Buckelwiesen）。这片连绵起伏、如同大波浪般的绿色丘陵并非人工挖掘，而是形成于最后一次冰河时代末期（大约 1.5 万年前）。当时巨大的伊萨尔-洛伊萨赫冰川在消退、冻融交替的过程中，地下的冰核不断膨胀与融化，硬生生地在大地上挤压、冲刷出了这种极其特殊的地貌，是地球亿万年演变的绝佳自然课堂。",
+                "<b>百花齐放的珍稀高山植物圈：</b> 由于这种丘陵地貌的特殊性，阳光照射和水分分布在每一个小山包的向阳面和背阴面都有着极其微小的差异。这种微气候造就了极其丰富的生物多样性。每到春夏交替之际（尤其是五六月份），这里的草甸上会绽放出上百种极其珍稀的阿尔卑斯高山野花，包括著名的龙胆花（Enzian）、报春花以及各种野生兰花。在这里散步，就像是走进了一个完全没有人工雕琢的天然植物园，色彩斑斓令人陶醉。",
+                "<b>全年龄友好的完美徒步体验：</b> 穿越冰川丘陵的步道是巴伐利亚最受欢迎的轻量级徒步路线之一。这条路全程约 5 到 6 公里，地势非常平缓，没有剧烈的海拔爬升，非常适合哪怕是不常运动的游客。一路走在宽阔的步道上，视野极其开阔，四周被巍峨的卡尔文德尔山脉和韦特施泰因山脉环绕，中途还会经过清澈见底的施马尔湖（Schmalensee）。这不仅是一次徒步，更是一场彻底洗涤肺部和灵魂的自然有氧SPA。",
+                "<b>隐秘的克莱斯小镇 (Klais)：</b> 位于徒步路线终点的克莱斯（Klais），是一个人口极少的宁静巴伐利亚村落。别看它现在不起眼，在历史上，它曾是连接意大利威尼斯与德国奥格斯堡的极其重要的古罗马商道（Via Raetia）的重要节点。1972 年慕尼黑奥运会期间，这里甚至还接待过前来参赛的运动员。如今，克莱斯火车站成为了无数徒步爱好者开启或结束冰川丘陵探险的完美交通枢纽，保留着最淳朴的巴伐利亚乡村风貌。",
+                "<b>必须遵守的极其严格的环保法则：</b> 冰川丘陵草甸被巴伐利亚州政府列为受极其严格保护的自然生态区（Naturschutzgebiet）。在这里徒步，不仅是为了享受美景，更需要承担保护自然的责任。绝大部分丘陵区域属于当地农民的私人牧场，徒步时请严格沿着被标记好的步道行走，绝对不要为了拍照而私自翻越木制栅栏、踩踏珍贵的牧草，更不能惊扰在此吃草的牛羊。这里严禁随意采摘野花或乱扔任何垃圾，保护生态从每一个徒步者做起。"
+            ]
+        }
+    };
+
+    var guideData = {
+        'route_half_day': {
+            title: "0.5日 路线 A：米滕瓦尔德老城与冰川丘陵徒步",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Buckelwiesen_bei_Mittenwald_02.jpg/1200px-Buckelwiesen_bei_Mittenwald_02.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">慕尼黑出发</div><div class="rt-sub">08:00 (RB6)</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🎨</div><div class="rt-text">米滕瓦尔德</div><div class="rt-sub">09:50 老城漫步</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🥾</div><div class="rt-text">冰川丘陵</div><div class="rt-sub">11:30 徒步向北</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">克莱斯 Klais</div><div class="rt-sub">13:30 返程</div></div>' +
+                  '</div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：从慕尼黑 Hbf 乘坐 Werdenfelsbahn (RB6) 区域列车，大约 1小时50分 即可直达米滕瓦尔德站。沿途会经过施塔恩贝格湖和极美的阿尔卑斯山麓！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚆 德国铁路 DB (RB6 区域列车)</span>' +
+                  '<span class="transit-time">08:00 - 09:50 (约1h50m)</span>' +
+                  '<span class="transit-dest">前往: 米滕瓦尔德 (Mittenwald) Bahnhof</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>慕尼黑前往米滕瓦尔德完全包含在 Deutschlandticket (D-Ticket) 或 拜仁州票 (Bayern-Ticket) 的免费范围内，无需额外买票！</div>' +
+                  '<button class="db-btn" onclick="copyAndGo(event, \'Mittenwald\', \'https://www.bahn.de/\')">🚆 DB 查班次 (自动复制终点)</button>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 1: 漫步“活生生的图画书”老城", 
+                      "游玩时间: 09:50 - 11:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Mittenwald_Obermarkt.jpg/800px-Mittenwald_Obermarkt.jpg",
+                      "抵达米滕瓦尔德后，立刻步入主街（Obermarkt），感受大文豪歌德口中“活生生的图画书”。街道两侧古老的巴伐利亚房屋外墙上，画满了极其鲜艳巨大的湿壁画（Lüftlmalerei），描绘着宗教故事与世俗生活。此外，这里是享誉欧洲的“千把小提琴的村庄”，街头随处可见提琴作坊的招牌，空气中弥漫着云杉木和天然清漆的香味。漫步在石板路上，背靠着巍峨险峻的卡尔文德尔（Karwendel）石灰岩巨壁，每一帧都是绝美的明信片风光。推荐在此短暂停留喝杯咖啡或买点简餐作为徒步路粮。",
+                      "老城区虽然极其适合漫步，但主街偶尔有本地车辆或马车缓慢驶过，拍照退后取景时请务必注意身后的交通安全。绝大多数传统商店和提琴作坊在周日是严格闭店休息的，如果想要购买精美的木雕纪念品或本地特产，请务必安排在周一至周六前往。这里的咖啡馆极度偏爱现金支付，请备好充足的欧元零钱。",
+                      "https://www.google.com/maps/search/?api=1&query=Mittenwald+Obermarkt"
+                  ) +
+                  
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：从老城区往北走，越过镇子的边界，便能看到通往 Buckelwiesen 和 Klais 的明确徒步路标。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行至徒步起点</span>' +
+                  '<span class="transit-time">11:30 开始徒步</span>' +
+                  '<span class="transit-dest">前往: 冰川丘陵 (Buckelwiesen)</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 2: 穿越绝美冰川丘陵步道 (Buckelwiesen)", 
+                      "徒步时间: 11:30 - 13:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Buckelwiesen_bei_Mittenwald_02.jpg/800px-Buckelwiesen_bei_Mittenwald_02.jpg", 
+                      "结束老城漫步后，沿着路标向北进发，开启连接米滕瓦尔德与克莱斯（Klais）的经典徒步路线——穿越“冰川丘陵”（Buckelwiesen）。这是上一次冰河时期冰川消退后留下的极其独特的地貌奇观，连绵起伏的绿色小山丘如同大地的波浪。春夏交替时，这里开满了上百种珍稀的阿尔卑斯高山野花（如龙胆花）。这条徒步路线全长约 6 公里，地势平缓且呈极其舒适的微上坡/下坡趋势，一路伴随着阿尔卑斯雪山的壮丽背景，最终抵达宁静的克莱斯火车站。",
+                      "这段徒步路线虽然难度极低，适合所有年龄段，但全程草甸区域几乎没有任何高大树木遮挡阳光。在晴朗天气下紫外线极其强烈，请务必提前涂抹高倍数防晒霜并佩戴遮阳帽。草甸属于受极其严格保护的自然生态区，绝大部分区域是私人牧场，徒步时请严格沿着标记好的步道行走，绝对不要为了拍照而翻越栅栏踩踏牧草或惊扰牛羊。中途补给极少，请自备充足的饮用水和点心。",
+                      "https://www.google.com/maps/search/?api=1&query=Buckelwiesen+Mittenwald"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：抵达克莱斯 (Klais) 后，稍作休整即可搭乘 RB6 列车返回慕尼黑，完美结束半日拉练！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚆 德国铁路 DB (RB6 区域列车)</span>' +
+                  '<span class="transit-time">13:30 以后任意班次返回</span>' +
+                  '<span class="transit-dest">前往: 慕尼黑 Hbf</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>返程同样使用 D-Ticket 或拜仁州票，无需购票。Klais 站较小，请留意列车方向以免坐反。</div>' +
+                  '<button class="db-btn" onclick="copyAndGo(event, \'München Hbf\', \'https://www.bahn.de/\')">🚆 DB 查返程班次 (自动复制终点)</button>' +
+                  '</div></div>'
+        }
+    };
+
+    function generateAccordion(title, timeBadge, imgUrl, desc, notice, mapLink) {
+        var buttonsHtml = '<div class="btn-group">';
+        if(mapLink) {
+            buttonsHtml += '<a href="' + mapLink + '" class="map-btn" target="_blank">📍 Google Maps 导航</a>';
+        }
+        buttonsHtml += '</div>';
+
+        return '<div class="accordion-item" onclick="toggleAccordion(this)">' +
+               '<div class="accordion-header">' +
+               '<div class="header-title-box"><span>' + title + '</span><span class="step-time-badge">⏱️ ' + timeBadge + '</span></div>' +
+               '</div>' +
+               '<div class="accordion-content">' +
+               '<img src="' + imgUrl + '" alt="实景风光" onerror="this.style.display=\'none\'">' +
+               '<p class="spot-desc" style="text-align:justify;">' + desc + '</p>' +
+               '<div class="notice"><b>⚠️ 避坑与注意事项：</b><br>' + notice + '</div>' +
+               buttonsHtml +
+               '</div></div>';
+    }
+
+    function toggleAccordion(element) {
+        element.classList.toggle('active');
+    }
+
+    function copyAndGo(event, dest, url) {
+        event.preventDefault();
+        var btn = event.currentTarget;
+        var originalText = btn.innerHTML;
+        
+        try {
+            var tempInput = document.createElement("input");
+            tempInput.value = dest;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+        } catch(e) { console.log('Copy fallback failed'); }
+
+        btn.innerHTML = '✅ 已复制: ' + dest;
+        showToast('💡 已将终点站【' + dest + '】复制到剪贴板！<br>请在跳转后的 DB 网页中直接粘贴查询班次。');
+        
+        setTimeout(function(){
+            window.open(url, '_blank');
+            btn.innerHTML = originalText;
+        }, 1800);
+    }
+
+    function showToast(message) {
+        var toast = document.getElementById("toast");
+        toast.innerHTML = message;
+        toast.classList.add("show");
+        setTimeout(function(){ toast.classList.remove("show"); }, 4000);
+    }
+
+    function switchQTab(tabIndex, category) {
+        var container = document.getElementById('q-content-container');
+        var btns = container.querySelectorAll('.q-sub-btn');
+        var contents = container.querySelectorAll('.q-sub-content');
+        for (var i = 0; i < btns.length; i++) {
+            if (i === tabIndex) {
+                btns[i].classList.add('active');
+                contents[i].classList.add('active');
+            } else {
+                btns[i].classList.remove('active');
+                contents[i].classList.remove('active');
+            }
+        }
+    }
+
+    var modalOverlay = document.getElementById('modalOverlay');
+    var modalHeader = document.getElementById('modalHeader');
+    var modalTitle = document.getElementById('modalTitle');
+    var modalBody = document.getElementById('modalBody');
+
+    function openModal(spotKey) {
+        var data = guideData[spotKey];
+        if(!data) return;
+        modalTitle.innerText = data.title;
+        modalHeader.style.backgroundImage = "url('" + data.img + "')";
+        modalHeader.style.display = "block";
+        modalBody.innerHTML = data.html;
+        
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openQModal(key) {
+        var data = qData[key];
+        if(!data) return;
+        modalTitle.innerText = data.title;
+        modalHeader.style.display = "none";
+        
+        var html = '<div id="q-content-container"><div class="q-sub-tabs">';
+        for (var i = 0; i < data.tabs.length; i++) {
+            var activeClass = i === 0 ? 'active' : '';
+            html += '<button class="q-sub-btn ' + activeClass + '" onclick="switchQTab(' + i + ', \'' + key + '\')">' + data.tabs[i] + '</button>';
+        }
+        html += '</div>';
+        
+        for (var j = 0; j < data.contents.length; j++) {
+            var contentClass = j === 0 ? 'active' : '';
+            html += '<div class="q-sub-content ' + contentClass + '"><p style="line-height:1.8; text-align:justify;">' + data.contents[j] + '</p></div>';
+        }
+        html += '</div>';
+
+        modalBody.innerHTML = html;
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+        if (e.target === modalOverlay || e.target.classList.contains('close-btn')) {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            modalBody.innerHTML = ''; 
+        }
+    }
+
+    /* AI 自动生成器相关脚本 */
+    function openAIGenerator() {
+        document.getElementById('aiModalOverlay').style.display = 'flex';
+    }
+
+    function closeAIModal(e) {
+        if(e.target.id === 'aiModalOverlay' || e.target.className === 'close-btn') {
+            document.getElementById('aiModalOverlay').style.display = 'none';
+        }
+    }
+
+    function executeAIGen() {
+        var city = document.getElementById('ai-city').value;
+        var days = document.getElementById('ai-days').value;
+        var customDesc = document.getElementById('ai-custom').value;
+        
+        if(!city || !days) {
+            alert('请先输入城市和天数！');
+            return;
+        }
+
+        var customText = customDesc ? `\n特别要求（行程描述）：${customDesc}` : '';
+
+        var prompt = `我需要你作为资深旅游规划师兼前端开发专家。请参考我上传的 HTML 模板文件，为我生成一份【${city}】的【${days}】日游交互式网页攻略。
+核心要求：
+1. 路线规划必须最合适、最便捷、省事且绝对不绕路。请按 0.5 天（半天）为最小单位来拆分和规划行程。${customText}
+2. 交通方式必须精准穿插在时间轴的每个 Step 之间，标注耗时并给出最优交通建议。
+3. 完全保留模板的 UI 样式、皇室金线时间轴、交通节点卡片、Q版互动图标（替换为${city}特色）及一键复制导航功能。
+4. 所有景点的介绍和注意事项均需 100 字以上，并带 Google Maps 跳转和官方查票链接。
+5. 所有配图必须使用 Wikimedia 稳定的高清实景原图。
+请直接输出完整的 HTML 代码。`;
+
+        var tempInput = document.createElement("textarea");
+        tempInput.value = prompt;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+
+        var htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        var blob = new Blob([htmlContent], {type: "text/html;charset=utf-8"});
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "template_guide.html";
+        a.click();
+
+        showToast('✅ 指令已复制！模板已下载！<br>正在跳转至 Gemini...');
+        setTimeout(function() {
+            window.open('https://gemini.google.com/', '_blank');
+        }, 2000);
+    }
+</script>
+
+</body>
+</html>
