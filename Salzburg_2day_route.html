@@ -49,6 +49,12 @@
             transition: all 0.4s ease; 
         }
         
+        /* 核心修复：当侧边栏收起时，左侧容器保持900px不拉伸，优雅居中 */
+        .page-wrapper.sidebar-collapsed .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
         /* 侧边栏收起时的悬浮定位 */
         .page-wrapper.sidebar-collapsed .sidebar {
             position: fixed;
@@ -139,17 +145,18 @@
             background: rgba(0,0,0,0.5); z-index: 2000; align-items: center; justify-content: center;
         }
         .modal-content {
-            background: #fff; width: 90%; max-width: 500px; border-radius: 12px; padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 80vh; overflow-y: auto; position: relative;
+            background: #fff; width: 95%; max-width: 650px; border-radius: 12px; padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 85vh; overflow-y: auto; position: relative;
         }
         .close-btn {
             position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; color: #999;
-            background: none; border: none; padding: 0; line-height: 1;
+            background: none; border: none; padding: 0; line-height: 1; z-index: 10;
         }
         .close-btn:hover { color: #333; }
-        .phrase-item { margin-bottom: 15px; padding: 10px; background: #F8F9FA; border-radius: 8px; border-left: 4px solid var(--austrian-red); }
-        .p-zh { font-weight: bold; color: #333; margin-bottom: 4px; }
-        .p-en { font-size: 13px; color: #1976D2; margin-bottom: 2px; }
+        
+        .phrase-item { margin-bottom: 12px; padding: 12px; background: #F8F9FA; border-radius: 8px; border-left: 4px solid var(--austrian-red); }
+        .p-zh { font-weight: bold; color: #333; margin-bottom: 4px; font-size: 15px; }
+        .p-en { font-size: 13px; color: #1976D2; margin-bottom: 3px; }
         .p-de { font-size: 13px; color: #2E7D32; font-style: italic; }
 
         /* ================= 侧边栏专属样式 ================= */
@@ -230,7 +237,7 @@
         </div>
 
         <!-- DAY 1 -->
-        <div class="day-divider"><span>Day 1 : 湖光山色与绝美夜游</span></div>
+        <div class="day-divider"><span>Day 1 : 湖光山色与要塞夜游</span></div>
         <div class="timeline">
             
             <!-- 抵达萨尔茨堡 -->
@@ -269,7 +276,7 @@
                 </div>
                 <a href="https://www.google.com/maps/search/Yiyami+Salzburg" target="_blank" class="btn-link">📍 餐厅一键导航</a>
                 <details>
-                    <summary>🍽️ 餐厅指南</summary>
+                    <summary>🍽️️ 餐厅指南</summary>
                     <div class="details-content">
                         <div class="sub-sec"><strong>🌟 推荐理由</strong>：谁说来欧洲只能吃无聊的河粉和拉面？在“万物皆可炸”的德奥菜系包围下，这家店隐藏的重口味中餐才是海外游子的灵魂救赎，热辣滚烫，瞬间唤醒你的味蕾！</div>
                         <div class="sub-sec"><strong>🌶️ 特色菜推荐</strong>：
@@ -291,7 +298,7 @@
                     <h3 class="event-title">搭乘 150路公交前往圣吉尔根</h3>
                 </div>
                 <div style="margin-bottom: 10px;">
-                    <!-- 核心修复：三大按钮并排完整保留 -->
+                    <!-- 核心保留：完整的三大按钮并列 -->
                     <button class="btn-link btn-action" onclick="copyAndGo('St. Gilgen Busbahnhof', 'https://salzburg-verkehr.at/')">
                         🚌 查询车次 & 复制终点(St. Gilgen)
                     </button>
@@ -419,7 +426,7 @@
                     <h3 class="event-title">搭乘 150X 快线巴士返回萨尔茨堡</h3>
                 </div>
                 <div style="margin-bottom: 10px;">
-                    <!-- 核心修复：三大按钮并排完整保留 -->
+                    <!-- 核心保留：完整的三大按钮并列 -->
                     <button class="btn-link btn-action" onclick="copyAndGo('Salzburg Hauptbahnhof', 'https://salzburg-verkehr.at/')">
                         🚌 查询车次 & 复制终点(Salzburg Hbf)
                     </button>
@@ -507,7 +514,7 @@
                     <h3 class="event-title">粮食胡同 (Getreidegasse) 20大必逛商铺扫货</h3>
                 </div>
                 <details>
-                    <summary>🛍️️ 20大必买精选店铺详解</summary>
+                    <summary>🛍 20大必买精选店铺详解</summary>
                     <div class="details-content">
                         <div class="shop-item">
                             <div class="shop-title">1. Café Konditorei Fürst <a href="https://www.google.com/maps/search/Cafe+Furst+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
@@ -610,7 +617,7 @@
                     <h3 class="event-title">准时登车，搭乘 RE5 返回慕尼黑</h3>
                 </div>
                 <div style="margin-bottom: 10px;">
-                    <!-- 核心修复：三大按钮并排完整保留 -->
+                    <!-- 核心保留：完整的三大按钮并排 -->
                     <button class="btn-link btn-action" onclick="copyAndGo('München Hbf', 'https://www.bahn.com/en')">
                         🚆 查询车次 & 复制终点(München Hbf)
                     </button>
@@ -778,45 +785,148 @@
     </div>
 </div>
 
-<!-- 悬浮语言助手按钮 -->
+<!-- ================= 悬浮语言助手按钮 ================= -->
 <button class="lang-fab" onclick="document.getElementById('langModal').style.display='flex'">
     💬 语言助手
 </button>
 
-<!-- 模态框 (弹出层) -->
+<!-- ================= 史诗级扩容：模态框 (弹出层) ================= -->
 <div id="langModal" class="modal">
     <div class="modal-content">
         <button class="close-btn" onclick="document.getElementById('langModal').style.display='none'">&times;</button>
-        <h3 style="color: var(--nordic-dark); margin-top: 0; border-bottom: 2px solid #EEE; padding-bottom: 10px;">💬 购物与点餐应急锦囊</h3>
+        <h3 style="color: var(--nordic-dark); margin-top: 0; border-bottom: 2px solid #EEE; padding-bottom: 10px;">💬 终极语言锦囊 (全场景覆盖)</h3>
         
-        <h4 style="color: var(--austrian-red); margin-bottom: 10px;">🛍️ 购物高频场景</h4>
-        <div class="phrase-item">
-            <div class="p-zh">请问这个多少钱？</div>
-            <div class="p-en">EN: How much is this?</div>
-            <div class="p-de">DE: Wie viel kostet das? (读：维-费尔-烤斯特-达斯)</div>
+        <!-- 基础救命短语 -->
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:15px;">
+            <span style="background:#E3F2FD; color:#1976D2; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;">买单: Die Rechnung, bitte (低-瑞希农, 必特)</span>
+            <span style="background:#E3F2FD; color:#1976D2; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;">能刷卡吗: Mit Karte? (密特 卡特?)</span>
+            <span style="background:#E3F2FD; color:#1976D2; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;">免费水: Leitungswasser, bitte (莱通斯-瓦瑟)</span>
         </div>
-        <div class="phrase-item">
-            <div class="p-zh">能刷卡吗？/ 只收现金吗？</div>
-            <div class="p-en">EN: Can I pay by card? / Cash only?</div>
-            <div class="p-de">DE: Kann ich mit Karte zahlen? / Nur bar?</div>
-        </div>
-        
-        <h4 style="color: var(--austrian-red); margin-bottom: 10px; margin-top: 20px;">🍽️ 餐厅高频场景</h4>
-        <div class="phrase-item">
-            <div class="p-zh">有英文菜单吗？</div>
-            <div class="p-en">EN: Do you have an English menu?</div>
-            <div class="p-de">DE: Haben Sie eine englische Speisekarte?</div>
-        </div>
-        <div class="phrase-item">
-            <div class="p-zh">请给我一杯免费自来水。(在欧洲很重要)</div>
-            <div class="p-en">EN: Tap water, please.</div>
-            <div class="p-de">DE: Leitungswasser, bitte. (读：莱通斯-瓦瑟，必特)</div>
-        </div>
-        <div class="phrase-item">
-            <div class="p-zh">买单！(结账)</div>
-            <div class="p-en">EN: The bill, please.</div>
-            <div class="p-de">DE: Die Rechnung, bitte. (读：低-瑞希农，必特)</div>
-        </div>
+
+        <!-- 场景一：交通与寻找经典问路 -->
+        <details open style="margin-top:0; border: 1px solid var(--austrian-red);">
+            <summary style="background: #FFF9F9; color: var(--austrian-red);">🚉 场景一：交通与经典问路</summary>
+            <div class="details-content" style="padding-top:5px; padding-bottom:5px;">
+                <div class="phrase-item">
+                    <div class="p-zh">【问路人】请问去萨尔茨堡火车站的150路公交站台在哪里？</div>
+                    <div class="p-en">EN: Excuse me, where is the bus stop for line 150 to Salzburg Hbf?</div>
+                    <div class="p-de">DE: Entschuldigung, wo ist die Bushaltestelle Linie 150 zum Hauptbahnhof? <br><span style="color:#666;">(读：恩求地宫，沃 伊斯特 迪 布斯哈尔特施泰勒 丽妮 150 粗姆 豪普特-巴恩霍夫?)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【问司机】你好，请问这辆车到圣吉尔根(St. Gilgen)吗？</div>
+                    <div class="p-en">EN: Hello, does this bus go to St. Gilgen?</div>
+                    <div class="p-de">DE: Hallo, fährt dieser Bus nach St. Gilgen? <br><span style="color:#666;">(读：哈罗，费尔特 迪泽 布斯 纳赫 圣-吉尔根?)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【小镇寻路】请问十二角峰缆车站怎么走？</div>
+                    <div class="p-en">EN: How do I get to the Zwölferhorn cable car station?</div>
+                    <div class="p-de">DE: Wie komme ich zur Zwölferhorn Seilbahn? <br><span style="color:#666;">(读：维 考么 伊希 促尔 茨沃尔弗霍恩 赛尔巴恩?)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【寻经典机位】请问《音乐之声》里的飞马喷泉在哪里？</div>
+                    <div class="p-en">EN: Where is the Pegasus Fountain from The Sound of Music?</div>
+                    <div class="p-de">DE: Wo ist der Pegasusbrunnen aus "The Sound of Music"? <br><span style="color:#666;">(读：沃 伊斯特 德尔 佩加苏斯-布鲁嫩 熬斯 The Sound of Music?)</span></div>
+                </div>
+            </div>
+        </details>
+
+        <!-- 场景二：四大餐厅点餐特供 -->
+        <details style="border: 1px solid #1976D2;">
+            <summary style="background: #E3F2FD; color: #1976D2;">🍽️ 场景二：四大餐厅专属点单</summary>
+            <div class="details-content" style="padding-top:5px; padding-bottom:5px;">
+                <div class="phrase-item">
+                    <div class="p-zh">【烤鱼店1】你好，请给我来一条经典的木棍烤鱼。</div>
+                    <div class="p-de">DE: Hallo, ich hätte gerne einen klassischen Steckerlfisch. <br><span style="color:#666;">(读：哈罗，伊希 黑特 给恩 艾嫩 克拉西申 施泰克尔-费什)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【烤鱼店2】请问今天的烤鱼卖完了吗？</div>
+                    <div class="p-de">DE: Ist der Steckerlfisch für heute ausverkauft? <br><span style="color:#666;">(读：伊斯特 德尔 施泰克尔-费什 弗尔 霍伊特 熬斯-费尔考夫特?)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【烤鱼店3】除了烤鱼，您还有什么特色菜推荐吗？</div>
+                    <div class="p-de">DE: Haben Sie neben Fisch noch andere Spezialitäten zu empfehlen? <br><span style="color:#666;">(读：哈本 齐 涅本 费什 诺赫 安德勒 施佩齐亚丽特藤 促 恩普费伦?)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【Fischerwirt 高级鱼】请给我来一份黄油煎沃尔夫冈湖白鲑鱼。</div>
+                    <div class="p-de">DE: Ich nehme bitte die gebratene Wolfgangsee-Reinanke in Butter. <br><span style="color:#666;">(读：伊希 涅么 必特 迪 给布拉特呢 沃尔夫冈塞-莱安克 印 布特)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【Gasthof 传统菜】我要一份传统的清炖牛肉，再来一杯本地大杯扎啤。</div>
+                    <div class="p-de">DE: Einmal den traditionellen Tafelspitz und ein großes lokales Fassbier, bitte. <br><span style="color:#666;">(读：艾恩马尔 登 特拉蒂齐奥涅伦 塔费尔施皮茨 翁特 艾恩 格罗塞斯 楼卡勒斯 法斯比尔, 必特)</span></div>
+                </div>
+                <div class="phrase-item">
+                    <div class="p-zh">【Yiyami 中餐】老板，麻烦水煮鱼少放点盐，多放点辣！</div>
+                    <div class="p-de">DE: Chef, bitte weniger Salz und richtig schön scharf! <br><span style="color:#666;">(读：谢夫，必特 维尼格 萨尔茨 翁特 瑞希提希 勋 沙夫)</span></div>
+                </div>
+            </div>
+        </details>
+
+        <!-- 场景三：20大纪念品店专属特供对白 -->
+        <details style="border: 1px solid #2E7D32;">
+            <summary style="background: #E8F5E9; color: #2E7D32;">🛍️ 场景三：20大店铺精选对话大赏</summary>
+            <div class="details-content" style="padding-top:5px; padding-bottom:5px;">
+                <div class="phrase-item"><div class="p-zh">1.【Fürst】请给我拿两盒只在你们店里卖的银箔蓝字纯手工莫扎特巧克力。</div>
+                <div class="p-de">DE: Ich hätte gerne zwei Schachteln der originalen handgemachten Mozartkugeln in Silber-Blau.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">2.【邮政局】我想买五张莫扎特主题纪念邮票，并盖上萨尔茨堡特色邮戳。</div>
+                <div class="p-de">DE: Ich möchte fünf Mozart-Sondermarken kaufen und mit dem Salzburger Poststempel versehen lassen.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">3.【冰箱贴店】请问有高地要塞或者莫扎特故居造型的立体陶瓷冰箱贴吗？</div>
+                <div class="p-de">DE: Haben Sie 3D-Keramikmagnete in Form der Festung oder von Mozarts Geburtshaus?</div></div>
+
+                <div class="phrase-item"><div class="p-zh">4.【Manner】我想买三大袋经典榛子原味和柠檬酸奶味的粉色威化饼。</div>
+                <div class="p-de">DE: Ich möchte drei große Tüten der klassischen Haselnuss- und Zitronen-Joghurt-Waffeln.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">5.【圣诞世界】请问这个手工木制熏香小人是奥地利本地制作的吗？</div>
+                <div class="p-de">DE: Ist dieses handgemachte Räuchermännchen aus österreichischer Herstellung?</div></div>
+
+                <div class="phrase-item"><div class="p-zh">6.【红牛世界】我想看看红牛车队的官方纪念棒球帽和潮牌T恤。</div>
+                <div class="p-de">DE: Ich würde mir gerne die offiziellen Kappen und T-Shirts des Red Bull Racing Teams ansehen.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">7.【ZARA】麻烦帮我找下这件衣服的M码。顺便问下复古楼梯在哪拍照好看？</div>
+                <div class="p-de">DE: Haben Sie das in Größe M? Und wo fotografiert man am besten die historische Treppe?</div></div>
+
+                <div class="phrase-item"><div class="p-zh">8.【Lanz】请问有带有传统“雪绒花”刺绣图案的帆布袋或配饰吗？</div>
+                <div class="p-de">DE: Haben Sie Stofftaschen oder Accessoires mit der traditionellen Edelweiß-Stickerei?</div></div>
+
+                <div class="phrase-item"><div class="p-zh">9.【古老药局】麻烦推荐一款具有天然助眠功效的阿尔卑斯高山草本茶。</div>
+                <div class="p-de">DE: Können Sie einen alpinen Kräutertee empfehlen, der auf natürliche Weise beim Einschlafen hilft?</div></div>
+
+                <div class="phrase-item"><div class="p-zh">10.【施华洛世奇】我想看看奥地利本土限定款的经典天鹅项链。</div>
+                <div class="p-de">DE: Zeigen Sie mir bitte die exklusiven österreichischen Modelle der klassischen Schwan-Halskette.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">11.【Stiegl周边】请给我拿两个带金属翻盖的传统陶瓷啤酒杯。</div>
+                <div class="p-de">DE: Ich hätte gerne zwei traditionelle Keramik-Bierkrüge mit Zinndeckel.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">12.【Gehmacher】请问这款带有高山松木香气的室内香氛可以带上飞机吗？</div>
+                <div class="p-de">DE: Darf ich diesen Raumduft mit Zirbenkiefer-Aroma im Handgepäck mit ins Flugzeug nehmen?</div></div>
+
+                <div class="phrase-item"><div class="p-zh">13.【Aïda甜品】请给我来两包这种骚粉色复古包装的精装咖啡豆。</div>
+                <div class="p-de">DE: Ich nehme zwei Packungen dieser Kaffeebohnen in der rosa Retro-Verpackung.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">14.【Jahn-Markl】我想挑选一个纯手工缝制的真皮零钱包作为送给男士的礼物。</div>
+                <div class="p-de">DE: Ich suche eine handgenähte Geldbörse aus echtem Leder als Geschenk für einen Herrn.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">15.【Mirabell】请给我拿五袋这种平价大包装的红金版莫扎特巧克力。</div>
+                <div class="p-de">DE: Ich hätte gerne fünf große Beutel der rot-goldenen Mozartkugeln.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">16.【古老面包房】你好，我要买一个小号的新鲜刚出炉的酸面团面包。</div>
+                <div class="p-de">DE: Hallo, ich hätte gerne ein kleines, frisch gebackenes Sauerteigbrot.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">17.【顶级帽坊】如果我不买帽子，可以单买这种极具奥地利特色的传统小羽毛别针吗？</div>
+                <div class="p-de">DE: Kann ich auch nur diese traditionelle Federanstecknadel kaufen, ohne einen Hut zu nehmen?</div></div>
+
+                <div class="phrase-item"><div class="p-zh">18.【高山岩盐】我想买几瓶加入了阿尔卑斯高山香草和蒜香的复方调味岩盐磨床瓶。</div>
+                <div class="p-de">DE: Ich möchte Mühlen mit Steinsalz, gemischt mit Alpenkräutern und Knoblauch, kaufen.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">19.【Tomaselli】请给我拿一个礼盒装的你们自家烘焙的特选咖啡豆，谢谢。</div>
+                <div class="p-de">DE: Bitte geben Sie mir eine Geschenkbox mit Ihren hausgerösteten Spezial-Kaffeebohnen, danke.</div></div>
+
+                <div class="phrase-item"><div class="p-zh">20.【复古烟具】你好，我想看看那些手工雕刻的复古铜制雪茄剪和精美的火柴盒。</div>
+                <div class="p-de">DE: Hallo, ich würde mir gerne die handgefertigten kupfernen Zigarrenschneider und die schönen Streichholzschachteln ansehen.</div></div>
+            </div>
+        </details>
+
     </div>
 </div>
 
