@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>兰茨胡特 1日深度游交互攻略</title>
+    <style>
+        :root {
+            --bavaria-blue: #0066b2; /* 巴伐利亚蓝 */
+            --aus-white: #FFFFFF;
+            --royal-gold: #C5A059; /* 皇室金 */
+            --alpine-green: #2B4E38; /* 阿尔卑斯深绿 */
+            --bg-color: #F4F7FA;
+            --text-color: #2C2C2C;
+        }
+        body {
+            font-family: 'Georgia', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            margin: 0; padding: 0; line-height: 1.8;
+        }
+        
+        header {
+            background: linear-gradient(rgba(0, 102, 178, 0.75), rgba(43, 78, 56, 0.85)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Landshut_Altstadt_Rathaus_und_Martinskirche.jpg/1920px-Landshut_Altstadt_Rathaus_und_Martinskirche.jpg') center/cover;
+            color: var(--aus-white); text-align: center; padding: 4.5rem 1rem 3.5rem;
+            border-bottom: 6px solid var(--royal-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        header h1 { margin: 0; font-size: 2.6rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); letter-spacing: 1px; color: #fff;}
+        header p { font-size: 1.2rem; font-weight: bold; margin-top: 15px; color: #FFF3CD; text-shadow: 1px 1px 3px rgba(0,0,0,0.8);}
+
+        .q-bar {
+            display: flex; justify-content: center; gap: 25px; flex-wrap: wrap;
+            padding: 20px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .q-icon {
+            font-size: 2.2rem; cursor: pointer; background: var(--bg-color); 
+            border: 2px solid var(--royal-gold); border-radius: 50%; 
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;
+        }
+        .q-icon:hover { transform: scale(1.15) translateY(-5px); background: #E6F0F9; box-shadow: 0 8px 15px rgba(0, 102, 178, 0.3); }
+        .q-icon::after {
+            content: attr(data-tooltip); position: absolute; bottom: -30px;
+            font-size: 0.85rem; color: var(--bavaria-blue); font-weight: bold; white-space: nowrap;
+            opacity: 0; transition: opacity 0.3s; background: #fff; padding: 3px 10px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid var(--bavaria-blue);
+        }
+        .q-icon:hover::after { opacity: 1; }
+
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
+        .day-header {
+            background: var(--bavaria-blue); color: white; padding: 12px 25px; border-radius: 8px; 
+            margin: 40px 0 20px; display: inline-block; font-size: 1.6rem;
+            border-left: 8px solid var(--royal-gold); box-shadow: 0 4px 10px rgba(0, 102, 178, 0.3);
+        }
+
+        .route-timeline {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            background: #fff; padding: 25px 20px 15px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; position: relative; overflow-x: auto;
+        }
+        .route-timeline::before {
+            content: ''; position: absolute; top: 41px; left: 50px; right: 50px;
+            height: 3px; background: var(--royal-gold); z-index: 1; opacity: 0.8;
+        }
+        .rt-step { position: relative; z-index: 2; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 80px; }
+        .rt-icon {
+            width: 36px; height: 36px; background: var(--alpine-green); color: white; border-radius: 50%;
+            line-height: 36px; font-size: 1.1rem; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-bottom: 10px;
+        }
+        .rt-text { font-size: 0.95rem; font-weight: bold; color: var(--alpine-green); line-height: 1.2; }
+        .rt-sub { font-size: 0.75rem; color: var(--bavaria-blue); margin-top: 6px; background: #E6F0F9; padding: 3px 8px; border-radius: 12px; font-weight: bold; white-space: nowrap;}
+
+        .spot-card {
+            background: #fff; padding: 30px; border-radius: 12px; margin-bottom: 30px;
+            border-top: 6px solid var(--alpine-green); box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+        .spot-time { color: var(--bavaria-blue); font-weight: bold; font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 8px; display: inline-block; margin-bottom: 20px; }
+        .spot-title { margin: 0 0 15px; color: var(--alpine-green); font-size: 1.8rem; font-weight: bold; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center;
+            z-index: 1000; backdrop-filter: blur(8px);
+        }
+        .modal {
+            background: var(--bg-color); width: 95%; max-width: 950px; max-height: 88vh;
+            border-radius: 16px; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            border: 2px solid var(--royal-gold);
+        }
+        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 40px; color: #fff; cursor: pointer; z-index: 10; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+        .modal-header { height: 320px; background-size: cover; background-position: center; position: relative; border-radius: 14px 14px 0 0; background-color: #eee; }
+        .modal-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
+        .modal-title { position: absolute; bottom: 25px; left: 30px; color: var(--royal-gold); margin: 0; font-size: 2.3rem; z-index: 2; text-shadow: 0 2px 4px #000; }
+        .modal-body { padding: 40px; font-size: 1.1rem; }
+
+        .transit-node {
+            display: flex; align-items: center; margin: 15px 0 25px 25px;
+            border-left: 3px dashed var(--royal-gold); padding-left: 35px; position: relative;
+        }
+        .time-icon {
+            position: absolute; left: -24px; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px; line-height: 44px; text-align: center;
+            background: #fff; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 0 0 4px var(--bg-color), 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.2s; z-index: 2;
+        }
+        .time-icon:hover { transform: translateY(-50%) scale(1.15); box-shadow: 0 0 0 4px #E6F0F9, 0 4px 12px rgba(0,102,178,0.4); }
+        
+        .transit-info {
+            background: #E6F0F9; border: 1px solid var(--bavaria-blue); border-radius: 8px; 
+            padding: 15px 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05); width: 100%;
+        }
+        .transit-mode { font-weight: bold; color: var(--alpine-green); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+        .transit-time { color: var(--bavaria-blue); font-weight: bold; background: #fff; padding: 4px 12px; border-radius: 20px; border: 1px solid #B3D7FF; font-size: 0.95rem; }
+        .transit-dest { color:#2B4E38; font-weight:bold; margin-left:auto; }
+        .ticket-notice {
+            flex-basis: 100%; margin-top: 10px; font-size: 0.95rem; color: #004085; background: #CCE5FF; 
+            padding: 10px 12px; border-radius: 6px; border-left: 5px solid #0056b3; line-height: 1.6;
+        }
+
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .map-btn, .db-btn, .ticket-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px;
+            text-decoration: none; font-weight: bold; font-size: 1rem; transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); border-bottom: 3px solid; cursor: pointer;
+        }
+        .map-btn { background: linear-gradient(135deg, var(--alpine-green), #0F2916); color: white; border-bottom-color: #08170C; }
+        .map-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(43,78,56,0.4); color: white; }
+        .db-btn { background: linear-gradient(135deg, var(--bavaria-blue), #004085); color: white; border-bottom-color: #002752; border: none; }
+        .db-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,102,178,0.4); color: white; border-bottom: 3px solid #002752; }
+        .ticket-btn { background: linear-gradient(135deg, var(--royal-gold), #8c7340); color: white; border-bottom-color: #5c4a25; border: none; }
+        .ticket-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(197, 160, 89,0.4); color: white; border-bottom: 3px solid #5c4a25; }
+
+        .accordion-item { border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .accordion-header {
+            background: #fdfbf7; padding: 22px 25px; cursor: pointer; font-weight: bold; font-size: 1.25rem;
+            color: var(--alpine-green); display: flex; justify-content: space-between; align-items: center;
+            border-left: 6px solid var(--royal-gold); transition: background 0.2s;
+        }
+        .accordion-header:hover { background: #F4F7FA; }
+        .header-title-box { display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 15px; }
+        .step-time-badge { background: #E6F0F9; color: var(--bavaria-blue); font-size: 0.9rem; padding: 4px 12px; border-radius: 15px; border: 1px solid #B3D7FF; font-weight: bold; }
+
+        .accordion-content { display: none; padding: 30px; border-top: 1px solid #eee; }
+        .accordion-item.active .accordion-content { display: block; animation: fadeIn 0.4s; }
+        .accordion-content img { width: 100%; border-radius: 10px; margin-bottom: 25px; max-height: 450px; object-fit: cover; border: 1px solid #eee; background-color: #eee; }
+        .notice { background: #FFF3CD; color: #856404; padding: 18px; border-left: 5px solid #FFC107; margin-top: 25px; border-radius: 6px; font-size: 1.05rem; line-height: 1.7; }
+        
+        .main-btn {
+            display: inline-block; font-size: 1.05rem; color: #fff; background: linear-gradient(135deg, var(--bavaria-blue), #004085); 
+            padding: 12px 30px; border-radius: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(0, 102, 178, 0.4); 
+            transition: all 0.2s; cursor: pointer; border: none; margin-top: 15px; border-bottom: 3px solid #002752; text-align: center;
+        }
+        .main-btn:hover { background: #0056b3; transform: translateY(-2px); }
+
+        .q-sub-tabs { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+        .q-sub-btn { 
+            background: #eee; border: 2px solid transparent; padding: 10px 20px; font-size: 1.05rem; 
+            border-radius: 30px; cursor: pointer; font-weight: bold; color: #333; transition: all 0.2s;
+        }
+        .q-sub-btn.active { background: #E6F0F9; border-color: var(--bavaria-blue); color: var(--bavaria-blue); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .q-sub-content { display: none; padding: 30px; background: #fff; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .q-sub-content.active { display: block; animation: fadeIn 0.4s; }
+
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 102, 178, 0.95); color: white; padding: 15px 30px; border-radius: 30px;
+            font-size: 1.05rem; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; border: 2px solid var(--royal-gold); text-align: center;
+        }
+        #toast.show { bottom: 40px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body style="overflow: auto;">
+
+<header>
+    <h1>慕尼黑 ⇌ 兰茨胡特 1日深度游</h1>
+    <p>红砖哥特奇迹 × 意大利文艺复兴宫殿 × 最美伊萨尔河畔</p>
+</header>
+
+<div class="q-bar">
+    <div class="q-icon" data-tooltip="特劳斯尼茨城堡" onclick="openQModal('castle')">🏰</div>
+    <div class="q-icon" data-tooltip="红砖奇迹教堂" onclick="openQModal('church')">⛪</div>
+    <div class="q-icon" data-tooltip="中世纪婚礼节" onclick="openQModal('wedding')">🎭</div>
+    <div class="q-icon" data-tooltip="巴伐利亚美食" onclick="openQModal('food')">🍻</div>
+    <div class="q-icon" data-tooltip="伊萨尔河畔" onclick="openQModal('river')">🌊</div>
+</div>
+
+<div class="container">
+    <h2 class="day-header">1日精华路线：慕尼黑 ➔ 兰茨胡特老城 ➔ 城堡 ➔ 返回慕尼黑</h2>
+    
+    <div class="spot-card">
+        <span class="spot-time">上午 08:30 - 13:30 | 上半场：老城漫步与红砖奇迹</span>
+        <h3 class="spot-title">🏙️ 路线 A：穿越中世纪与文艺复兴的繁华街区</h3>
+        <p>早上从慕尼黑轻松出发，约不到一小时即可抵达兰茨胡特。首先前往宽阔壮丽的老城主街（Altstadt），欣赏保存完好的彩色哥特式建筑群，探访散发着浓郁意大利文艺复兴气息的城市宫殿，并仰望世界最高的砖砌钟楼。午餐将在老城内享用最地道的巴伐利亚美食。</p>
+        <button class="main-btn" onclick="openModal('route_morning')">展开 上午 极速穿越时间轴与导航 ➔</button>
+    </div>
+
+    <div class="spot-card">
+        <span class="spot-time">下午 13:30 - 19:00 | 下半场：俯瞰全城与伊萨尔河畔休整</span>
+        <h3 class="spot-title">🏰 路线 B：特劳斯尼茨城堡探秘与河畔微醺</h3>
+        <p>下午沿着山坡小径登上雄伟的特劳斯尼茨城堡（Burg Trausnitz），深入巴伐利亚公爵的昔日宅邸，俯瞰整座城市的绝美全景。傍晚时分下山来到伊萨尔河畔（Isar），在水边的啤酒花园或咖啡馆放松身心，最后在晚上7点左右乘车返回慕尼黑，形成完美的闭环行程，绝不绕路。</p>
+        <button class="main-btn" onclick="openModal('route_afternoon')">展开 下午 极速穿越时间轴与导航 ➔</button>
+    </div>
+</div>
+
+<!-- 模态框 -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modalContent" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeModal(event)">×</span>
+        <div class="modal-header" id="modalHeader">
+            <h2 class="modal-title" id="modalTitle">标题</h2>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+    var qData = {
+        'castle': {
+            title: "🏰 特劳斯尼茨城堡：维特尔斯巴赫家族的发源地",
+            tabs: ["1. 城堡历史", "2. 艺术与珍奇柜", "3. 绝佳观景台"],
+            contents: [
+                "<b>雄踞山巅的权力象征：</b> 特劳斯尼茨城堡（Burg Trausnitz）始建于1204年，在长达数百年的时间里，它一直是维特尔斯巴赫家族（巴伐利亚的统治家族）的居住地和权力中心。这座堡垒完美融合了中世纪的厚重防御工事与文艺复兴时期的优雅宫廷风格，见证了下巴伐利亚公国的鼎盛时期。",
+                "<b>珍奇柜 (Kunst- und Wunderkammer)：</b> 城堡内部最令人惊叹的展区之一是文艺复兴时期的“珍奇柜”。这是早期博物馆的雏形，巴伐利亚公爵们在此收集了来自世界各地的奇珍异宝、精美的黄金工艺品、异国情调的动植物标本以及早期的科学仪器，展示了当时统治者对探索世界和彰显财富的极致追求。",
+                "<b>俯瞰全城的绝佳视野：</b> 城堡位于兰茨胡特老城上方的山丘上。站在城堡的观景台或城墙边，你可以将整座城市的美景尽收眼底。红色的屋顶、高耸的圣马丁教堂钟楼，以及蜿蜒流淌的伊萨尔河，构成了一幅绝美的巴伐利亚风景画，是绝对不可错过的摄影打卡圣地。"
+            ]
+        },
+        'church': {
+            title: "⛪ 圣马丁教堂：世界最高砖砌钟楼",
+            tabs: ["1. 建筑奇迹", "2. 哥特式空间", "3. 历史传说"],
+            contents: [
+                "<b>挑战极限的砖砌奇迹：</b> 兰茨胡特的圣马丁教堂（Martinskirche）不仅是德国最重要的哥特式教堂之一，更拥有高达 130.6 米的钟楼。这不仅是巴伐利亚的标志性天际线，更是<b>世界上最高的无钢筋结构砖砌钟楼</b>。在没有现代机械的年代，用数百万块烧制的红砖砌成如此高耸入云的建筑，堪称建筑史上的奇迹。",
+                "<b>令人敬畏的内部空间：</b> 走进教堂内部，你会被其极其修长、高耸的比例所震撼。八角形的细长立柱支撑着精致的星形穹顶，阳光透过巨大的彩色玻璃花窗洒下，营造出一种神圣而庄严的氛围。这里不仅是宗教活动的中心，更是中世纪市民财富和骄傲的象征。",
+                "<b>富有戏剧性的历史：</b> 关于教堂的建造，流传着许多有趣的故事。据说，富裕的兰茨胡特市民为了向居住在山上城堡里的巴伐利亚公爵炫耀自己的财富和力量，故意将教堂的钟楼修得极高，甚至超过了城堡的高度，以此宣示“市民的权力不亚于贵族”。"
+            ]
+        },
+        'wedding': {
+            title: "🎭 兰茨胡特婚礼：欧洲最盛大的中世纪节日",
+            tabs: ["1. 历史渊源", "2. 全民参与的狂欢", "3. 严苛的历史还原"],
+            contents: [
+                "<b>1475年的世纪联姻：</b> “兰茨胡特婚礼”（Landshuter Hochzeit）是为了纪念 1475 年巴伐利亚公爵乔治（Georg der Reiche）与波兰公主海德薇（Hedwig Jagiellonica）的盛大婚礼。这场婚礼在当时不仅是政治联姻，更是一场空前绝后的奢华盛宴，全欧洲的贵族都受邀参加，消耗了数万头牛羊牲畜，轰动一时。",
+                "<b>四年一度的全民狂欢：</b> 如今，兰茨胡特每四年都会在夏天举办一次为期数周的盛大复古庆典，重现当年的盛况。超过两千名当地居民会穿上极其考究的中世纪服装，扮演骑士、贵族、游吟诗人、杂耍艺人等角色，在老城的大街小巷举行盛大的游行、骑士比武和露天宴会，仿佛整个城市都穿越回了中世纪。",
+                "<b>近乎苛刻的细节还原：</b> 这个节日之所以享誉世界，在于其对历史细节的极致追求。参与者不仅需要提前留长发，连佩戴的手表、眼镜等现代物品在活动期间也严格禁止。所有的服饰、道具甚至演奏的音乐和提供的食物，都必须严格考证 15 世纪的历史文献，确保为游客提供最纯粹的沉浸式体验。"
+            ]
+        },
+        'food': {
+            title: "🍻 巴伐利亚美食：老城里的舌尖享受",
+            tabs: ["1. 传统酒馆", "2. 特色美食", "3. 下巴伐利亚啤酒"],
+            contents: [
+                "<b>深藏在老城的传统酒馆：</b> 兰茨胡特的老城区（Altstadt 和 Neustadt）分布着大量历史悠久的传统酒馆（Wirtshaus）。这些酒馆通常拥有厚重的橡木门、带拱顶的天花板和热闹非凡的氛围。中午时分，找一家本地人扎堆的酒馆，不仅能品尝到地道美食，更能感受到下巴伐利亚人热情好客的性格。",
+                "<b>不能错过的硬核硬菜：</b> 这里的菜单是肉食爱好者的天堂。除了经典的脆皮烤猪肘（Schweinshaxe）和巴伐利亚白香肠（Weißwurst），你一定要尝试下巴伐利亚的特色烤肉拼盘，配上吸收了浓郁肉汁的土豆面团子（Kartoffelknödel）和微酸解腻的紫甘蓝。每一口都是极其扎实的能量补充，非常适合徒步游览后的回血。",
+                "<b>享誉盛名的本地啤酒：</b> 兰茨胡特及周边地区有着极其深厚的酿酒传统。这里盛产优质的小麦啤酒（Weißbier）和深色烈性啤酒（Starkbier）。在阳光明媚的下午，坐在老城街边的露天座位或伊萨尔河畔的啤酒花园，点上一杯带着绵密泡沫的冰镇鲜酿啤酒，绝对是这座城市最迷人的打开方式。"
+            ]
+        },
+        'river': {
+            title: "🌊 伊萨尔河：城市的绿色翡翠项链",
+            tabs: ["1. 绿色的自然屏障", "2. 河中岛 Mühleninsel", "3. 惬意的休闲时光"],
+            contents: [
+                "<b>穿城而过的翡翠项链：</b> 发源于阿尔卑斯山的伊萨尔河（Isar）流经兰茨胡特，将城市分为几部分。这里的河水呈现出极其美丽的蓝绿色，清澈见底。河岸两旁绿树成荫，为这座历史悠久的砖砌城市增添了一抹极其生动自然的色彩，是当地居民最喜爱的休闲胜地。",
+                "<b>浪漫的河中岛 (Mühleninsel)：</b> 在兰茨胡特的市中心，伊萨尔河分岔形成了一个极其美丽的小岛——Mühleninsel。这里曾经是水车磨坊的所在地，如今被改造成了一个极具现代感又保留了自然野趣的公园。岛上有散步小径、现代艺术雕塑和舒适的长椅，你可以在这里近距离感受水流的湍急与清凉。",
+                "<b>放慢脚步的惬意时光：</b> 游览兰茨胡特的最佳收尾方式，就是黄昏时分在伊萨尔河畔散步。无论是沿着河岸的林荫道骑行，还是在河边的咖啡馆点一杯饮品静静看着天鹅游过，都能让你彻底洗去一天的疲惫。伴随着远处圣马丁教堂传来的悠扬钟声，尽情享受巴伐利亚的慢生活。"
+            ]
+        }
+    };
+
+    var guideData = {
+        'route_morning': {
+            title: "上午 路线 A：穿越中世纪与文艺复兴的繁华街区",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Landshut_Altstadt_Rathaus_und_Martinskirche.jpg/1200px-Landshut_Altstadt_Rathaus_und_Martinskirche.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">慕尼黑出发</div><div class="rt-sub">08:24 (RE22)</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🚌</div><div class="rt-text">火车站到老城</div><div class="rt-sub">09:15 巴士接驳</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🏙️</div><div class="rt-text">老城与城市宫殿</div><div class="rt-sub">09:30 漫步参观</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">⛪</div><div class="rt-text">圣马丁教堂</div><div class="rt-sub">11:30 登顶红砖奇迹</div></div>' +
+                  '</div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：从慕尼黑主火车站出发，乘坐前往雷根斯堡或帕绍方向的 RE（区域快车），大约只需 45-50 分钟即可极速抵达兰茨胡特主火车站。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚆 德国铁路 DB (RE22 或 RE3 快车)</span>' +
+                  '<span class="transit-time">08:24 - 09:11 (约47m)</span>' +
+                  '<span class="transit-dest">前往: 兰茨胡特 (Landshut (Bay) Hbf)</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>这段路程完美覆盖在 Deutschlandticket (D-Ticket) 或 拜仁州票 (Bayern-Ticket) 范围内，无需额外购票，直接上车即可！</div>' +
+                  '<button class="db-btn" onclick="copyAndGo(event, \'Landshut(Bay)Hbf\', \'https://www.bahn.de/\')">🚆 DB 查班次 (自动复制终点)</button>' +
+                  '</div></div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：兰茨胡特火车站距离老城区约有1.5公里，建议出站后直接乘坐市内巴士前往老城区，节省体力留给之后的古城漫步。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚌 城市公交 (多条线路直达)</span>' +
+                  '<span class="transit-time">09:15 - 09:25 (约10m)</span>' +
+                  '<span class="transit-dest">前往: 老城区 (Altstadt)</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>乘坐 3路、6路等公交车至 Altstadt 站下车。持有 D-Ticket 或 拜仁州票的游客同样可以免费乘坐当地公交车。</div>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 1: 震撼的色彩长廊——老城区与城市宫殿", 
+                      "游玩时间: 09:30 - 11:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Stadtresidenz_Landshut_Innenhof_01.jpg/800px-Stadtresidenz_Landshut_Innenhof_01.jpg",
+                      "抵达老城主街 (Altstadt)，你立刻会被这里极其宽阔的街道和两侧连绵不断、色彩斑斓的哥特式和文艺复兴风格阶梯状山墙建筑所深深吸引。这是欧洲保存最完好、最美丽的古老街道之一。顺着街道漫步，务必参观位于市中心的【城市宫殿】(Stadtresidenz Landshut)。这是阿尔卑斯山以北第一座纯粹的意大利文艺复兴风格宫殿。走进其极其精美的内部庭院，古罗马风格的拱廊、精美的壁画和极其华丽的“意大利厅”会让你瞬间产生置身于意大利佛罗伦萨的错觉，展示了巴伐利亚公爵路德维希十世极其奢华的审美品味。",
+                      "老城区的路面铺满了具有数百年历史的极其不平整的石头鹅卵石，请务必穿着平底且鞋底较厚、极其舒适的步行鞋，避免崴脚。城市宫殿的内部参观可能需要遵循特定的导览时间表或购票，建议抵达后第一时间在入口处确认购票信息。此外，拍照时主街上的彩色建筑在上午顺光时色彩最为极其鲜艳饱和，请抓紧早上的黄金光线时间尽情出片。",
+                      "https://www.google.com/maps/search/?api=1&query=Stadtresidenz+Landshut",
+                      "https://www.schloesser.bayern.de/deutsch/schloss/objekte/la_resid.htm"
+                  ) +
+                  
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：从老城主街或城市宫殿步行前往圣马丁教堂只需短短 3 分钟，教堂那高耸入云的红砖塔楼是极其醒目的地标，绝不会迷路。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 极短步行接驳</span>' +
+                  '<span class="transit-time">11:30 步行出发</span>' +
+                  '<span class="transit-dest">前往: 圣马丁教堂</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 2: 仰望建筑奇迹——圣马丁教堂", 
+                      "游玩时间: 11:30 - 12:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Martinskirche_Landshut_01.jpg/800px-Martinskirche_Landshut_01.jpg", 
+                      "在老城的中心，矗立着令人极其敬畏的圣马丁教堂（Martinskirche）。这座建于中世纪的哥特式宏伟建筑，拥有着高达 130.6 米的尖顶钟楼。这是<b>世界上现存最高的无钢筋结构砖砌塔楼</b>，其工艺之精湛、结构之大胆，至今令建筑学家叹为观止。走进教堂内部，由极其细长的八角形砖柱支撑的星形肋骨拱顶，营造出一种向上极度升腾的极其空灵的神圣空间感。阳光透过极其绚丽的彩色玻璃窗投射在古老的石板地上，让你深刻感受到中世纪兰茨胡特极其雄厚的经济实力与市民阶层的无比骄傲。",
+                      "教堂内部是极度神圣的宗教场所，请务必保持极度安静，不要使用闪光灯拍照，并脱下帽子以示尊重。教堂内部免费开放参观。虽然巨大的红砖塔楼极具吸引力，但出于极其严格的安全保护原因，塔楼内部并不对外开放攀登，请在教堂外部寻找合适的角度拍摄其极具视觉冲击力的高耸全貌。参观结束后，极其推荐在教堂附近的老城广场找一家传统巴伐利亚餐馆享用一顿极其丰盛的烤猪肘午餐。",
+                      "https://www.google.com/maps/search/?api=1&query=Martinskirche+Landshut"
+                  )
+        },
+        'route_afternoon': {
+            title: "下午 路线 B：特劳斯尼茨城堡探秘与河畔微醺",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Burg_Trausnitz_Landshut.jpg/1200px-Burg_Trausnitz_Landshut.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">🚶</div><div class="rt-text">老城出发</div><div class="rt-sub">13:30 登山径</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🏰</div><div class="rt-text">特劳斯尼茨城堡</div><div class="rt-sub">14:00 城堡探秘</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🌊</div><div class="rt-text">伊萨尔河畔</div><div class="rt-sub">16:30 河畔休整</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">返回慕尼黑</div><div class="rt-sub">18:50 (RE3)</div></div>' +
+                  '</div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：午餐后，从老城区南部的小径（如 Fürstentreppe 或 Ochsenklavier）拾级而上，步行约 15-20 分钟即可抵达山顶城堡。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行登山或乘坐公交</span>' +
+                  '<span class="transit-time">13:30 - 14:00</span>' +
+                  '<span class="transit-dest">前往: 特劳斯尼茨城堡 (Burg Trausnitz)</span>' +
+                  '<div class="ticket-notice">💳 <b>体力建议：</b>登山路径稍有坡度，但风景极好。如果体力不支或带有老人小孩，极其建议在老城乘坐专门的城市公交（如 7A 线路）直接抵达城堡大门。</div>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 3: 俯瞰巴伐利亚大地——特劳斯尼茨城堡", 
+                      "游玩时间: 14:00 - 16:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Burg_Trausnitz_Landshut.jpg/800px-Burg_Trausnitz_Landshut.jpg",
+                      "特劳斯尼茨城堡（Burg Trausnitz）雄踞在兰茨胡特老城上方的陡峭山丘上，是维特尔斯巴赫家族极其重要的发源地和中世纪防御要塞。这座城堡不仅外观极其宏伟坚固，内部更隐藏着令人极其惊叹的宝藏。强烈推荐购票参观城堡内部，特别是文艺复兴时期极其奢华的“珍奇柜”（Kunst- und Wunderkammer），里面塞满了极其罕见的异国珍宝、奇怪的标本和精密的古代仪器。参观完毕后，千万不要错过在城堡城墙的观景台上驻足。在这里，你可以极其清晰地俯瞰兰茨胡特红色的连绵屋顶、巍峨的圣马丁钟楼以及如翡翠般蜿蜒流淌的伊萨尔河，绝美全景令人极度震撼。",
+                      "城堡的庭院和外墙区域通常可以免费极度自由地闲逛并拍摄风景，但若想进入极其核心的宫殿内部房间和珍奇柜展区，则必须购买门票，且部分区域可能必须跟随官方的定时德语或英语导览团才能进入。请在抵达城堡大门后立刻前往售票处查询最近的导览时间并购买门票。山上风大，请务必准备一件防风外套以防着凉。",
+                      "https://www.google.com/maps/search/?api=1&query=Burg+Trausnitz+Landshut",
+                      "https://www.burg-trausnitz.de/"
+                  ) +
+                  
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：结束城堡游览后，顺着下山的小路轻松步行返回市区，径直走向美丽的伊萨尔河畔。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行下山</span>' +
+                  '<span class="transit-time">16:30 步行出发</span>' +
+                  '<span class="transit-dest">前往: 伊萨尔河畔 (Isar / Mühleninsel)</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 4: 翡翠项链边的黄昏——伊萨尔河畔休整", 
+                      "游玩时间: 16:45 - 18:00",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Landshut_Altstadt_Rathaus_und_Martinskirche.jpg/800px-Landshut_Altstadt_Rathaus_und_Martinskirche.jpg", 
+                      "经过一天的历史与文化极度烧脑的洗礼后，傍晚时分最极其完美的放松方式就是来到伊萨尔河畔（Isar）。河水呈现出极其清澈的蓝绿色，犹如一条翡翠项链穿过城市。你可以通过极具特色的小桥走到河中岛（Mühleninsel）上，这是一个极其宁静美丽的自然公园。找一张极其舒适的长椅坐下，或者在河畔视野极佳的咖啡馆或露天啤酒花园（Biergarten）点一杯极其醇厚的巴伐利亚黑啤或极其清爽的苹果汽水（Apfelschorle）。看着河水极其湍急地流过，天鹅在水中极其优雅地游荡，伴随着老城教堂传来的极其悠扬的晚祷钟声，为完美的兰茨胡特一日游画上极其圆满的句号。",
+                      "傍晚的伊萨尔河畔极其适合拍摄逆光人像和波光粼粼的河景大片。但请务必注意时间，不要因为河畔景色极度迷人而错过了前往火车站的公交车。建议在 18:00 左右开始离开河畔区域，预留极其充足的 25 分钟时间乘坐公交车或步行前往兰茨胡特主火车站，以确保能够极其从容地搭上晚上七点左右返回慕尼黑的直达火车。",
+                      "https://www.google.com/maps/search/?api=1&query=M%C3%BChleninsel+Landshut"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：从火车站搭乘 RE 快车，只需不到 50 分钟即可极速返回慕尼黑市中心，完美闭环！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚆 德国铁路 DB (RE3 或 RE22 区域快车)</span>' +
+                  '<span class="transit-time">18:24 或 18:50 (约50m)</span>' +
+                  '<span class="transit-dest">前往: 慕尼黑 (München Hbf)</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>使用 D-Ticket 或 拜仁州票直接乘坐返程列车。班次非常频繁（几乎每小时有2班），哪怕稍作延迟也能轻松上车。</div>' +
+                  '<button class="db-btn" onclick="copyAndGo(event, \'München Hbf\', \'https://www.bahn.de/\')">🚆 DB 查返程班次 (自动复制终点)</button>' +
+                  '</div></div>'
+        }
+    };
+
+    function generateAccordion(title, timeBadge, imgUrl, desc, notice, mapLink, ticketLink) {
+        var buttonsHtml = '<div class="btn-group">';
+        if(mapLink) {
+            buttonsHtml += '<a href="' + mapLink + '" class="map-btn" target="_blank">📍 Google Maps 导航</a>';
+        }
+        if(ticketLink) {
+            buttonsHtml += '<a href="' + ticketLink + '" class="ticket-btn" target="_blank">🎫 官方查票与资讯</a>';
+        }
+        buttonsHtml += '</div>';
+
+        return '<div class="accordion-item" onclick="toggleAccordion(this)">' +
+               '<div class="accordion-header">' +
+               '<div class="header-title-box"><span>' + title + '</span><span class="step-time-badge">⏱️ ' + timeBadge + '</span></div>' +
+               '</div>' +
+               '<div class="accordion-content">' +
+               '<img src="' + imgUrl + '" alt="实景风光" onerror="this.style.display=\'none\'">' +
+               '<p class="spot-desc" style="text-align:justify;">' + desc + '</p>' +
+               '<div class="notice"><b>⚠️ 避坑与注意事项：</b><br>' + notice + '</div>' +
+               buttonsHtml +
+               '</div></div>';
+    }
+
+    function toggleAccordion(element) {
+        element.classList.toggle('active');
+    }
+
+    function copyAndGo(event, dest, url) {
+        event.preventDefault();
+        var btn = event.currentTarget;
+        var originalText = btn.innerHTML;
+        
+        try {
+            var tempInput = document.createElement("input");
+            tempInput.value = dest;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+        } catch(e) { console.log('Copy fallback failed'); }
+
+        btn.innerHTML = '✅ 已复制: ' + dest;
+        showToast('💡 已将终点站【' + dest + '】复制到剪贴板！<br>请在跳转后的 DB 网页中直接粘贴查询班次。');
+        
+        setTimeout(function(){
+            window.open(url, '_blank');
+            btn.innerHTML = originalText;
+        }, 1800);
+    }
+
+    function showToast(message) {
+        var toast = document.getElementById("toast");
+        toast.innerHTML = message;
+        toast.classList.add("show");
+        setTimeout(function(){ toast.classList.remove("show"); }, 4000);
+    }
+
+    function switchQTab(tabIndex, category) {
+        var container = document.getElementById('q-content-container');
+        var btns = container.querySelectorAll('.q-sub-btn');
+        var contents = container.querySelectorAll('.q-sub-content');
+        for (var i = 0; i < btns.length; i++) {
+            if (i === tabIndex) {
+                btns[i].classList.add('active');
+                contents[i].classList.add('active');
+            } else {
+                btns[i].classList.remove('active');
+                contents[i].classList.remove('active');
+            }
+        }
+    }
+
+    var modalOverlay = document.getElementById('modalOverlay');
+    var modalHeader = document.getElementById('modalHeader');
+    var modalTitle = document.getElementById('modalTitle');
+    var modalBody = document.getElementById('modalBody');
+
+    function openModal(spotKey) {
+        var data = guideData[spotKey];
+        if(!data) return;
+        modalTitle.innerText = data.title;
+        modalHeader.style.backgroundImage = "url('" + data.img + "')";
+        modalHeader.style.display = "block";
+        modalBody.innerHTML = data.html;
+        
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openQModal(key) {
+        var data = qData[key];
+        if(!data) return;
+        modalTitle.innerText = data.title;
+        modalHeader.style.display = "none";
+        
+        var html = '<div id="q-content-container"><div class="q-sub-tabs">';
+        for (var i = 0; i < data.tabs.length; i++) {
+            var activeClass = i === 0 ? 'active' : '';
+            html += '<button class="q-sub-btn ' + activeClass + '" onclick="switchQTab(' + i + ', \'' + key + '\')">' + data.tabs[i] + '</button>';
+        }
+        html += '</div>';
+        
+        for (var j = 0; j < data.contents.length; j++) {
+            var contentClass = j === 0 ? 'active' : '';
+            html += '<div class="q-sub-content ' + contentClass + '"><p style="line-height:1.8; text-align:justify;">' + data.contents[j] + '</p></div>';
+        }
+        html += '</div>';
+
+        modalBody.innerHTML = html;
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+        if (e.target === modalOverlay || e.target.classList.contains('close-btn')) {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            modalBody.innerHTML = ''; 
+        }
+    }
+</script>
+
+</body></html>
