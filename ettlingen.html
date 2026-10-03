@@ -3,406 +3,634 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ettlingen one-day-route</title>
+    <title>卡尔斯鲁厄 ⇌ 埃特林根·黑森林 周日深度游</title>
     <style>
         :root {
-            --primary: #2c4c3b; 
-            --secondary: #d4a373; 
-            --bg: #fdfbf7;
-            --text: #2d3436;
-            --card-bg: #ffffff;
-            --border: #e8e8e8;
+            --ger-red: #CC0000; 
+            --aus-white: #FFFFFF;
+            --bw-gold: #FFCE00; 
+            --bf-green: #1B4528; 
+            --bg-color: #F9F8F6;
+            --text-color: #2C2C2C;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            font-family: 'Georgia', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            margin: 0; padding: 0; line-height: 1.8;
         }
+        
         header {
-            background: linear-gradient(rgba(44, 76, 59, 0.85), rgba(44, 76, 59, 0.95)), url('https://picsum.photos/seed/ettlingen_bg/1920/1080') center/cover;
-            color: white;
-            text-align: center;
-            padding: 4rem 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            background: linear-gradient(rgba(27, 69, 40, 0.85), rgba(20, 20, 20, 0.7)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Ettlingen_-_Schloss.jpg/1920px-Ettlingen_-_Schloss.jpg') center/cover;
+            color: var(--aus-white); text-align: center; padding: 4.5rem 1rem 3.5rem;
+            border-bottom: 6px solid var(--bw-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        header h1 { margin: 0; font-size: 2.5rem; letter-spacing: 2px; }
-        header p { font-size: 1.1rem; opacity: 0.9; margin-top: 10px; }
-        
-        .container { max-width: 900px; margin: 3rem auto; padding: 0 20px; }
-        
-        /* 侧边时间轴设计 */
-        .timeline { position: relative; padding: 20px 0; }
-        .timeline::before {
-            content: ''; position: absolute; top: 0; left: 20px;
-            height: 100%; width: 4px; background: var(--secondary); border-radius: 2px;
+        header h1 { margin: 0; font-size: 2.6rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); letter-spacing: 1px; color: #fff;}
+        header p { font-size: 1.2rem; font-weight: bold; margin-top: 15px; color: var(--bw-gold); text-shadow: 1px 1px 3px rgba(0,0,0,0.8);}
+
+        .q-bar {
+            display: flex; justify-content: center; gap: 25px; flex-wrap: wrap;
+            padding: 20px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            position: sticky; top: 0; z-index: 100;
         }
-        .spot { position: relative; margin-bottom: 2.5rem; padding-left: 60px; cursor: pointer; transition: transform 0.3s ease; }
-        .spot:hover { transform: translateX(8px); }
-        .spot::before {
-            content: ''; position: absolute; left: 12px; top: 10px;
-            width: 20px; height: 20px; background: var(--primary);
-            border-radius: 50%; border: 4px solid var(--bg);
-            box-shadow: 0 0 0 2px var(--secondary);
+        .q-icon {
+            font-size: 2.2rem; cursor: pointer; background: var(--bg-color); 
+            border: 2px solid var(--bw-gold); border-radius: 50%; 
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;
         }
-        .spot-card {
-            background: var(--card-bg); padding: 20px; border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.06); border-left: 5px solid var(--primary);
+        .q-icon:hover { transform: scale(1.15) translateY(-5px); background: #FFFDE7; box-shadow: 0 8px 15px rgba(255, 206, 0, 0.4); }
+        .q-icon::after {
+            content: attr(data-tooltip); position: absolute; bottom: -30px;
+            font-size: 0.85rem; color: var(--bf-green); font-weight: bold; white-space: nowrap;
+            opacity: 0; transition: opacity 0.3s; background: #fff; padding: 3px 10px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); border: 1px solid var(--bw-gold);
         }
-        .spot-time { font-weight: bold; color: var(--secondary); font-size: 0.95rem; display: block; margin-bottom: 5px; }
-        .spot-title { margin: 0 0 10px 0; font-size: 1.4rem; color: var(--primary); }
-        .spot-desc { margin: 0; color: #555; font-size: 0.95rem; }
-        .btn-hint {
-            display: inline-block; margin-top: 12px; font-size: 0.85rem; color: #fff;
-            background-color: var(--primary); padding: 5px 15px; border-radius: 20px;
+        .q-icon:hover::after { opacity: 1; }
+
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
+        .day-header {
+            background: var(--ger-red); color: white; padding: 12px 25px; border-radius: 8px; 
+            margin: 40px 0 20px; display: inline-block; font-size: 1.6rem;
+            border-left: 8px solid var(--bw-gold); box-shadow: 0 4px 10px rgba(204, 0, 0, 0.3);
         }
 
-        /* 模态框 (弹窗) */
+        .route-timeline {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            background: #fff; padding: 25px 20px 15px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; position: relative; overflow-x: auto;
+        }
+        .route-timeline::before {
+            content: ''; position: absolute; top: 41px; left: 50px; right: 50px;
+            height: 3px; background: var(--bw-gold); z-index: 1; opacity: 0.8;
+        }
+        .rt-step { position: relative; z-index: 2; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 80px; }
+        .rt-icon {
+            width: 36px; height: 36px; background: var(--bf-green); color: white; border-radius: 50%;
+            line-height: 36px; font-size: 1.1rem; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-bottom: 10px;
+        }
+        .rt-text { font-size: 0.95rem; font-weight: bold; color: var(--bf-green); line-height: 1.2; }
+        .rt-sub { font-size: 0.75rem; color: var(--ger-red); margin-top: 6px; background: #FDE8E9; padding: 3px 8px; border-radius: 12px; font-weight: bold; white-space: nowrap;}
+
+        .spot-card {
+            background: #fff; padding: 30px; border-radius: 12px; margin-bottom: 30px;
+            border-top: 6px solid var(--bf-green); box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+        .spot-time { color: var(--ger-red); font-weight: bold; font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 8px; display: inline-block; margin-bottom: 20px; }
+        .spot-title { margin: 0 0 15px; color: var(--bf-green); font-size: 1.8rem; font-weight: bold; }
+
         .modal-overlay {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center;
-            z-index: 1000; backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center;
+            z-index: 1000; backdrop-filter: blur(8px);
         }
         .modal {
-            background: #fff; width: 92%; max-width: 800px; max-height: 85vh;
-            border-radius: 16px; overflow-y: auto; position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3); animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--bg-color); width: 95%; max-width: 950px; max-height: 88vh;
+            border-radius: 16px; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            border: 2px solid var(--bw-gold);
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-        .close-btn {
-            position: absolute; top: 15px; right: 20px; font-size: 32px;
-            color: #fff; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.5); z-index: 10;
-        }
-        .modal-header { height: 260px; background-size: cover; background-position: center; position: relative; }
-        .modal-header::after {
-            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60%;
-            background: linear-gradient(transparent, rgba(0,0,0,0.85));
-        }
-        .modal-title { position: absolute; bottom: 20px; left: 25px; color: #fff; margin: 0; font-size: 2rem; z-index: 2; }
-        .modal-body { padding: 30px 25px; }
-        .modal-body h3 { color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 8px; margin-top: 0; }
+        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 40px; color: #fff; cursor: pointer; z-index: 10; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+        .modal-header { height: 320px; background-size: cover; background-position: center; position: relative; border-radius: 14px 14px 0 0; background-color: #eee; }
+        .modal-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
+        .modal-title { position: absolute; bottom: 25px; left: 30px; color: var(--bw-gold); margin: 0; font-size: 2.3rem; z-index: 2; text-shadow: 0 2px 4px #000; }
+        .modal-body { padding: 40px; font-size: 1.1rem; }
 
-        /* 手风琴折叠列表 (用于10个看点) */
-        .accordion-item { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+        .transit-node {
+            display: flex; align-items: center; margin: 15px 0 25px 25px;
+            border-left: 3px dashed var(--bw-gold); padding-left: 35px; position: relative;
+        }
+        .time-icon {
+            position: absolute; left: -24px; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px; line-height: 44px; text-align: center;
+            background: #fff; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 0 0 4px var(--bg-color), 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.2s; z-index: 2;
+        }
+        .time-icon:hover { transform: translateY(-50%) scale(1.15); box-shadow: 0 0 0 4px #FFFDE7, 0 4px 12px rgba(255,206,0,0.5); }
+        
+        .transit-info {
+            background: #FFFDE7; border: 1px solid var(--bw-gold); border-radius: 8px; 
+            padding: 15px 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05); width: 100%;
+        }
+        .transit-mode { font-weight: bold; color: var(--bf-green); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+        .transit-time { color: var(--ger-red); font-weight: bold; background: #fff; padding: 4px 12px; border-radius: 20px; border: 1px solid #F5C6CB; font-size: 0.95rem; }
+        .transit-dest { color:#2B4E38; font-weight:bold; margin-left:auto; }
+        .ticket-notice {
+            flex-basis: 100%; margin-top: 10px; font-size: 0.95rem; color: #856404; background: #FFF3CD; 
+            padding: 10px 12px; border-radius: 6px; border-left: 5px solid #FFC107; line-height: 1.6;
+        }
+
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .map-btn, .kvv-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px;
+            text-decoration: none; font-weight: bold; font-size: 1rem; transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); border-bottom: 3px solid; cursor: pointer;
+        }
+        .map-btn { background: linear-gradient(135deg, var(--bf-green), #0F2916); color: white; border-bottom-color: #08170C; }
+        .map-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(27,69,40,0.4); color: white; }
+        .kvv-btn { background: linear-gradient(135deg, var(--bw-gold), #D4A900); color: #111; border-bottom-color: #B38F00; border: none; }
+        .kvv-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(255,206,0,0.4); color: #111; border-bottom: 3px solid #B38F00; }
+
+        .accordion-item { border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .accordion-header {
-            background: #f8f9fa; padding: 15px 20px; cursor: pointer; font-weight: bold;
-            color: var(--primary); display: flex; justify-content: space-between; align-items: center;
-            transition: background 0.2s;
+            background: #fdfbf7; padding: 22px 25px; cursor: pointer; font-weight: bold; font-size: 1.25rem;
+            color: var(--bf-green); display: flex; justify-content: space-between; align-items: center;
+            border-left: 6px solid var(--bw-gold); transition: background 0.2s;
         }
-        .accordion-header:hover { background: #eef2f0; }
-        .accordion-header::after { content: '+'; font-size: 1.5rem; color: var(--secondary); }
-        .accordion-item.active .accordion-header::after { content: '−'; }
-        .accordion-content {
-            display: none; padding: 20px; background: #fff; border-top: 1px solid var(--border);
-        }
-        .accordion-item.active .accordion-content { display: block; }
-        .accordion-content img { width: 100%; border-radius: 8px; margin-bottom: 15px; max-height: 250px; object-fit: cover; }
+        .accordion-header:hover { background: #faebd7; }
+        .header-title-box { display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 15px; }
+        .step-time-badge { background: #FDE8E9; color: var(--ger-red); font-size: 0.9rem; padding: 4px 12px; border-radius: 15px; border: 1px solid #F5C6CB; font-weight: bold; }
+
+        .accordion-content { display: none; padding: 30px; border-top: 1px solid #eee; }
+        .accordion-item.active .accordion-content { display: block; animation: fadeIn 0.4s; }
+        .accordion-content img { width: 100%; border-radius: 10px; margin-bottom: 25px; max-height: 450px; object-fit: cover; border: 1px solid #eee; background-color: #eee; }
+        .notice { background: #F8D7DA; color: #721C24; padding: 18px; border-left: 5px solid #F5C6CB; margin-top: 25px; border-radius: 6px; font-size: 1.05rem; line-height: 1.7; }
         
-        /* 徒步路线 Tabs */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px; }
-        .tab-btn {
-            background: none; border: none; padding: 10px 20px; font-size: 1rem; cursor: pointer;
-            color: #666; border-radius: 20px; transition: all 0.2s; font-weight: bold;
+        .main-btn {
+            display: inline-block; font-size: 1.05rem; color: #fff; background: linear-gradient(135deg, var(--bf-green), #0F2916); 
+            padding: 12px 30px; border-radius: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(27, 69, 40, 0.4); 
+            transition: all 0.2s; cursor: pointer; border: none; margin-top: 15px; border-bottom: 3px solid #08170C; text-align: center;
         }
-        .tab-btn.active { background: var(--primary); color: #fff; }
-        .tab-content { display: none; animation: fadeIn 0.4s; }
-        .tab-content.active { display: block; }
+        .main-btn:hover { background: #1B4528; transform: translateY(-2px); }
+
+        .q-sub-tabs { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+        .q-sub-btn { 
+            background: #eee; border: 2px solid transparent; padding: 10px 20px; font-size: 1.05rem; 
+            border-radius: 30px; cursor: pointer; font-weight: bold; color: #333; transition: all 0.2s;
+        }
+        .q-sub-btn.active { background: #FFFDE7; border-color: var(--bw-gold); color: var(--bf-green); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .q-sub-content { display: none; padding: 30px; background: #fff; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .q-sub-content.active { display: block; animation: fadeIn 0.4s; }
+
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(27, 69, 40, 0.95); color: white; padding: 15px 30px; border-radius: 30px;
+            font-size: 1.05rem; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; border: 2px solid var(--bw-gold); text-align: center;
+        }
+        #toast.show { bottom: 40px; }
+
+        /* AI 生成器悬浮按钮 */
+        #ai-generator-btn {
+            position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--bw-gold), #D4A900);
+            color: #111; padding: 15px 25px; border-radius: 30px; font-weight: bold; font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 999; border: 2px solid #fff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        #ai-generator-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(255,206,0,0.4); }
+        .ai-modal { background: #fff; max-width: 500px; padding: 30px; }
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        .route-card { background: #fdfdfd; border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-        .route-map-placeholder {
-            width: 100%; height: 200px; border-radius: 8px; margin-bottom: 15px;
-            background-size: cover; background-position: center; border: 2px solid var(--secondary);
-            display: flex; align-items: flex-end; padding: 10px; box-sizing: border-box;
-        }
-        .route-map-badge { background: rgba(0,0,0,0.7); color: #fff; padding: 5px 10px; border-radius: 4px; font-size: 0.85rem; }
-        .route-nodes {
-            background: #f0f4f1; padding: 15px; border-radius: 8px; color: var(--primary);
-            font-weight: bold; margin-bottom: 15px; text-align: center; font-size: 1.1rem;
-        }
-        .route-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        .route-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
-        @media (max-width: 600px) { .route-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Ettlingen one-day-route</h1>
-    <p>深度漫步指南：巴洛克老城 ✕ 黑森林徒步</p>
+    <h1>卡尔斯鲁厄 ⇌ 埃特林根·黑森林 周日游</h1>
+    <p>巴洛克宫殿的悠闲漫步 × 黑森林边缘的绿意徒步</p>
 </header>
 
+<div class="q-bar">
+    <div class="q-icon" data-tooltip="黑森林自然" onclick="openQModal('forest')">🌲</div>
+    <div class="q-icon" data-tooltip="巴登与施瓦本美食" onclick="openQModal('food')">🍰</div>
+    <div class="q-icon" data-tooltip="埃特林根历史" onclick="openQModal('history')">🏰</div>
+    <div class="q-icon" data-tooltip="周末啤酒文化" onclick="openQModal('beer')">🍺</div>
+    <div class="q-icon" data-tooltip="KVV交通指南" onclick="openQModal('transit')">🚋</div>
+</div>
+
 <div class="container">
-    <div class="timeline">
-        
-        <div class="spot" onclick="openModal('station')">
-            <div class="spot-card">
-                <span class="spot-time">10:00</span>
-                <h3 class="spot-title">抵达 Ettlingen Stadt 车站</h3>
-                <p class="spot-desc">乘坐 S1/S11 轻松抵达，下车即是老城的门户。这里有直饮水机和公厕，可以在进城前稍作休整。</p>
-                <span class="btn-hint">查看实景</span>
-            </div>
-        </div>
+    <h2 class="day-header">完美的周日：从卡鲁出发 ➔ 埃特林根宫 ➔ 黑森林边缘 ➔ 老城晚餐</h2>
+    
+    <div class="spot-card">
+        <span class="spot-time">09:30 - 13:30 | 上午：老城与巴洛克宫殿</span>
+        <h3 class="spot-title">🏰 路线 A：穿越回 18 世纪的巴登侯爵夏宫</h3>
+        <p>周日早晨从卡尔斯鲁厄出发，乘坐 S1/S11 轻松抵达。我们精心为你避开了周日关门的商店，专注于历史街区、水车磨坊、华丽的宫殿以及一顿丰盛的德式周末午餐！</p>
+        <button class="main-btn" onclick="openModal('route_morning')">展开 上午老城与宫殿路线 ➔</button>
+    </div>
 
-        <div class="spot" onclick="openModal('spots10')">
-            <div class="spot-card">
-                <span class="spot-time">10:15 - 12:30</span>
-                <h3 class="spot-title">老城与埃特林根宫 (十大看点)</h3>
-                <p class="spot-desc">漫步穿城而过的 Alb 河，打卡巴洛克风格宫殿、穹顶壁画与半木结构古老街区。</p>
-                <span class="btn-hint">点击解锁 10 大必看景点图文</span>
-            </div>
-        </div>
-
-        <div class="spot" onclick="openModal('lunch')">
-            <div class="spot-card">
-                <span class="spot-time">12:30 - 13:30</span>
-                <h3 class="spot-title">午餐时刻：老城寻味</h3>
-                <p class="spot-desc">精选5家周末照常营业的优质餐厅，外加本地最火的手工冰淇淋推荐。</p>
-                <span class="btn-hint">查看餐厅列表</span>
-            </div>
-        </div>
-
-        <div class="spot" onclick="openModal('hiking')">
-            <div class="spot-card">
-                <span class="spot-time">13:30 - 18:30</span>
-                <h3 class="spot-title">黑森林深度徒步 (3条专属路线)</h3>
-                <p class="spot-desc">从 Horbachpark 城市绿洲出发，深入黑森林。提供登高全景、森林溪流等三条精准路线。</p>
-                <span class="btn-hint">打开徒步路线图与节点</span>
-            </div>
-        </div>
-
-        <div class="spot" onclick="openModal('dinner')">
-            <div class="spot-card">
-                <span class="spot-time">18:30 - 20:00</span>
-                <h3 class="spot-title">老城晚餐与返程</h3>
-                <p class="spot-desc">伴着夜景在老城区吃顿晚餐，随后前往车站乘车返回卡尔斯鲁厄。</p>
-                <span class="btn-hint">查看返程指南</span>
-            </div>
-        </div>
-
+    <div class="spot-card">
+        <span class="spot-time">13:40 - 18:30 | 下午：城市绿洲与黑森林徒步</span>
+        <h3 class="spot-title">🌲 路线 B：登高俯瞰莱茵平原与冰淇淋奖励</h3>
+        <p>吃饱喝足后，我们将穿过美丽的 Horbachpark，逐渐深入真正的黑森林（Schwarzwald）边缘地带。登顶俾斯麦塔后，返回老城吃个冰淇淋作为完美收尾。</p>
+        <button class="main-btn" onclick="openModal('route_afternoon')">展开 下午黑森林徒步与返程路线 ➔</button>
     </div>
 </div>
 
-<!-- Modal 弹窗 -->
+<!-- AI 拓展生成器入口 -->
+<div id="ai-generator-btn" onclick="openAIGenerator()">
+    🌍 生成新城市攻略
+</div>
+
+<!-- AI 拓展生成器模态框 -->
+<div class="modal-overlay" id="aiModalOverlay" onclick="closeAIModal(event)">
+    <div class="modal ai-modal" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeAIModal(event)" style="color:#333; text-shadow:none; top:10px; right:15px;">&times;</span>
+        <h2 style="color: var(--bf-green); margin-top:0;">🌍 一键生成新城市攻略</h2>
+        <p style="color: #666; font-size: 0.95rem;">输入你想去的城市和天数，系统将自动生成最强 AI 提示词，并下载当前的 HTML 模板文件。你只需在 Gemini 中上传模板并粘贴提示词即可！</p>
+        
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">📍 目的城市：</label>
+            <input type="text" id="ai-city" placeholder="例如：巴黎、苏黎世、维也纳..." style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box;">
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">📅 游玩天数：</label>
+            <input type="number" id="ai-days" placeholder="例如：3" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box;">
+        </div>
+
+        <button class="main-btn" style="width:100%; display:block;" onclick="executeAIGen()">🚀 复制提示词、下载模板并跳转 Gemini</button>
+    </div>
+</div>
+
+<!-- 原有的模态框 -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal" id="modalContent" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal(event)">&times;</span>
         <div class="modal-header" id="modalHeader">
             <h2 class="modal-title" id="modalTitle">标题</h2>
         </div>
-        <div class="modal-body" id="modalBody">
-            <!-- 动态内容 -->
-        </div>
+        <div class="modal-body" id="modalBody"></div>
     </div>
 </div>
 
+<div id="toast"></div>
+
 <script>
-    const guideData = {
-        station: {
-            title: "抵达 Ettlingen Stadt",
-            img: "https://picsum.photos/seed/ett_station/1200/800", 
-            html: `<h3>起点简介</h3><p>下车后，顺着轨道旁的石板路往东走，不到 3 分钟就能听到 Alb 河的水声，正式进入这座巴登小镇的历史腹地。</p>`
+    var qData = {
+        'forest': {
+            title: "🌲 探秘黑森林：自然与神话的交织",
+            tabs: ["1. 为什么叫黑森林？", "2. 格林童话的摇篮", "3. 德国人的徒步狂热", "4. 标志性的大绒球帽", "5. 埃特林根的黑森林门户"],
+            contents: [
+                "<b>为什么叫黑森林 (Schwarzwald)？</b> 这是因为这片连绵不断的山脉上生长着极其密集的冷杉和松树（针叶林）。这些树木高耸入云且四季常青，由于树冠太过浓密，阳光很难穿透照射到地面，导致森林内部常年显得幽暗深邃。古罗马人第一次来到这里时，被这种阴森的气氛所震撼，便将其命名为“Silva Nigra”（黑色的森林）。如今，这里是德国面积最大的中等高度山脉，也是全球自然爱好者的顶级徒步圣地。",
+                "<b>格林童话的真实摇篮：</b> 你小时候读过的《白雪公主》、《糖果屋》（汉塞尔与格莱特）、《灰姑娘》等格林童话，许多故事的灵感背景其实就来源于黑森林。这里幽深的林间小道、常年笼罩在雾气中的山谷、以及古老的半木结构房屋，简直是女巫、狼人和小精灵的天然栖息地。走在黑森林的深处，听着乌鸦的叫声和踩在枯枝上的声音，你真的会感觉随时可能遇到一间用姜饼盖成的小屋。",
+                "<b>德国人的徒步狂热 (Wandern)：</b> 德国人对在大自然中徒步有着近乎宗教般的狂热。一到周末，无论是年轻人还是白发苍苍的老人，都会穿上极其专业的冲锋衣和重型登山鞋，带着手杖钻进山里。黑森林拥有超过 24000 公里的标记徒步路线，这些路牌系统极其完善，标注了距离和难度。徒步在这里不仅是为了锻炼身体，更是一种亲近自然、与家人朋友交流的方式。",
+                "<b>标志性的大绒球帽 (Bollenhut)：</b> 如果你在旅游纪念品店看到一顶白色的草帽，上面顶着 14 个巨大的红色或黑色羊毛绒球，这就是黑森林最著名的文化符号——Bollenhut。这种帽子最初只在黑森林深处的三个极其偏僻的村庄作为传统女性服饰佩戴。有趣的是，红色的绒球代表佩戴者是未婚少女，而黑色的绒球则代表已婚妇女。它已经成为了整个黑森林乃至德国传统文化在世界上的标志。",
+                "<b>埃特林根：完美的黑森林北部雷达站：</b> 埃特林根不仅是一座拥有巴洛克宫殿的历史古城，在地理位置上，它更被称为“黑森林的北大门”。小镇紧紧依偎在阿尔本河（Alb）流入莱茵河谷的出口处，背后就是黑森林的第一道山脉（Wattkopf）。这使得埃特林根成为了从卡尔斯鲁厄出发，进行“半城市半森林”轻度探险的完美起点。你可以在这里喝完咖啡后，直接钻进幽深的针叶林中。"
+            ]
         },
-        spots10: {
-            title: "老城与宫殿 10 大必看景点",
-            img: "https://picsum.photos/seed/ett_schloss_main/1200/800",
-            html: `
-                <h3>不可错过的历史角落</h3>
-                <div class="accordion-container">
-                    ${generateAccordion(
-                        "1. Schloss Ettlingen (埃特林根宫主建筑)", 
-                        "https://picsum.photos/seed/ett_palace/800/500",
-                        "这座华丽的巴洛克式宫殿是小镇的地标。1689年被法军烧毁后，由巴登藩侯夫人 Sibylla Augusta 委托重建作为夏宫。红砂岩的窗框与亮黄色的墙面极具南德风情。"
-                    )}
-                    ${generateAccordion(
-                        "2. Schlosshof (宫殿内院与海豚喷泉)", 
-                        "https://picsum.photos/seed/ett_fountain/800/500",
-                        "走进宫殿大门，宽阔的内院中心有一座精美的巴洛克海豚喷泉 (Delphinbrunnen)。夏天这里会搭建舞台，举办著名的埃特林根城堡艺术节。"
-                    )}
-                    ${generateAccordion(
-                        "3. Asam-Fresken (宫殿礼拜堂穹顶壁画)", 
-                        "https://picsum.photos/seed/ett_fresco/800/500",
-                        "藏在宫殿内部的瑰宝！由南德著名艺术家 Cosmas Damian Asam 创作的巨幅湿壁画，仰头观看时，强烈的 3D 错觉让人仿佛看到了天堂之门。"
-                    )}
-                    ${generateAccordion(
-                        "4. St. Martin Kirche (圣马丁教堂)", 
-                        "https://picsum.photos/seed/ett_church/800/500",
-                        "镇上最古老的主教堂。它的地下不仅是宗教圣地，更隐藏着一段罗马时期的历史，八角形的塔楼在老城任何地方都能抬头望见。"
-                    )}
-                    ${generateAccordion(
-                        "5. Rathaus (历史市政厅)", 
-                        "https://picsum.photos/seed/ett_rathaus/800/500",
-                        "建于18世纪的市政厅，带有标志性的洋葱头钟楼和红砂岩拱廊，完美融合了文艺复兴晚期与巴洛克风格。"
-                    )}
-                    ${generateAccordion(
-                        "6. Alte Mühle (Alb 河畔老磨坊)", 
-                        "https://picsum.photos/seed/ett_mill/800/500",
-                        "Alb 河穿城而过，河边保存完好的水力老磨坊是拍照的最佳机位。听着湍急的水声，看着两岸鲜花点缀的半木结构房屋，非常出片。"
-                    )}
-                    ${generateAccordion(
-                        "7. Narrenbrunnen (狂欢节小丑喷泉)", 
-                        "https://picsum.photos/seed/ett_statue/800/500",
-                        "位于老城步行街上的趣味雕像喷泉，展现了巴登地区浓厚的 Fastnacht（狂欢节）传统文化，造型滑稽生动。"
-                    )}
-                    ${generateAccordion(
-                        "8. Marktplatz (集市广场)", 
-                        "https://picsum.photos/seed/ett_square/800/500",
-                        "老城的心脏地带，四周被色彩缤纷的商铺和咖啡馆包围。周末这里人们坐在露天吃冰淇淋，极具生活气息。"
-                    )}
-                    ${generateAccordion(
-                        "9. Bismarckturm 远景 (老城眺望塔)", 
-                        "https://picsum.photos/seed/ett_tower/800/500",
-                        "站在老城向东面的半山腰望去，隐约能看到这座纪念俾斯麦的石塔，这也是我们下午徒步路线1的终极目标。"
-                    )}
-                    ${generateAccordion(
-                        "10. Römische Badruinen (古罗马浴场遗址)", 
-                        "https://picsum.photos/seed/ett_ruins/800/500",
-                        "位于圣马丁教堂地下的古罗马浴场遗迹，证明了早在2000年前，罗马人就已经在这个小镇建造了地暖和洗浴设施。"
-                    )}
-                </div>
-            `
+        'food': {
+            title: "🍰 舌尖上的巴登与施瓦本",
+            tabs: ["1. 黑森林樱桃蛋糕", "2. 施瓦本面疙瘩", "3. 炸肉排的南德吃法", "4. 德式碱水结", "5. 巴登特色葡萄酒"],
+            contents: [
+                "<b>闻名世界的黑森林樱桃蛋糕 (Schwarzwälder Kirschtorte)：</b> 这是德国在全球最著名的甜品！正宗的黑森林蛋糕绝对不是那种只有巧克力和鲜奶油的甜腻产物。德国法律甚至明文规定，只有加入了足量纯正“黑森林樱桃烈酒”（Kirschwasser）的蛋糕，才有资格叫这个名字。正宗的做法是：几层湿润的巧克力海绵蛋糕，中间夹着打发的鲜奶油、酸樱桃以及浓烈的樱桃酒，表面铺满巧克力碎屑。浓郁的酒香绝对让你惊艳。",
+                "<b>极具饱腹感的施瓦本面疙瘩 (Käsespätzle)：</b> 位于巴登-符腾堡州的这片区域，在饮食上深受施瓦本文化的影响。Käsespätzle（奶酪面疙瘩）是这里最硬核的传统主食。它是用鸡蛋和面粉混合成浓稠的面糊，然后通过特殊的漏板直接刮入沸水中煮熟而成的。最经典的吃法是将其与大量浓郁的融化高山奶酪混合搅拌至拉丝，表面再撒上炸得极其酥脆的焦糖洋葱碎。这道菜热量极高，是徒步后最完美的碳水补充。",
+                "<b>炸肉排的南德经典吃法 (Schnitzel mit Pommes)：</b> 虽然维也纳炸牛排闻名于世，但在南德地区的餐馆里，炸猪排（Schweineschnitzel）才是真正的平民王者。厨师会将猪排用肉锤敲打得又大又薄，裹上面包糠后在平底锅里用黄油煎炸至金黄酥脆。与奥地利配土豆沙拉不同，南德的年轻人和家庭更喜欢配上一大盘极其酥脆的炸薯条，挤上新鲜柠檬汁，再搭配一小碗侧边沙拉。盲点绝对不会出错。",
+                "<b>国民级小吃：德式碱水结 (Brezel)：</b> 在巴符州，Brezel 绝对不仅仅是一种面包，它是生活本身。无论是在火车站的售卖亭，还是传统的周末早午餐，碱水结都是绝对的C位。烘焙前浸泡在极其稀释的碱水中，赋予了它深棕色的外壳和独特的香气，表面撒上粗海盐。正宗的南德吃法，习惯将其横向切开，在中间涂抹上极其厚实的一层新鲜黄油（Butterbrezel）。外壳微脆、内里柔韧、黄油奶香四溢。",
+                "<b>巴登葡萄酒：阳光的馈赠：</b> 巴登（Baden）是德国第三大葡萄酒产区，也是全德国气候最温暖、日照最充足的地区，被誉为德国的“托斯卡纳”。这里的气候条件非常适合种植勃艮第葡萄品种。如果你在埃特林根的餐厅吃晚餐，强烈推荐点一杯本地产的黑皮诺红葡萄酒（Spätburgunder）或者雷司令白葡萄酒（Riesling）。这里的酒带着极其清新的果香和适度的酸度，非常适合搭配传统巴登菜。"
+            ]
         },
-        lunch: {
-            title: "老城午餐与冰淇淋推荐",
-            img: "https://picsum.photos/seed/ett_food/1200/800",
-            html: `
-                <h3>精选 5 家餐厅 (周日营业)</h3>
-                <ul>
-                    <li><b>1. Vogel Hausbräu Ettlingen：</b> 老牌自酿啤酒馆，主打烤猪肘 (Schweinshaxe) 和无过滤啤酒，院子里氛围极佳。</li>
-                    <li><b>2. Ratsstuben：</b> 市政厅旁的高端传统巴登菜馆，提供高品质的黑森林野味和黄油煎肉排。</li>
-                    <li><b>3. Restaurant Markuskreuz：</b> 极具性价比的地道德国菜，施瓦本手作面疙瘩 (Käsespätzle) 份量极足。</li>
-                    <li><b>4. Mamma Lina：</b> 评分极高的正宗拿坡里窑烤披萨店。</li>
-                    <li><b>5. Trattoria Toscana：</b> Alb 河畔的意式小酒馆，坐在室外吃海鲜意面，度假感拉满。</li>
-                </ul>
-                <h3>🍦 必吃冰淇淋推荐</h3>
-                <p><b>Eiscafe Pierod</b> - 位于 Marktplatz，本地人排队也要吃的手工冰淇淋，推荐开心果味 (Pistazie) 或清爽柠檬雪葩！</p>
-            `
+        'history': {
+            title: "🏰 埃特林根：侯爵夏宫与历史印记",
+            tabs: ["1. 巴洛克夏宫的重生", "2. 古罗马浴场遗址", "3. 半木结构老城之美", "4. 阿尔本河的磨坊", "5. 巴登藩侯夫人西比拉"],
+            contents: [
+                "<b>埃特林根宫：从废墟到巴洛克夏宫的重生：</b> 埃特林根宫（Schloss Ettlingen）是这座小镇绝对的地标。它的前身是一座建于 13 世纪的中世纪水上城堡。在 1689 年极其惨烈的九年战争中，法国军队将整座城堡烧成了废墟。直到 1727 年，巴登藩侯夫人西比拉委托著名建筑师，将其在废墟上原址重建为如今这座极其华丽的巴洛克式宫殿。它拥有红砂岩的窗框和亮黄色的墙面，成为了她晚年最钟爱的夏宫。",
+                "<b>地下隐藏的古罗马浴场遗址：</b> 埃特林根的历史远比中世纪还要久远。在老城圣马丁教堂的地下发掘中，考古学家震惊地发现了距今两千多年前的古罗马浴场（Römerbad）遗址！这证明了早在公元 1 世纪，罗马帝国的军队就已经在此驻扎，并且建造了极其先进的地暖系统和洗浴设施。如今这些遗迹被精心保护在教堂的地下博物馆中，向世人展示着罗马人如何在这片黑森林边缘享受高级的文明生活。",
+                "<b>南德童话：半木结构房屋之美 (Fachwerkhaus)：</b> 漫步在埃特林根的老城街巷，最吸引眼球的就是那些错落有致、色彩斑斓的半木结构房屋。这种建筑风格在南德极其普遍。建筑师先用极其粗壮的橡木搭建出极其复杂的承重框架，然后用黏土、稻草或砖块填充中间的空隙。这些房屋不仅抗震性能极佳，而且外露的木骨架形成了极其美丽的几何图案，每一栋房屋的图腾甚至代表了当年主人的职业和地位，拍照极其出片。",
+                "<b>穿城而过的生命线：阿尔本河与水磨坊：</b> 阿尔本河（Alb）是埃特林根的灵魂，这条源自黑森林深处的清澈河流一路奔腾，将老城优美地一分为二。在工业革命之前，河流湍急的水力是这里最重要的能源。河岸边至今依然保留着极其古老的半木结构水车磨坊（Alte Mühle）。虽然水车不再运作，但河畔被改造成了极其迷人的散步长廊，听着湍急的水声，看着两岸的繁花，是体会南德慢节奏生活的最美角落。",
+                "<b>巴登藩侯夫人西比拉的传奇人生：</b> 埃特林根宫之所以能如此奢华，完全归功于西比拉·奥古斯塔夫人。作为巴登-巴登藩侯（大名鼎鼎的“土耳其路易”）的妻子，她在丈夫早逝后，以极其强悍的政治手腕作为摄政王统治了巴登地区长达 20 年。她不仅是一位出色的政治家，更是一位极具艺术品味的赞助人。她亲自参与了埃特林根宫的设计，聘请了大量顶级艺术家，留下了宫殿礼拜堂内那幅极其令人震撼的穹顶 3D 湿壁画。"
+            ]
         },
-        hiking: {
-            title: "黑森林徒步：3条精选路线",
-            img: "https://picsum.photos/seed/ett_forest_bg/1200/800",
-            html: `
-                <h3>从 Horbachpark 绿洲向森林进发</h3>
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab(1)">路线1: 俾斯麦塔全景线</button>
-                    <button class="tab-btn" onclick="switchTab(2)">路线2: 森林深处野趣线</button>
-                    <button class="tab-btn" onclick="switchTab(3)">路线3: 沿河溯溪休闲线</button>
-                </div>
-
-                <!-- 路线 1 -->
-                <div class="tab-content active" id="tab1">
-                    <div class="route-card">
-                        <div class="route-map-placeholder" style="background-image: url('https://picsum.photos/seed/ett_map1/800/300');">
-                            <span class="route-map-badge">🗺️ 路线示意：爬升约150米，耗时2小时</span>
-                        </div>
-                        <div class="route-nodes">Horbachpark ➔ Robberg 步道 ➔ Bismarckturm (登顶) ➔ Spessarter Str. ➔ 老城</div>
-                        <p><b>✨ 路线优势：</b> 这是最经典的半日徒步路线。一半是公园，一半是山路，路况极好。登顶俾斯麦塔后视野完全没有遮挡。</p>
-                        <p><b>👀 沿途景色：</b> 登塔后可以俯瞰 Ettlingen 标志性的红屋顶，天气好时能直接看到莱茵平原和对面的法国孚日山脉。</p>
-                        <div class="route-grid">
-                            <img class="route-img" src="https://picsum.photos/seed/ett_view1/600/400" alt="登高俯瞰">
-                            <img class="route-img" src="https://picsum.photos/seed/ett_view2/600/400" alt="俾斯麦塔">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 路线 2 -->
-                <div class="tab-content" id="tab2">
-                    <div class="route-card">
-                        <div class="route-map-placeholder" style="background-image: url('https://picsum.photos/seed/ett_map2/800/300');">
-                            <span class="route-map-badge">🗺️ 路线示意：爬升约220米，耗时3小时</span>
-                        </div>
-                        <div class="route-nodes">Horbachpark ➔ Waldsaumweg ➔ Wattkopf 峰顶 ➔ 森林木屋 ➔ 沿无名溪流下山</div>
-                        <p><b>✨ 路线优势：</b> 深入真正的 Schwarzwald (黑森林) 内部！避暑纳凉的神仙路线，含氧量爆表，能体验到被参天巨树包围的静谧感。</p>
-                        <p><b>👀 沿途景色：</b> 幽深的针叶林，阳光透过树冠形成的丁达尔效应，偶遇的复古木屋和长满青苔的倒木，纯正黑森林风光。</p>
-                        <div class="route-grid">
-                            <img class="route-img" src="https://picsum.photos/seed/ett_forest1/600/400" alt="黑森林丁达尔效应">
-                            <img class="route-img" src="https://picsum.photos/seed/ett_forest2/600/400" alt="森林木屋">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 路线 3 -->
-                <div class="tab-content" id="tab3">
-                    <div class="route-card">
-                        <div class="route-map-placeholder" style="background-image: url('https://picsum.photos/seed/ett_map3/800/300');">
-                            <span class="route-map-badge">🗺️ 路线示意：平路为主，耗时1.5小时</span>
-                        </div>
-                        <div class="route-nodes">Horbachpark ➔ Alb 河沿岸向南 ➔ Graf-Rhena-Weg ➔ 铁路桥折返 ➔ 老城</div>
-                        <p><b>✨ 路线优势：</b> 几乎完全没有爬升，适合不想费体力、只想悠闲散步聊天的组合。全程顺着宽阔的水流前行，极其清凉。</p>
-                        <p><b>👀 沿途景色：</b> 潺潺的 Alb 河溪流，宽阔的河畔草甸。这条线路还会与历史悠久的 Albtalbahn 铁轨并行，运气好能拍到小火车穿梭在林间的画面。</p>
-                        <div class="route-grid">
-                            <img class="route-img" src="https://picsum.photos/seed/ett_river1/600/400" alt="河流草甸">
-                            <img class="route-img" src="https://picsum.photos/seed/ett_river2/600/400" alt="林间轨道">
-                        </div>
-                    </div>
-                </div>
-            `
+        'beer': {
+            title: "🍺 德国周末：啤酒花园与静谧周日",
+            tabs: ["1. 神圣的周日休息法", "2. Biergarten 文化", "3. Radler：解渴利器", "4. Vogel 家酿啤酒", "5. 周末的冰淇淋社交"],
+            contents: [
+                "<b>不可侵犯的周日休息法 (Sonntagsruhe)：</b> 很多初来德国的人在周日都会感到崩溃，因为全德国所有的超市、服装店、大型商场在周日全部依法严格关闭！这是源于基督教传统和保护工人权益的法律。在德国人看来，周日是极其神圣的、完全属于家庭、大自然和休息的时间。这也是为什么周日去埃特林根极其合适：因为虽然零售店关门，但所有的餐厅、咖啡馆、冰淇淋店不仅开门，而且充满了享受生活的本地人。",
+                "<b>露天啤酒花园文化 (Biergarten)：</b> 只要天气一放晴，德国人就会涌入户外的啤酒花园。这是一种起源于巴伐利亚、随后风靡全德国的独特社交文化。长长的木桌和长椅摆放在巨大的栗树荫下，人们不用穿戴整齐，可以牵着狗、推着婴儿车，甚至和完全不认识的陌生人拼桌。点上一杯一升装的新鲜生啤，大口吃着烤肉或碱水结，在阳光下高谈阔论。在这里，阶级和职业被完全抹平，只有极其放松的周末氛围。",
+                "<b>徒步后的解渴利器：混合啤酒 Radler：</b> 如果你不喜欢纯啤酒的苦涩，或者想在下午继续保持清醒，那么 Radler 绝对是你的首选。这个词在德语里是“骑自行车的人”的意思。传说是由于某家啤酒馆的啤酒不够卖了，老板急中生智将一半柠檬汽水和一半啤酒混合，卖给骑车口渴的游客，结果大受欢迎。特别是你钟爱的血橙味（Blutorange），果汁的酸甜完美中和了麦香，酒精度极低，是黑森林徒步下山后最完美的解渴饮料！",
+                "<b>本地的骄傲：Vogel Hausbräu 自酿啤酒：</b> 在埃特林根老城里，Vogel Hausbräu 是一家绝对不容错过的极具本地特色的酿酒馆。这里的啤酒是直接在店内的巨大铜制发酵罐中酿造的，属于未经巴氏杀菌、保留了丰富酵母的无过滤新鲜生啤（Naturtrüb）。它家的未过滤皮尔森或应季特酿口感极其醇厚、泡沫绵密。院子里有一个非常棒的啤酒花园，点一份烤猪肘配上一杯自酿鲜啤，是体验最地道德国胃的最佳方式。",
+                "<b>不可或缺的意式冰淇淋社交 (Eiscafe)：</b> 德国人对意式手工冰淇淋（Gelato）的热爱极其疯狂。无论在哪个小镇的中心广场，你总能找到一家由意大利移民经营的正宗 Eiscafe。在周日的下午，吃完午饭或者散步归来，全家人排队买一个双球甜筒，或者坐在露天位子上点一份极其夸张的“意式面条冰淇淋”（Spaghettieis，将香草冰淇淋压成面条状，浇上草莓酱假装番茄酱），看着广场上跑来跑去的孩子，是周末最甜蜜的一环。"
+            ]
         },
-        dinner: {
-            title: "老城晚餐与返程",
-            img: "https://picsum.photos/seed/ett_dinner/1200/800",
-            html: `
-                <h3>夜幕下的 Ettlingen</h3>
-                <p>傍晚下山后，老城区的巴洛克建筑在暖黄色的路灯下显得格外浪漫。你可以在河边找个露天位置，喝一杯巴登地区盛产的黑皮诺红酒 (Spätburgunder)。</p>
-                <p><b>返程：</b> 晚上的 S1/S11 班次依然密集（通常 20 分钟一班）。在 Ettlingen Stadt 上车，只需约 20 分钟就能回到卡尔斯鲁厄市区。</p>
-            `
+        'transit': {
+            title: "🚋 KVV 交通指南：轻松玩转巴符州",
+            tabs: ["1. 什么是 KVV 网络", "2. S1/S11 轻轨直达", "3. 极其强大的 D-Ticket", "4. KVV.info 查班次", "5. 乘车礼仪与查票"],
+            contents: [
+                "<b>卡尔斯鲁厄交通网 (KVV) 的强大覆盖：</b> 卡尔斯鲁厄交通运输联盟（KVV）是德国最早实行“有轨电车与铁路网并轨”模式（即著名的卡尔斯鲁厄模式）的地区。它的有轨电车不仅能在市区的街道上行驶，还能直接开上国家铁路网的轨道，一路开进黑森林深处的小镇！这意味着你完全不需要去火车站买火车票，只需要在市区的任意一个电车站，就能直接跳上黄色的有轨电车，一路坐到风景如画的埃特林根，极度无缝和便捷。",
+                "<b>专属大动脉：S1 与 S11 线：</b> 前往埃特林根老城最快、最方便的方式就是乘坐 KVV 系统的 S1 或 S11 线。这两条线路班次极其密集，从卡尔斯鲁厄主火车站出发，只需大约 15 分钟即可直达埃特林根的核心车站 Ettlingen Stadt。这趟车会带你驶出市区，穿过卡鲁南部的森林和居住区，当你看到窗外出现错落有致的红屋顶和远处的黑森林山脉时，就意味着你已经抵达了这座美丽的巴洛克小镇。",
+                "<b>无敌的 Deutschlandticket (D-Ticket)：</b> 如果你已经持有目前德国极度普及的“49欧元全国月票”（或基于此的青年票），那么恭喜你，你前往埃特林根的交通成本为零！埃特林根完全处于 KVV 的覆盖范围内，属于本地短途交通。你只需要拿着手机里的二维码车票，直接上车即可，无需在售票机前研究复杂的计费区。如果没有月票，你也可以在车站的自动售票机上购买单程票（通常属 2 区车票）或性价比极高的日票。",
+                "<b>如何精准掌握时刻表：KVV.info：</b> 德国公共交通最令人放心的就是它极其精确到分钟的时刻表规划。强烈建议在手机上使用 KVV 官方网站查询系统（kvv.de）或者全德通用的 DB Navigator App。只需要输入起点和终点，系统不仅会告诉你几点几分有哪一路车，还会实时显示列车是否晚点、在哪个站台发车。在周日，公交班次通常会比工作日略微稀疏，出发和返程前用手机“一键查班次”是必备生存技能。",
+                "<b>无人售票与极其严格的随机查票：</b> 德国所有的轻轨和公交车均实行“信用乘车制”，车站没有闸机，司机也不负责售票。上车后车厢内通常有自动售票机或打卡机。千万不要抱有侥幸心理逃票！KVV 会有穿着便衣的查票员随机上车，车门一关他们就会掏出证件进行地毯式查票。一旦被发现没有有效车票，将面临 60 欧元的高额罚款及信用记录。此外，如果你带有大型犬或自行车，请务必确认是否符合 KVV 的票务规定。"
+            ]
         }
     };
 
-    // 修复了此处的转义符号，去掉了 \
-    function generateAccordion(title, imgUrl, desc) {
-        return `
-            <div class="accordion-item" onclick="toggleAccordion(this)">
-                <div class="accordion-header">${title}</div>
-                <div class="accordion-content">
-                    <img src="${imgUrl}" alt="${title}">
-                    <p>${desc}</p>
-                </div>
-            </div>
-        `;
+    var guideData = {
+        'route_morning': {
+            title: "路线 A：老城与巴洛克宫殿",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Ettlingen_-_Schloss.jpg/1200px-Ettlingen_-_Schloss.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">🚋</div><div class="rt-text">卡鲁市区</div><div class="rt-sub">09:30 轻松出发</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">📍</div><div class="rt-text">Ettlingen Stadt</div><div class="rt-sub">09:45 抵达</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🏰</div><div class="rt-text">老城与宫殿</div><div class="rt-sub">10:15 巴洛克风情</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🥨</div><div class="rt-text">Vogel 啤酒馆</div><div class="rt-sub">12:15 周日大餐</div></div>' +
+                  '</div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：周日早晨人流较少，直接使用你的 D-Ticket 上车即可！注意看车头显示 Bad Herrenalb 或 Ittersbach 的 S1/S11 均可到达。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚋 KVV S1 或 S11 线</span>' +
+                  '<span class="transit-time">09:30 - 09:45 (约15分钟)</span>' +
+                  '<span class="transit-dest">前往: Ettlingen Stadt 车站</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>如果你持有全国通用的青年/学生月票 (D-Ticket)，直接免费乘坐。如需购票，买 2 区单程票。</div>' +
+                  '<button class="kvv-btn" onclick="copyAndGo(event, \'Ettlingen Stadt\', \'https://www.kvv.de/liniennetz/fahrplanauskunft.html\')">🚋 KVV查班次 (自动复制终点)</button>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 1: 老城入口与 Alb 河水磨坊 (Alte Mühle)", 
+                      "漫步时间: 09:45 - 10:15",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Ettlingen_Schloss_01.jpg/800px-Ettlingen_Schloss_01.jpg",
+                      "下车后顺着轨道旁的石板路往东走，立刻就能听到 Alb 河奔腾的水声。河岸边保存完好的半木结构水力老磨坊在晨光下极具巴登风情。听着湍急的水声，看着两岸鲜花点缀的彩色房屋，南德小镇的惬意感扑面而来。",
+                      "周日上午老城区极其安静，绝大多数零售商店（衣服、超市等）依法严格闭店。但非常适合在毫无游客干扰的情况下，在河边长椅上拍出绝美无人的风景大片。",
+                      "https://www.google.com/maps/search/?api=1&query=Ettlingen+Alte+Muehle"
+                  ) +
+                  
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：从水磨坊沿着河畔往市中心方向走，大约 5 分钟就能看到极其醒目的黄色宫殿建筑！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 沿 Alb 河滨步行</span>' +
+                  '<span class="transit-time">10:15 - 10:20</span>' +
+                  '<span class="transit-dest">前往: 埃特林根宫</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 2: 埃特林根宫与 Asam 穹顶壁画", 
+                      "游览时间: 10:20 - 11:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Ettlingen_-_Schloss.jpg/800px-Ettlingen_-_Schloss.jpg", 
+                      "这座华丽的巴洛克式宫殿是小镇绝对的地标。由巴登藩侯夫人西比拉委托重建作为夏宫。强烈推荐买票进入宫殿内部的博物馆（周日照常开放！），你将看到瑰宝级的宫殿礼拜堂，南德著名艺术家 Asam 创作的巨幅湿壁画拥有强烈的 3D 错觉，仿佛置身天堂。",
+                      "内部博物馆周日通常 11:00 开放，门票约 4 欧元。宫殿内院的海豚喷泉是免费开放的，夏季这里还会有露天戏剧节。请在馆内保持安静，壁画区严禁开启闪光灯拍照。",
+                      "https://www.google.com/maps/search/?api=1&query=Schloss+Ettlingen"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 广场提示：逛完宫殿后穿过 Marktplatz（集市广场），就能看到圣马丁教堂高耸的八角形钟楼了。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 穿梭老城区广场</span>' +
+                  '<span class="transit-time">11:30 - 11:35</span>' +
+                  '<span class="transit-dest">前往: 圣马丁教堂</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 3: 圣马丁教堂与古罗马浴场遗址", 
+                      "游览时间: 11:35 - 12:15",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Ettlingen_St._Martin_01.jpg/800px-Ettlingen_St._Martin_01.jpg",
+                      "圣马丁教堂是镇上最古老的主教堂。但最震撼的其实隐藏在它的地下——两千多年前的古罗马浴场（Römerbad）遗址！这证明了早在公元 1 世纪，罗马人就已经在这个黑森林的边缘建造了地暖和洗浴设施，向世人展示着欧洲早期的文明印记。",
+                      "教堂主厅可免费进入参观，请务必脱帽且不要穿着暴露。地下罗马浴场遗址可能需要跟随特定的导览或在特定时间开放，请提前咨询。",
+                      "https://www.google.com/maps/search/?api=1&query=Sankt+Martin+Ettlingen"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 觅食提示：午餐时间到！从教堂走几步路就能到达本地人气最旺的 Vogel 啤酒馆，周日绝对开门！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行寻味</span>' +
+                  '<span class="transit-time">12:15 - 12:20</span>' +
+                  '<span class="transit-dest">前往: Vogel Hausbräu 啤酒馆</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 4: 周日大餐！Vogel 啤酒馆", 
+                      "就餐时间: 12:20 - 13:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Schweinsbraten_mit_Kn%C3%B6del_und_Sauerkraut.jpg/800px-Schweinsbraten_mit_Kn%C3%B6del_und_Sauerkraut.jpg",
+                      "周日中午很多店铺关门，但这家极具氛围的本地老牌自酿啤酒馆绝对人声鼎沸！强烈推荐点一份外焦里嫩的烤猪肘（Schweinshaxe）或施瓦本奶酪面疙瘩（Käsespätzle）。喜欢果味饮料的你可以点一杯清爽的 Radler（啤酒混雪碧），绝配！",
+                      "周日中午本地家庭聚餐极多，可能需要等位。结账时可以用刷卡，如果觉得服务不错，可以直接口头加上 5%-10% 的小费告诉服务员你想付的总数。",
+                      "https://www.google.com/maps/search/?api=1&query=Vogel+Hausbraeu+Ettlingen"
+                  )
+        },
+
+        'route_afternoon': {
+            title: "路线 B：城市绿洲与黑森林徒步",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Schwarzwald_Landscape.jpg/1200px-Schwarzwald_Landscape.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">🦆</div><div class="rt-text">Horbachpark</div><div class="rt-sub">13:40 散步</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🥾</div><div class="rt-text">黑森林边缘</div><div class="rt-sub">14:30 俾斯麦塔</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🍦</div><div class="rt-text">老城冰淇淋</div><div class="rt-sub">16:45 冰爽奖励</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🚋</div><div class="rt-text">卡尔斯鲁厄</div><div class="rt-sub">轻松返程</div></div>' +
+                  '</div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 散步提示：从啤酒馆出来向南走，穿过几个老街区，很快就能看到大片绿地的城市公园了。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 饭后闲庭信步</span>' +
+                  '<span class="transit-time">13:30 - 13:40</span>' +
+                  '<span class="transit-dest">前往: Horbachpark 城市公园</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 1: Horbachpark 绿洲漫步消食", 
+                      "漫步时间: 13:40 - 14:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Horbachpark_Ettlingen.jpg/800px-Horbachpark_Ettlingen.jpg",
+                      "吃饱喝足后，最适合来到小镇南部的 Horbachpark 走走。这是一个设计精巧、绿树成荫的城市公园，有清澈的小湖、雕塑和修剪整齐的阳光草坪。下午在这里散步、看看鸭子和天鹅，欣赏远处逐渐升高的黑森林山脉轮廓，为接下来的进山徒步做个完美的热身。",
+                      "公园完全免费，全天候开放。在草坪上休息时请注意不要踩踏到天鹅或野鸭的粪便。公园也是当地人跑步和骑车的常去之处，请注意避让。",
+                      "https://www.google.com/maps/search/?api=1&query=Horbachpark+Ettlingen"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 徒步提示：从公园东侧的步道顺势向上，直接切入 Wattkopf 山脉，开启黑森林登高之旅！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🥾 开始爬坡登高</span>' +
+                  '<span class="transit-time">14:30 - 15:30 (约1小时爬升)</span>' +
+                  '<span class="transit-dest">前往: 俾斯麦塔 (Bismarckturm)</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 2: 进阶挑战！黑森林俾斯麦塔徒步", 
+                      "徒步观景: 14:30 - 16:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Bismarckturm_Ettlingen_01.jpg/800px-Bismarckturm_Ettlingen_01.jpg",
+                      "想体验纯正的黑森林，从公园东侧顺着山路往高处走！这段路爬升适中，带你深入幽静的针叶林内部。大约一小时后到达建于半山腰的俾斯麦塔。站在塔下开阔的平台上，你可以毫无遮挡地俯瞰整个埃特林根老城的红屋顶，甚至能远眺到法国的莱茵平原，视野极度震撼！",
+                      "请穿着舒适的运动鞋。森林中气温通常比镇上低两三度，如果出汗后在观景台吹风容易着凉，建议背包里备一件轻薄的运动夹克。",
+                      "https://www.google.com/maps/search/?api=1&query=Bismarckturm+Ettlingen"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 下撤提示：俗话说上山容易下山难，顺着石板阶梯或平缓的林间小道返回老城中心。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 顺路下撤回城</span>' +
+                  '<span class="transit-time">16:30 - 16:45</span>' +
+                  '<span class="transit-dest">前往: 老城 Marktplatz</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 3: 极爽奖励！Eiscafe Pierod 意式冰淇淋", 
+                      "享受时间: 16:45 - 17:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Gelato_cone.jpg/800px-Gelato_cone.jpg",
+                      "大汗淋漓地从黑森林下山回到老城广场，最好的奖励绝对是一个正宗的意大利冰淇淋！位于集市广场的 Eiscafe Pierod 是本地人排队也要吃的神店。在周日的傍晚，找个长椅坐下，舔一口浓郁的开心果味或清爽解渴的柠檬雪葩，看着广场上的雕塑和嬉闹的孩子，一扫疲惫。",
+                      "这家店周日下午通常大排长龙，请耐心等待。买甜筒直接在窗口外带即可，通常只收现金，准备好 2-4 欧元的零钱。",
+                      "https://www.google.com/maps/search/?api=1&query=Eiscafe+Pierod+Ettlingen"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 返程提示：吃完冰淇淋散步 5 分钟就能回到早上抵达的车站，随时可以走。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚋 KVV S1 或 S11 线</span>' +
+                  '<span class="transit-time">傍晚任意时间</span>' +
+                  '<span class="transit-dest">前往: 卡尔斯鲁厄市区</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>返程同样直接使用手机里的 D-Ticket 或购买对应车票。轻松返回卡鲁，结束充实的一天！</div>' +
+                  '<button class="kvv-btn" onclick="copyAndGo(event, \'Karlsruhe Hauptbahnhof\', \'https://www.kvv.de/liniennetz/fahrplanauskunft.html\')">🚋 查返程班次 (自动复制终点)</button>' +
+                  '</div></div>'
+        }
+    };
+
+    function generateAccordion(title, timeBadge, imgUrl, desc, notice, mapLink) {
+        var buttonsHtml = '<div class="btn-group">';
+        if(mapLink) {
+            buttonsHtml += '<a href="' + mapLink + '" class="map-btn" target="_blank">📍 Google Maps 导航</a>';
+        }
+        buttonsHtml += '</div>';
+
+        return '<div class="accordion-item" onclick="toggleAccordion(this)">' +
+               '<div class="accordion-header">' +
+               '<div class="header-title-box"><span>' + title + '</span><span class="step-time-badge">⏱️ ' + timeBadge + '</span></div>' +
+               '</div>' +
+               '<div class="accordion-content">' +
+               '<img src="' + imgUrl + '" alt="实景风光" onerror="this.style.display=\'none\'">' +
+               '<p class="spot-desc">' + desc + '</p>' +
+               '<div class="notice"><b>⚠️ 避坑与注意事项：</b><br>' + notice + '</div>' +
+               buttonsHtml +
+               '</div></div>';
     }
 
-    window.toggleAccordion = function(element) {
+    function toggleAccordion(element) {
         element.classList.toggle('active');
     }
 
-    window.switchTab = function(tabIndex) {
-        document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
-            if(idx === tabIndex - 1) btn.classList.add('active');
-            else btn.classList.remove('active');
-        });
-        document.querySelectorAll('.tab-content').forEach((content, idx) => {
-            if(idx === tabIndex - 1) content.classList.add('active');
-            else content.classList.remove('active');
-        });
+    function copyAndGo(event, dest, url) {
+        event.preventDefault();
+        var btn = event.currentTarget;
+        var originalText = btn.innerHTML;
+        
+        try {
+            var tempInput = document.createElement("input");
+            tempInput.value = dest;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+        } catch(e) { console.log('Copy fallback failed'); }
+
+        btn.innerHTML = '✅ 已复制: ' + dest;
+        showToast('💡 已将终点站【' + dest + '】复制到剪贴板！<br>请在跳转后的网页中直接粘贴查询班次。');
+        
+        setTimeout(function(){
+            window.open(url, '_blank');
+            btn.innerHTML = originalText;
+        }, 1800);
     }
 
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalHeader = document.getElementById('modalHeader');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalBody = document.getElementById('modalBody');
+    function showToast(message) {
+        var toast = document.getElementById("toast");
+        toast.innerHTML = message;
+        toast.classList.add("show");
+        setTimeout(function(){ toast.classList.remove("show"); }, 4000);
+    }
 
-    window.openModal = function(spotKey) {
-        const data = guideData[spotKey];
+    function switchQTab(tabIndex, category) {
+        var container = document.getElementById('q-content-container');
+        var btns = container.querySelectorAll('.q-sub-btn');
+        var contents = container.querySelectorAll('.q-sub-content');
+        for (var i = 0; i < btns.length; i++) {
+            if (i === tabIndex) {
+                btns[i].classList.add('active');
+                contents[i].classList.add('active');
+            } else {
+                btns[i].classList.remove('active');
+                contents[i].classList.remove('active');
+            }
+        }
+    }
+
+    var modalOverlay = document.getElementById('modalOverlay');
+    var modalHeader = document.getElementById('modalHeader');
+    var modalTitle = document.getElementById('modalTitle');
+    var modalBody = document.getElementById('modalBody');
+
+    function openModal(spotKey) {
+        var data = guideData[spotKey];
         if(!data) return;
-
         modalTitle.innerText = data.title;
-        // 修复了此处的转义符号，去掉了 \
-        modalHeader.style.backgroundImage = `url('${data.img}')`;
+        modalHeader.style.backgroundImage = "url('" + data.img + "')";
+        modalHeader.style.display = "block";
         modalBody.innerHTML = data.html;
-
+        
         modalOverlay.style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
 
-    window.closeModal = function(e) {
+    function openQModal(key) {
+        var data = qData[key];
+        if(!data) return;
+        modalTitle.innerText = data.title;
+        modalHeader.style.display = "none";
+        
+        var html = '<div id="q-content-container"><div class="q-sub-tabs">';
+        for (var i = 0; i < data.tabs.length; i++) {
+            var activeClass = i === 0 ? 'active' : '';
+            html += '<button class="q-sub-btn ' + activeClass + '" onclick="switchQTab(' + i + ', \'' + key + '\')">' + data.tabs[i] + '</button>';
+        }
+        html += '</div>';
+        
+        for (var j = 0; j < data.contents.length; j++) {
+            var contentClass = j === 0 ? 'active' : '';
+            html += '<div class="q-sub-content ' + contentClass + '"><p style="line-height:1.8;">' + data.contents[j] + '</p></div>';
+        }
+        html += '</div>';
+
+        modalBody.innerHTML = html;
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
         if (e.target === modalOverlay || e.target.classList.contains('close-btn')) {
             modalOverlay.style.display = 'none';
             document.body.style.overflow = 'auto';
             modalBody.innerHTML = ''; 
         }
+    }
+
+    /* AI 自动生成器相关脚本 */
+    function openAIGenerator() {
+        document.getElementById('aiModalOverlay').style.display = 'flex';
+    }
+
+    function closeAIModal(e) {
+        if(e.target.id === 'aiModalOverlay' || e.target.className === 'close-btn') {
+            document.getElementById('aiModalOverlay').style.display = 'none';
+        }
+    }
+
+    function executeAIGen() {
+        var city = document.getElementById('ai-city').value;
+        var days = document.getElementById('ai-days').value;
+        if(!city || !days) {
+            alert('请先输入城市和天数！');
+            return;
+        }
+
+        var prompt = `我需要你作为资深旅游规划师兼前端开发专家。请参考我上传的 HTML 模板文件，为我生成一份【${city}】的【${days}】日游交互式网页攻略。
+核心要求：
+1. 路线规划必须最合适、最便捷、省事且绝对不绕路。明确规划好这 ${days} 天每天固定的核心游览路线和具体景点。
+2. 交通方式必须精准穿插在时间轴的每个 Step 之间，标注耗时并给出最优交通建议。
+3. 完全保留模板的 UI 样式、皇室金线时间轴、交通节点卡片、Q版互动图标（替换为${city}特色）及一键复制导航功能。
+4. 所有景点的介绍和注意事项均需 100 字以上，并带 Google Maps 跳转和官方查票链接。
+5. 所有配图必须使用 Wikimedia 稳定的高清实景原图。
+请直接输出完整的 HTML 代码。`;
+
+        var tempInput = document.createElement("textarea");
+        tempInput.value = prompt;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+
+        var htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        var blob = new Blob([htmlContent], {type: "text/html;charset=utf-8"});
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "template_guide.html";
+        a.click();
+
+        showToast('✅ 指令已复制！模板已下载！<br>正在跳转至 Gemini...');
+        setTimeout(function() {
+            window.open('https://gemini.google.com/', '_blank');
+        }, 2000);
     }
 </script>
 
