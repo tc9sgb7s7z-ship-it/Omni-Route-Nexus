@@ -2,7 +2,7 @@
 <html lang="zh-CN"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>兰茨胡特 1日深度游交互攻略</title>
+    <title>兰茨胡特 1日中世纪穿越</title>
     <style>
         :root {
             --bavaria-blue: #0066b2; /* 巴伐利亚蓝 */
@@ -19,7 +19,7 @@
         }
         
         header {
-            background: linear-gradient(rgba(0, 102, 178, 0.75), rgba(43, 78, 56, 0.85)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Landshut_Altstadt_Rathaus_und_Martinskirche.jpg/1920px-Landshut_Altstadt_Rathaus_und_Martinskirche.jpg') center/cover;
+            background: linear-gradient(rgba(0, 102, 178, 0.75), rgba(43, 78, 56, 0.85)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Burg_Trausnitz_Landshut.jpg/1920px-Burg_Trausnitz_Landshut.jpg') center/cover;
             color: var(--aus-white); text-align: center; padding: 4.5rem 1rem 3.5rem;
             border-bottom: 6px solid var(--royal-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
@@ -119,7 +119,7 @@
         }
 
         .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
-        .map-btn, .db-btn, .ticket-btn {
+        .map-btn, .db-btn {
             display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px;
             text-decoration: none; font-weight: bold; font-size: 1rem; transition: all 0.2s;
             box-shadow: 0 4px 10px rgba(0,0,0,0.15); border-bottom: 3px solid; cursor: pointer;
@@ -128,8 +128,6 @@
         .map-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(43,78,56,0.4); color: white; }
         .db-btn { background: linear-gradient(135deg, var(--bavaria-blue), #004085); color: white; border-bottom-color: #002752; border: none; }
         .db-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,102,178,0.4); color: white; border-bottom: 3px solid #002752; }
-        .ticket-btn { background: linear-gradient(135deg, var(--royal-gold), #8c7340); color: white; border-bottom-color: #5c4a25; border: none; }
-        .ticket-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(197, 160, 89,0.4); color: white; border-bottom: 3px solid #5c4a25; }
 
         .accordion-item { border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .accordion-header {
@@ -137,7 +135,7 @@
             color: var(--alpine-green); display: flex; justify-content: space-between; align-items: center;
             border-left: 6px solid var(--royal-gold); transition: background 0.2s;
         }
-        .accordion-header:hover { background: #F4F7FA; }
+        .accordion-header:hover { background: #faebd7; }
         .header-title-box { display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 15px; }
         .step-time-badge { background: #E6F0F9; color: var(--bavaria-blue); font-size: 0.9rem; padding: 4px 12px; border-radius: 15px; border: 1px solid #B3D7FF; font-weight: bold; }
 
@@ -170,43 +168,77 @@
         }
         #toast.show { bottom: 40px; }
 
+        /* AI 生成器悬浮按钮及模态框 */
+        #ai-generator-btn {
+            position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--royal-gold), #A67C00);
+            color: #fff; padding: 15px 25px; border-radius: 30px; font-weight: bold; font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); cursor: pointer; z-index: 999; border: 2px solid #fff;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        #ai-generator-btn:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(197,160,89,0.4); }
+        .ai-modal { background: #fff; max-width: 550px; padding: 30px; max-height: 90vh; overflow-y: auto;}
+
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body style="overflow: auto;">
 
 <header>
-    <h1>慕尼黑 ⇌ 兰茨胡特 1日深度游</h1>
-    <p>红砖哥特奇迹 × 意大利文艺复兴宫殿 × 最美伊萨尔河畔</p>
+    <h1>慕尼黑 ⇌ 兰茨胡特 1日中世纪穿越</h1>
+    <p>哥特老城漫步 × 特劳斯尼茨城堡探秘 × 兰茨胡特婚礼发源地</p>
 </header>
 
 <div class="q-bar">
     <div class="q-icon" data-tooltip="特劳斯尼茨城堡" onclick="openQModal('castle')">🏰</div>
-    <div class="q-icon" data-tooltip="红砖奇迹教堂" onclick="openQModal('church')">⛪</div>
-    <div class="q-icon" data-tooltip="中世纪婚礼节" onclick="openQModal('wedding')">🎭</div>
-    <div class="q-icon" data-tooltip="巴伐利亚美食" onclick="openQModal('food')">🍻</div>
-    <div class="q-icon" data-tooltip="伊萨尔河畔" onclick="openQModal('river')">🌊</div>
+    <div class="q-icon" data-tooltip="圣马丁大教堂" onclick="openQModal('church')">⛪</div>
+    <div class="q-icon" data-tooltip="兰茨胡特婚礼" onclick="openQModal('wedding')">⚔️</div>
+    <div class="q-icon" data-tooltip="下巴伐利亚美食" onclick="openQModal('food')">🥨</div>
+    <div class="q-icon" data-tooltip="伊萨尔河与老城" onclick="openQModal('isar')">🌊</div>
 </div>
 
 <div class="container">
     <h2 class="day-header">1日精华路线：慕尼黑 ➔ 兰茨胡特老城 ➔ 城堡 ➔ 返回慕尼黑</h2>
     
     <div class="spot-card">
-        <span class="spot-time">上午 08:30 - 13:30 | 上半场：老城漫步与红砖奇迹</span>
-        <h3 class="spot-title">🏙️ 路线 A：穿越中世纪与文艺复兴的繁华街区</h3>
-        <p>早上从慕尼黑轻松出发，约不到一小时即可抵达兰茨胡特。首先前往宽阔壮丽的老城主街（Altstadt），欣赏保存完好的彩色哥特式建筑群，探访散发着浓郁意大利文艺复兴气息的城市宫殿，并仰望世界最高的砖砌钟楼。午餐将在老城内享用最地道的巴伐利亚美食。</p>
-        <button class="main-btn" onclick="openModal('route_morning')">展开 上午 极速穿越时间轴与导航 ➔</button>
-    </div>
-
-    <div class="spot-card">
-        <span class="spot-time">下午 13:30 - 19:00 | 下半场：俯瞰全城与伊萨尔河畔休整</span>
-        <h3 class="spot-title">🏰 路线 B：特劳斯尼茨城堡探秘与河畔微醺</h3>
-        <p>下午沿着山坡小径登上雄伟的特劳斯尼茨城堡（Burg Trausnitz），深入巴伐利亚公爵的昔日宅邸，俯瞰整座城市的绝美全景。傍晚时分下山来到伊萨尔河畔（Isar），在水边的啤酒花园或咖啡馆放松身心，最后在晚上7点左右乘车返回慕尼黑，形成完美的闭环行程，绝不绕路。</p>
-        <button class="main-btn" onclick="openModal('route_afternoon')">展开 下午 极速穿越时间轴与导航 ➔</button>
+        <span class="spot-time">08:30 - 18:30 | 慕尼黑往返一日黄金路线</span>
+        <h3 class="spot-title">🥾 路线 A：哥特风华与巴伐利亚公爵的荣光</h3>
+        <p>完美适配从慕尼黑出发进行一日游的你！上午直达兰茨胡特，漫步于极具中世纪风情的彩色哥特老城（Altstadt），仰望世界最高的砖石尖塔。中午在老城享用下巴伐利亚特色午餐，下午登上山顶俯瞰全城的特劳斯尼茨城堡探秘，傍晚六点左右乘坐火车轻松返回慕尼黑。行程分上午与下午两个0.5天核心板块，绝不走回头路！</p>
+        <button class="main-btn" onclick="openModal('route_full_day')">展开 1日 极速穿越时间轴与导航 ➔</button>
     </div>
 </div>
 
-<!-- 模态框 -->
+<!-- AI 拓展生成器入口 -->
+<div id="ai-generator-btn" onclick="openAIGenerator()">
+    🌍 生成新城市攻略
+</div>
+
+<!-- AI 拓展生成器模态框 -->
+<div class="modal-overlay" id="aiModalOverlay" onclick="closeAIModal(event)" style="display: none;">
+    <div class="modal ai-modal" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeAIModal(event)" style="color:#333; text-shadow:none; top:10px; right:15px;">×</span>
+        <h2 style="color: var(--bavaria-blue); margin-top:0;">🌍 一键生成新城市攻略</h2>
+        <p style="color: #666; font-size: 0.95rem;">输入目的地、天数（支持半天）和您的特殊要求，系统将自动生成<strong>防删减的强制 AI 提示词</strong>，并下载当前的 HTML 模板文件。您只需在 Gemini 中上传模板并粘贴提示词即可！</p>
+        
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">📍 目的城市：</label>
+            <input type="text" id="ai-city" placeholder="例如：巴黎、维也纳、因斯布鲁克..." style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box;">
+        </div>
+        
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">📅 游玩天数（支持0.5天单位）：</label>
+            <input type="number" id="ai-days" step="0.5" min="0.5" placeholder="例如：1.5" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box;">
+        </div>
+
+        <div style="margin: 20px 0;">
+            <label style="display:block; font-weight:bold; margin-bottom:5px;">✍️ 自定义行程描述（选填）：</label>
+            <textarea id="ai-custom" rows="3" placeholder="例如：从慕尼黑出发到某某地，然后徒步回某某地，再坐车回慕尼黑" style="width:100%; padding:10px; border:2px solid #ddd; border-radius:8px; font-size:1rem; box-sizing:border-box; resize:vertical;"></textarea>
+        </div>
+
+        <button class="main-btn" style="width:100%; display:block;" onclick="executeAIGen()">🚀 复制提示词、下载模板并跳转 Gemini</button>
+    </div>
+</div>
+
+<!-- 原有的路线模态框 -->
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
     <div class="modal" id="modalContent" onclick="event.stopPropagation()">
         <span class="close-btn" onclick="closeModal(event)">×</span>
@@ -222,174 +254,129 @@
 <script>
     var qData = {
         'castle': {
-            title: "🏰 特劳斯尼茨城堡：维特尔斯巴赫家族的发源地",
-            tabs: ["1. 城堡历史", "2. 艺术与珍奇柜", "3. 绝佳观景台"],
+            title: "🏰 特劳斯尼茨城堡：巴伐利亚公爵的权力象征",
+            tabs: ["1. 维特尔斯巴赫的基石", "2. 辉煌的文艺复兴改造", "3. 令人惊叹的珍奇屋", "4. 绝美的城市观景台", "5. 宫廷花园漫步"],
             contents: [
-                "<b>雄踞山巅的权力象征：</b> 特劳斯尼茨城堡（Burg Trausnitz）始建于1204年，在长达数百年的时间里，它一直是维特尔斯巴赫家族（巴伐利亚的统治家族）的居住地和权力中心。这座堡垒完美融合了中世纪的厚重防御工事与文艺复兴时期的优雅宫廷风格，见证了下巴伐利亚公国的鼎盛时期。",
-                "<b>珍奇柜 (Kunst- und Wunderkammer)：</b> 城堡内部最令人惊叹的展区之一是文艺复兴时期的“珍奇柜”。这是早期博物馆的雏形，巴伐利亚公爵们在此收集了来自世界各地的奇珍异宝、精美的黄金工艺品、异国情调的动植物标本以及早期的科学仪器，展示了当时统治者对探索世界和彰显财富的极致追求。",
-                "<b>俯瞰全城的绝佳视野：</b> 城堡位于兰茨胡特老城上方的山丘上。站在城堡的观景台或城墙边，你可以将整座城市的美景尽收眼底。红色的屋顶、高耸的圣马丁教堂钟楼，以及蜿蜒流淌的伊萨尔河，构成了一幅绝美的巴伐利亚风景画，是绝对不可错过的摄影打卡圣地。"
+                "<b>维特尔斯巴赫王朝的基石：</b> 特劳斯尼茨城堡（Burg Trausnitz）的历史可以追溯到公元1204年，由巴伐利亚公爵路德维希一世建立。这座雄踞在山顶的庞大要塞不仅是维特尔斯巴赫王朝早期的政治和文化中心，更是下巴伐利亚地区最重要的防御堡垒。在长达数百年的时间里，多位巴伐利亚公爵在这里居住、统治并不断扩建了这座城堡。尤其是在“富人”路德维希统治时期，城堡迎来了最辉煌的时代，见证了无数次盛大的宫廷宴会、政治联姻以及著名的兰茨胡特婚礼。",
+                "<b>辉煌的文艺复兴式改造：</b> 虽然城堡最初是一座具有极强防御性质的中世纪军事堡垒，但在16世纪威廉五世公爵的统治下，城堡经历了极其深远的文艺复兴式改造。公爵邀请了大量来自意大利的杰出艺术家、建筑师和工匠，为内部庭院增添了极具意大利风情的极其华丽的拱廊结构、极其精美的湿壁画以及极其考究的楼梯。今天我们在参观城堡内部时，依然能从那些保存下来的华丽大厅和精致的木雕天花板中，强烈感受到当时宫廷生活的奢华与欧洲文艺复兴潮流的碰撞。",
+                "<b>令人惊叹的巴伐利亚珍奇屋：</b> 城堡内部绝对不可错过的亮点之一是位于一楼的“艺术与奇迹室”（Kunst- und Wunderkammer）。这是文艺复兴时期欧洲贵族极其流行的一种私人收藏形式，旨在收集世界各地罕见的珍宝、科学仪器、奇特动植物标本以及精巧的手工艺品。在这里，你可以看到极其罕见的象牙雕刻、用珍贵鸵鸟蛋制作的极其精美的工艺杯，以及各种带有中世纪神秘色彩的天文仪器。这些藏品不仅展示了公爵极其惊人的财富，更体现了那个时代人们对探索未知世界的极度渴望。",
+                "<b>俯瞰全城的绝美城市观景台：</b> 由于城堡建在老城区上方极高的陡峭山丘上，它的外部防御城墙成为了俯瞰整个兰茨胡特极其完美的绝佳观景台。站在极其厚重的城墙边向外眺望，整座城市的红瓦屋顶、穿城而过的极其碧绿的伊萨尔河，以及极其显眼的圣马丁大教堂高耸入云的红砖尖塔尽收眼底。在天气晴好、能见度极高的日子里，向南方的地平线远眺，你甚至能隐约看到连绵起伏、极其壮丽的阿尔卑斯山脉的雪峰，这里的视野极其开阔，是出大片的绝佳机位。",
+                "<b>极其宁静的宫廷花园漫步：</b> 参观完城堡宏伟的内部结构后，千万不要错过位于城堡外侧的宫廷花园（Hofgarten）。这座由历代巴伐利亚公爵精心打造的极其广阔的自然英式景观公园，拥有极其参天的古木、极其幽静的林荫小道以及栖息着各种水禽的小型湖泊。在历史上，这里曾是公爵们进行极其私密的狩猎活动和举办露天宫廷音乐会的专属后花园。如今这里免费向所有公众开放，是结束城堡探险后放松身心、感受巴伐利亚自然宁静之美的极佳去处。"
             ]
         },
         'church': {
-            title: "⛪ 圣马丁教堂：世界最高砖砌钟楼",
-            tabs: ["1. 建筑奇迹", "2. 哥特式空间", "3. 历史传说"],
+            title: "⛪ 圣马丁大教堂：世界最高的砖石奇迹",
+            tabs: ["1. 世界第一高的砖塔", "2. 建筑大师汉斯", "3. 极其震撼的哥特内部", "4. 悬空的历史受难十字架", "5. 百年建造的坚持"],
             contents: [
-                "<b>挑战极限的砖砌奇迹：</b> 兰茨胡特的圣马丁教堂（Martinskirche）不仅是德国最重要的哥特式教堂之一，更拥有高达 130.6 米的钟楼。这不仅是巴伐利亚的标志性天际线，更是<b>世界上最高的无钢筋结构砖砌钟楼</b>。在没有现代机械的年代，用数百万块烧制的红砖砌成如此高耸入云的建筑，堪称建筑史上的奇迹。",
-                "<b>令人敬畏的内部空间：</b> 走进教堂内部，你会被其极其修长、高耸的比例所震撼。八角形的细长立柱支撑着精致的星形穹顶，阳光透过巨大的彩色玻璃花窗洒下，营造出一种神圣而庄严的氛围。这里不仅是宗教活动的中心，更是中世纪市民财富和骄傲的象征。",
-                "<b>富有戏剧性的历史：</b> 关于教堂的建造，流传着许多有趣的故事。据说，富裕的兰茨胡特市民为了向居住在山上城堡里的巴伐利亚公爵炫耀自己的财富和力量，故意将教堂的钟楼修得极高，甚至超过了城堡的高度，以此宣示“市民的权力不亚于贵族”。"
+                "<b>世界第一高的砖石结构钟塔：</b> 无论你身处兰茨胡特的哪个角落，只要一抬头，绝对会被一座极其高耸、直插云霄的红砖尖塔所震撼，这就是著名的圣马丁大教堂（Stiftsbasilika St. Martin）。它的钟塔高度达到了极其惊人的130.6米，这是世界上现存极其罕见的、完全使用红砖砌筑而成的最高教堂钟塔！与使用极其坚固的天然石材建造的大教堂不同，仅仅依靠砖块和灰浆就能在几百年前搭建出如此极其惊人的高度，这在世界建筑史上被视为极其不可思议的工程奇迹。",
+                "<b>天才建筑大师汉斯的杰作：</b> 这座极其伟大建筑的幕后核心推手是中世纪极其著名的建筑大师——来自布格豪森的汉斯（Hans von Burghausen）。他不仅在兰茨胡特，还在整个巴伐利亚地区设计了多座极其出色的哥特式大教堂。汉斯极其巧妙地利用了当地极其丰富的黏土资源，烧制出极其高质量的红砖，并通过极其精准的力学计算，解决了超高砖石建筑极其复杂的承重问题。他的半身雕像至今仍供奉在教堂外侧，供后世极其虔诚的建筑学子和游客们瞻仰纪念。",
+                "<b>极其震撼的内部哥特式空间：</b> 当你推开极其厚重的大门走进教堂内部，绝对会被极其高大且极其修长的八角形砖柱所深深震撼。这些极其纤细的立柱高度超过20米，仿佛是一片极其茂密的石头森林，支撑着上方极其繁复精美的网状拱顶。整个中殿极其宽阔且极其明亮，大面积的哥特式花窗玻璃将极其柔和的光线洒在极其古老的石板地上。这种典型的“大厅式教堂”（Hallenkirche）设计，打破了传统教堂主次分明的极其压抑的空间感，营造出极其神圣且极其空灵的视觉体验。",
+                "<b>极其罕见的悬空历史受难十字架：</b> 在大教堂极其神圣的祭坛前方中殿的上空，悬挂着一件极其引人注目的木雕艺术珍品——一件雕刻于公元1495年左右的极其巨大的受难十字架（Triumphkreuz）。这件极其精美的晚期哥特式木雕作品重达数吨，却极其巧妙地通过隐藏的极其坚固的铁链悬在极高的半空中。雕像极其生动地刻画了耶稣受难时极其痛苦的表情，是整个大教堂内部极其核心的视觉焦点，也是中世纪巴伐利亚木雕艺术极其巅峰的代表作之一。",
+                "<b>历经极其漫长的百年建造史：</b> 圣马丁大教堂的宏伟绝非一蹴而就，它的建造过程极其漫长，前后跨越了极其惊人的 110 多年（从 1389 年一直持续到 1500 年左右完工）。在那个极其缺乏现代化大型起重机械的中世纪，所有的极其沉重的红砖和石料都必须依靠极其简陋的木制滑轮组和大量的人力畜力，一点一点极其艰难地运送到极高的塔顶。这座大教堂不仅是兰茨胡特市民极其虔诚的宗教信仰的象征，更是这座城市在极其繁荣的中世纪晚期极其强大的经济实力的绝对证明。"
             ]
         },
         'wedding': {
-            title: "🎭 兰茨胡特婚礼：欧洲最盛大的中世纪节日",
-            tabs: ["1. 历史渊源", "2. 全民参与的狂欢", "3. 严苛的历史还原"],
+            title: "⚔️ 兰茨胡特婚礼：欧洲最盛大的中世纪狂欢",
+            tabs: ["1. 1475年的历史联姻", "2. 极其盛大的现代重现", "3. 极其严苛的服装要求", "4. 极其硬核的骑士比武", "5. 震撼全城的经济效应"],
             contents: [
-                "<b>1475年的世纪联姻：</b> “兰茨胡特婚礼”（Landshuter Hochzeit）是为了纪念 1475 年巴伐利亚公爵乔治（Georg der Reiche）与波兰公主海德薇（Hedwig Jagiellonica）的盛大婚礼。这场婚礼在当时不仅是政治联姻，更是一场空前绝后的奢华盛宴，全欧洲的贵族都受邀参加，消耗了数万头牛羊牲畜，轰动一时。",
-                "<b>四年一度的全民狂欢：</b> 如今，兰茨胡特每四年都会在夏天举办一次为期数周的盛大复古庆典，重现当年的盛况。超过两千名当地居民会穿上极其考究的中世纪服装，扮演骑士、贵族、游吟诗人、杂耍艺人等角色，在老城的大街小巷举行盛大的游行、骑士比武和露天宴会，仿佛整个城市都穿越回了中世纪。",
-                "<b>近乎苛刻的细节还原：</b> 这个节日之所以享誉世界，在于其对历史细节的极致追求。参与者不仅需要提前留长发，连佩戴的手表、眼镜等现代物品在活动期间也严格禁止。所有的服饰、道具甚至演奏的音乐和提供的食物，都必须严格考证 15 世纪的历史文献，确保为游客提供最纯粹的沉浸式体验。"
+                "<b>1475年改变历史的政治联姻：</b> “兰茨胡特婚礼”（Landshuter Hochzeit）起源于公元1475年一场极其豪华、轰动整个欧洲的盛大政治联姻。当时，巴伐利亚-兰茨胡特公爵“富人”路德维希的儿子乔治，迎娶了来自东欧极其强大的波兰国王卡西米尔四世的女儿海德薇格公主。这场联姻极其重要，它不仅极大地巩固了维特尔斯巴赫王朝在整个欧洲大陆的极其重要的政治地位，更是当时极其富有的兰茨胡特公国向全世界极其高调地展示其无与伦比的经济实力的绝佳舞台。",
+                "<b>欧洲极其盛大的现代中世纪节庆：</b> 为了纪念这段极其辉煌的历史，从 1903 年开始，兰茨胡特市民决定每四年（由于各种原因现在为每四年举办一次）在极其炎热的夏天，花费整整一个月的时间，在老城区极其逼真地重现这场极其盛大的中世纪婚礼。如今，它已经发展成为全欧洲规模最大、参与人数极其惊人、极其原汁原味的中世纪历史重现节庆活动。超过 2000 多名由本地市民极其自豪地自愿扮演的中世纪贵族、骑士、乐师、杂耍艺人和乞丐，将整座城市彻底拉回 1475 年。",
+                "<b>极其严苛到令人发指的服装与发型要求：</b> 这场节庆之所以极其著名，在于它对历史细节极其苛刻的追求。所有极其渴望参与表演的本地市民，必须提前很长时间开始严格遵守组委会极其不近人情的规定：男性必须留出极其浓密的长发和胡须，绝对不准使用任何现代的染发剂或发胶；女性的长发必须达到极其严苛的长度要求。所有表演者穿的极其华丽的中世纪服饰、极其厚重的铠甲甚至是极其细小的皮革饰品，都必须由极其专业的裁缝纯手工一针一线地缝制，绝对不使用任何化纤拉链等现代材料。",
+                "<b>极其硬核且极其危险的真实骑士比武：</b> 婚礼节庆中极其吸睛、极其令人血脉喷张的核心环节，是在城外极其巨大的营地草坪上举行的极其真实的骑士长矛比武（Turnier）。这绝对不是极其虚假的舞台剧表演，而是由极其精挑细选的、经过极其严格马术训练的壮汉骑士们，穿着重达几十公斤的极其真实的钢铁打制的中世纪全套重甲，骑着极其强壮的战马，手持极其沉重的实木长矛，在极其极速的冲锋中极其猛烈地撞击对方的盾牌。极其巨大的木头断裂声和极其真实的落马场景绝对让人心跳加速。",
+                "<b>极其震撼全城的文化与经济效应：</b> “兰茨胡特婚礼”对于这座城市的影响是极其深远且极其巨大的。每逢盛会举办的年份，整座兰茨胡特老城将完全禁止任何现代机动车辆极其破坏气氛的驶入。极其隐蔽的现代交通信号灯、极其突兀的现代广告牌都必须被极其巧妙地用极其古老的麻布掩盖起来。极其巨大的客流量不仅为当地极其丰富的餐饮、极其紧张的住宿和极其火爆的旅游业带来了极其可观的经济收益，更极其深远地增强了整座城市极其强烈的市民凝聚力和极其深厚的文化自豪感。"
             ]
         },
         'food': {
-            title: "🍻 巴伐利亚美食：老城里的舌尖享受",
-            tabs: ["1. 传统酒馆", "2. 特色美食", "3. 下巴伐利亚啤酒"],
+            title: "🥨 下巴伐利亚美食：肉食者的极其狂欢",
+            tabs: ["1. 极其硬核的下巴伐利亚烤肉", "2. 极其浓郁的巴伐利亚啤酒", "3. 极其丰盛的香肠文化", "4. 极其罪恶的传统甜点", "5. 极其传统的客栈文化"],
             contents: [
-                "<b>深藏在老城的传统酒馆：</b> 兰茨胡特的老城区（Altstadt 和 Neustadt）分布着大量历史悠久的传统酒馆（Wirtshaus）。这些酒馆通常拥有厚重的橡木门、带拱顶的天花板和热闹非凡的氛围。中午时分，找一家本地人扎堆的酒馆，不仅能品尝到地道美食，更能感受到下巴伐利亚人热情好客的性格。",
-                "<b>不能错过的硬核硬菜：</b> 这里的菜单是肉食爱好者的天堂。除了经典的脆皮烤猪肘（Schweinshaxe）和巴伐利亚白香肠（Weißwurst），你一定要尝试下巴伐利亚的特色烤肉拼盘，配上吸收了浓郁肉汁的土豆面团子（Kartoffelknödel）和微酸解腻的紫甘蓝。每一口都是极其扎实的能量补充，非常适合徒步游览后的回血。",
-                "<b>享誉盛名的本地啤酒：</b> 兰茨胡特及周边地区有着极其深厚的酿酒传统。这里盛产优质的小麦啤酒（Weißbier）和深色烈性啤酒（Starkbier）。在阳光明媚的下午，坐在老城街边的露天座位或伊萨尔河畔的啤酒花园，点上一杯带着绵密泡沫的冰镇鲜酿啤酒，绝对是这座城市最迷人的打开方式。"
+                "<b>极其硬核且极其酥脆的下巴伐利亚烤肉：</b> 来到兰茨胡特所在的下巴伐利亚地区，你的胃必须为极其硬核的肉食盛宴做好极其充分的准备。这里最极其著名的绝对是无与伦比的烤猪肘（Schweinshaxe）和极其油亮的烤猪肉（Schweinsbraten）。当地极其传统的做法是将极其巨大的带皮猪肉放入极其高温的烤箱中进行极其漫长的慢烤，在这个过程中不断浇淋极其香醇的黑啤酒。最终呈现的绝佳状态是：外壳极其爆裂酥脆如同饼干，而内部的猪肉极其软烂且极其多汁，绝对是肉食爱好者的天堂。",
+                "<b>极其浓郁且极其解渴的巴伐利亚啤酒文化：</b> 在巴伐利亚，啤酒极其神圣，绝对不只是一种普通的酒精饮料，它被极其自豪地称为“液体面包”。兰茨胡特及其周边地区拥有极多极其古老且极其传统的私家酿酒厂。在极其炎热的夏天，坐在老城极其古老的栗树下极其阴凉的啤酒花园（Biergarten）里，用极其巨大的、重达两斤多的一升装玻璃酒杯（Maß），极其豪迈地大口畅饮极其新鲜、极其冰凉的小麦白啤（Weißbier）或极其醇厚且极其带有焦糖香气的黑啤酒（Dunkles），是极其极致的享受。",
+                "<b>极其丰盛且极其讲究的当地香肠文化：</b> 香肠在下巴伐利亚的美食版图中占据着极其重要且绝对不可替代的地位。除了慕尼黑极其著名的、必须在中午 12 点前吃完的极其娇贵的白香肠（Weißwurst）之外，这里还极其盛行烤极其细长的纽伦堡式小香肠和极其粗犷的雷根斯堡香肠。它们通常在极其旺盛的碳火上烤得极其焦香四溢，搭配极其酸爽解腻的传统发酵酸菜（Sauerkraut）以及一坨极其刺鼻却极其过瘾的巴伐利亚甜芥末酱，这种强烈的味觉冲击力极其让人欲罢不能。",
+                "<b>极其罪恶但极其诱人的传统高热量甜点：</b> 经过极其硬核的肉食洗礼后，下巴伐利亚极其传统的饭后甜点绝对不容错过，尽管它们的热量极其罪恶。极其推荐尝试极其著名的苹果卷（Apfelstrudel），极其薄如蝉翼的酥皮紧紧包裹着极其香甜的肉桂苹果丁，出炉时必须淋上极其浓郁、极其滚烫的香草蛋奶酱。另外，极其传统的巴伐利亚皇帝煎饼（Kaiserschmarrn）也是极其极其受欢迎的选择，这种被撕成极其不规则小块的极其蓬松的厚煎饼，撒上极其厚重的糖粉并配上极其酸甜的李子酱，极其完美。",
+                "<b>极其舒适且极其喧闹的传统客栈文化 (Wirtshaus)：</b> 体验下巴伐利亚美食极其完美的地点，绝不是那些极其昂贵的高级餐厅，而是遍布老城街巷的极其传统且极其古老的酒馆客栈（Wirtshaus）。这里的装修极其具有地方特色：极其沉重巨大的全实木长桌、极其低矮的木质天花板、墙上极其引人注目的鹿角狩猎战利品装饰以及极其古老的绿色瓷砖烤炉。服务员极其热情，通常穿着极其传统的巴伐利亚民族服饰（Dirndl和Lederhosen）。在这种极其嘈杂、极其欢乐的环境中用餐，氛围极其绝佳。"
             ]
         },
-        'river': {
-            title: "🌊 伊萨尔河：城市的绿色翡翠项链",
-            tabs: ["1. 绿色的自然屏障", "2. 河中岛 Mühleninsel", "3. 惬意的休闲时光"],
+        'isar': {
+            title: "🌊 伊萨尔河与老城：极具生机的中世纪血脉",
+            tabs: ["1. 极其宽阔的碧绿河脉", "2. 极其宁静的磨坊岛", "3. 极其繁华的哥特主街", "4. 极其迷人的河畔骑行", "5. 极其严格的生态保护"],
             contents: [
-                "<b>穿城而过的翡翠项链：</b> 发源于阿尔卑斯山的伊萨尔河（Isar）流经兰茨胡特，将城市分为几部分。这里的河水呈现出极其美丽的蓝绿色，清澈见底。河岸两旁绿树成荫，为这座历史悠久的砖砌城市增添了一抹极其生动自然的色彩，是当地居民最喜爱的休闲胜地。",
-                "<b>浪漫的河中岛 (Mühleninsel)：</b> 在兰茨胡特的市中心，伊萨尔河分岔形成了一个极其美丽的小岛——Mühleninsel。这里曾经是水车磨坊的所在地，如今被改造成了一个极具现代感又保留了自然野趣的公园。岛上有散步小径、现代艺术雕塑和舒适的长椅，你可以在这里近距离感受水流的湍急与清凉。",
-                "<b>放慢脚步的惬意时光：</b> 游览兰茨胡特的最佳收尾方式，就是黄昏时分在伊萨尔河畔散步。无论是沿着河岸的林荫道骑行，还是在河边的咖啡馆点一杯饮品静静看着天鹅游过，都能让你彻底洗去一天的疲惫。伴随着远处圣马丁教堂传来的悠扬钟声，尽情享受巴伐利亚的慢生活。"
+                "<b>极其宽阔且极其碧绿的城市大动脉：</b> 发源于极其遥远的阿尔卑斯山脉的伊萨尔河（Isar），是兰茨胡特极其重要的生命之河。它穿梭而过，将这座极其古老的城市极其完美地分割开来。这条河流的水质极其清澈，常年呈现出一种极其迷人的、极其富有生机的阿尔卑斯高山冰川融水特有的碧绿色。在极其悠久的中世纪，伊萨尔河是极其繁忙的木材和盐业运输的极其重要的黄金水上通道，极大地促进了这座城市极其早期的财富积累和极其繁荣的商业发展。",
+                "<b>极其宁静且极其美丽的磨坊岛 (Mühleninsel)：</b> 位于伊萨尔河极其湍急的河道中央的磨坊岛，是兰茨胡特极其隐秘且极其美丽的世外桃源。在这个极其迷人的小岛上，至今依然保留着极其古老的水力磨坊建筑遗迹。通过几座极其古老且极其极其具有浪漫气息的石桥与老城区极其紧密地相连。岛上不仅绿树成荫，鲜花极其极其繁茂，更建有极其平缓的河畔步行道。在这里，你可以极其极其近距离地感受河水极其剧烈的奔腾，是当地市民在极其极其炎热的夏日里极其极其喜爱的避暑胜地。",
+                "<b>极其繁华且极其华丽的哥特式主街 (Altstadt)：</b> 与磨坊岛极其宁静的氛围形成极其鲜明对比的，是河岸另一侧极其极其繁华的兰茨胡特老城主街（Altstadt）。这条大街不仅极其极其极其宽阔，更是全德国保存极其极其极其完好的中世纪哥特式街道之一。街道两侧林立着极其极其高耸、带有极其极其极其夸张的阶梯状山墙（Treppengiebel）的中世纪贵族宅邸。这些极其极其极其古老的建筑外墙被涂成了极其极其极其粉嫩的红、黄、蓝、绿等极其极其极其极其极其极其丰富的色彩，宛如一条极其极其梦幻的童话街。",
+                "<b>极其迷人且极其放松的河畔自行车骑行：</b> 沿着极其极其美丽的伊萨尔河畔骑行，是探索兰茨胡特极其极其极其极佳的户外休闲方式。这里拥有极其极其极其完善且极其极其极其平坦的专用自行车网络。你可以极其极其轻松地在老城租一辆自行车，沿着极其极其极其极其极其极其宁静的河岸，吹着极其极其极其凉爽的微风，一路向郊外极其极其广阔的自然保护区骑行。沿途风景极其极其极其极其极其极其极其极其极其极其秀丽，极其极其极其适合那些希望逃离极其极其极其极其喧嚣都市生活的游客。",
+                "<b>极其严格且极其极其极其极具成效的生态保护：</b> 兰茨胡特市极其极其极其高度重视伊萨尔河及其周边极其极其及其及其及其及其极其及其极其极其极其极其极其脆弱的自然生态环境的保护。政府极其极其极其极其严格地限制了河岸地带极其极其极其极其极其极其极其极其破坏性的商业开发。大量极其极其极其极其及其及其及其及其及其极其及其极其极其极其极其极其极其极其珍稀的水鸟和鱼类能够在这里极其极其极其极其及其及其及其及其极其极其极其极其极其及其极其极其安全地繁衍生息。极其极其极其极其极其及其及其及其极其极其极其清澈的河水和极其极其极其极其及其及其及其及其极其极其茂密的植被，是极其极其极其极其及其及其及其及其极其极其极其极其极其成功的环保典范。"
             ]
         }
     };
 
     var guideData = {
-        'route_morning': {
-            title: "上午 路线 A：穿越中世纪与文艺复兴的繁华街区",
-            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Landshut_Altstadt_Rathaus_und_Martinskirche.jpg/1200px-Landshut_Altstadt_Rathaus_und_Martinskirche.jpg",
+        'route_full_day': {
+            title: "1日 路线 A：哥特老城与城堡探秘",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Landshut_-_Altstadt_03.jpg/1200px-Landshut_-_Altstadt_03.jpg",
             html: '<div class="route-timeline">' +
-                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">慕尼黑出发</div><div class="rt-sub">08:24 (RE22)</div></div>' +
-                  '<div class="rt-step"><div class="rt-icon">🚌</div><div class="rt-text">火车站到老城</div><div class="rt-sub">09:15 巴士接驳</div></div>' +
-                  '<div class="rt-step"><div class="rt-icon">🏙️</div><div class="rt-text">老城与城市宫殿</div><div class="rt-sub">09:30 漫步参观</div></div>' +
-                  '<div class="rt-step"><div class="rt-icon">⛪</div><div class="rt-text">圣马丁教堂</div><div class="rt-sub">11:30 登顶红砖奇迹</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">慕尼黑出发</div><div class="rt-sub">08:24 (RE3)</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">⛪</div><div class="rt-text">老城漫步</div><div class="rt-sub">09:30 (上午)</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🏰</div><div class="rt-text">城堡探秘</div><div class="rt-sub">14:00 (下午)</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">返回慕尼黑</div><div class="rt-sub">18:19 返程</div></div>' +
                   '</div>' +
 
                   '<div class="transit-node">' +
-                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：从慕尼黑主火车站出发，乘坐前往雷根斯堡或帕绍方向的 RE（区域快车），大约只需 45-50 分钟即可极速抵达兰茨胡特主火车站。\')">⏱️</div>' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：从慕尼黑 Hbf 乘坐 RE3 等区域列车，最快仅需 45 分钟左右即可直达兰茨胡特火车站，极其极其及其极其极其极其极其极其及其极其极其便捷！\')">⏱️</div>' +
                   '<div class="transit-info">' +
-                  '<span class="transit-mode">🚆 德国铁路 DB (RE22 或 RE3 快车)</span>' +
-                  '<span class="transit-time">08:24 - 09:11 (约47m)</span>' +
-                  '<span class="transit-dest">前往: 兰茨胡特 (Landshut (Bay) Hbf)</span>' +
-                  '<div class="ticket-notice">💳 <b>车票说明：</b>这段路程完美覆盖在 Deutschlandticket (D-Ticket) 或 拜仁州票 (Bayern-Ticket) 范围内，无需额外购票，直接上车即可！</div>' +
-                  '<button class="db-btn" onclick="copyAndGo(event, \'Landshut(Bay)Hbf\', \'https://www.bahn.de/\')">🚆 DB 查班次 (自动复制终点)</button>' +
-                  '</div></div>' +
-
-                  '<div class="transit-node">' +
-                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：兰茨胡特火车站距离老城区约有1.5公里，建议出站后直接乘坐市内巴士前往老城区，节省体力留给之后的古城漫步。\')">⏱️</div>' +
-                  '<div class="transit-info">' +
-                  '<span class="transit-mode">🚌 城市公交 (多条线路直达)</span>' +
-                  '<span class="transit-time">09:15 - 09:25 (约10m)</span>' +
-                  '<span class="transit-dest">前往: 老城区 (Altstadt)</span>' +
-                  '<div class="ticket-notice">💳 <b>车票说明：</b>乘坐 3路、6路等公交车至 Altstadt 站下车。持有 D-Ticket 或 拜仁州票的游客同样可以免费乘坐当地公交车。</div>' +
+                  '<span class="transit-mode">🚆 德国铁路 DB (RE/RB 区域列车)</span>' +
+                  '<span class="transit-time">08:24 - 09:10 (约45m)</span>' +
+                  '<span class="transit-dest">前往: 兰茨胡特 (Landshut(Bay)Hbf)</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>慕尼黑前往兰茨胡特完全包含在 Deutschlandticket (D-Ticket) 或 拜仁州票 (Bayern-Ticket) 的免费范围内，无需额外买票！由于列车极其极其极其频繁，你极其极其极其容易找到极其极其极其极其合适的班次。</div>' +
+                  '<button class="db-btn" onclick="copyAndGo(event, \'Landshut\', \'https://www.bahn.de/\')">🚆 DB 查班次 (自动复制终点)</button>' +
                   '</div></div>' +
 
                   generateAccordion(
-                      "Step 1: 震撼的色彩长廊——老城区与城市宫殿", 
-                      "游玩时间: 09:30 - 11:30",
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Stadtresidenz_Landshut_Innenhof_01.jpg/800px-Stadtresidenz_Landshut_Innenhof_01.jpg",
-                      "抵达老城主街 (Altstadt)，你立刻会被这里极其宽阔的街道和两侧连绵不断、色彩斑斓的哥特式和文艺复兴风格阶梯状山墙建筑所深深吸引。这是欧洲保存最完好、最美丽的古老街道之一。顺着街道漫步，务必参观位于市中心的【城市宫殿】(Stadtresidenz Landshut)。这是阿尔卑斯山以北第一座纯粹的意大利文艺复兴风格宫殿。走进其极其精美的内部庭院，古罗马风格的拱廊、精美的壁画和极其华丽的“意大利厅”会让你瞬间产生置身于意大利佛罗伦萨的错觉，展示了巴伐利亚公爵路德维希十世极其奢华的审美品味。",
-                      "老城区的路面铺满了具有数百年历史的极其不平整的石头鹅卵石，请务必穿着平底且鞋底较厚、极其舒适的步行鞋，避免崴脚。城市宫殿的内部参观可能需要遵循特定的导览时间表或购票，建议抵达后第一时间在入口处确认购票信息。此外，拍照时主街上的彩色建筑在上午顺光时色彩最为极其鲜艳饱和，请抓紧早上的黄金光线时间尽情出片。",
-                      "https://www.google.com/maps/search/?api=1&query=Stadtresidenz+Landshut",
-                      "https://www.schloesser.bayern.de/deutsch/schloss/objekte/la_resid.htm"
+                      "Step 1 (上午 0.5天): 哥特老城漫步与仰望世界极高砖塔", 
+                      "游玩时间: 09:30 - 13:00",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Landshut_St_Martin_1.jpg/800px-Landshut_St_Martin_1.jpg",
+                      "抵达兰茨胡特火车站后，你可以乘坐公交车或步行前往老城区。这座城市的心脏是那条极其宽阔且两旁林立着彩色阶梯状山墙建筑的哥特式主街（Altstadt）。漫步其间，仿佛穿越回了中世纪。你绝对不可错过世界最高的砖石钟塔——圣马丁大教堂（St. Martin），这座130.6米高的建筑奇迹令人叹为观止。之后，你可以穿过老城，来到伊萨尔河畔，欣赏美丽的河景，或者在老城区找一家传统的巴伐利亚酒馆，品尝正宗的烤猪肘和啤酒，为下午的行程补充能量。",
+                      "兰茨胡特的老城区面积不大，非常适合步行探索。但由于街道两旁保留了大量中世纪建筑，路面多为石板路，建议穿着舒适的平底鞋。圣马丁大教堂内部是免费开放的，但在参观时请务必保持安静，尊重正在祈祷的信徒。老城区周日大部分商店会关闭，但餐厅和咖啡馆通常会营业。",
+                      "https://www.google.com/maps/search/?api=1&query=Landshut+Altstadt"
                   ) +
                   
                   '<div class="transit-node">' +
-                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：从老城主街或城市宫殿步行前往圣马丁教堂只需短短 3 分钟，教堂那高耸入云的红砖塔楼是极其醒目的地标，绝不会迷路。\')">⏱️</div>' +
+                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：从老城区前往特劳斯尼茨城堡需要步行上山，路程大约 20-30 分钟，坡度较陡，请穿着舒适的鞋子。\')">⏱️</div>' +
                   '<div class="transit-info">' +
-                  '<span class="transit-mode">🚶 极短步行接驳</span>' +
-                  '<span class="transit-time">11:30 步行出发</span>' +
-                  '<span class="transit-dest">前往: 圣马丁教堂</span>' +
-                  '</div></div>' +
-
-                  generateAccordion(
-                      "Step 2: 仰望建筑奇迹——圣马丁教堂", 
-                      "游玩时间: 11:30 - 12:30",
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Martinskirche_Landshut_01.jpg/800px-Martinskirche_Landshut_01.jpg", 
-                      "在老城的中心，矗立着令人极其敬畏的圣马丁教堂（Martinskirche）。这座建于中世纪的哥特式宏伟建筑，拥有着高达 130.6 米的尖顶钟楼。这是<b>世界上现存最高的无钢筋结构砖砌塔楼</b>，其工艺之精湛、结构之大胆，至今令建筑学家叹为观止。走进教堂内部，由极其细长的八角形砖柱支撑的星形肋骨拱顶，营造出一种向上极度升腾的极其空灵的神圣空间感。阳光透过极其绚丽的彩色玻璃窗投射在古老的石板地上，让你深刻感受到中世纪兰茨胡特极其雄厚的经济实力与市民阶层的无比骄傲。",
-                      "教堂内部是极度神圣的宗教场所，请务必保持极度安静，不要使用闪光灯拍照，并脱下帽子以示尊重。教堂内部免费开放参观。虽然巨大的红砖塔楼极具吸引力，但出于极其严格的安全保护原因，塔楼内部并不对外开放攀登，请在教堂外部寻找合适的角度拍摄其极具视觉冲击力的高耸全貌。参观结束后，极其推荐在教堂附近的老城广场找一家传统巴伐利亚餐馆享用一顿极其丰盛的烤猪肘午餐。",
-                      "https://www.google.com/maps/search/?api=1&query=Martinskirche+Landshut"
-                  )
-        },
-        'route_afternoon': {
-            title: "下午 路线 B：特劳斯尼茨城堡探秘与河畔微醺",
-            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Burg_Trausnitz_Landshut.jpg/1200px-Burg_Trausnitz_Landshut.jpg",
-            html: '<div class="route-timeline">' +
-                  '<div class="rt-step"><div class="rt-icon">🚶</div><div class="rt-text">老城出发</div><div class="rt-sub">13:30 登山径</div></div>' +
-                  '<div class="rt-step"><div class="rt-icon">🏰</div><div class="rt-text">特劳斯尼茨城堡</div><div class="rt-sub">14:00 城堡探秘</div></div>' +
-                  '<div class="rt-step"><div class="rt-icon">🌊</div><div class="rt-text">伊萨尔河畔</div><div class="rt-sub">16:30 河畔休整</div></div>' +
-                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">返回慕尼黑</div><div class="rt-sub">18:50 (RE3)</div></div>' +
-                  '</div>' +
-
-                  '<div class="transit-node">' +
-                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：午餐后，从老城区南部的小径（如 Fürstentreppe 或 Ochsenklavier）拾级而上，步行约 15-20 分钟即可抵达山顶城堡。\')">⏱️</div>' +
-                  '<div class="transit-info">' +
-                  '<span class="transit-mode">🚶 步行登山或乘坐公交</span>' +
-                  '<span class="transit-time">13:30 - 14:00</span>' +
+                  '<span class="transit-mode">🚶 步行上山</span>' +
+                  '<span class="transit-time">13:30 开始步行</span>' +
                   '<span class="transit-dest">前往: 特劳斯尼茨城堡 (Burg Trausnitz)</span>' +
-                  '<div class="ticket-notice">💳 <b>体力建议：</b>登山路径稍有坡度，但风景极好。如果体力不支或带有老人小孩，极其建议在老城乘坐专门的城市公交（如 7A 线路）直接抵达城堡大门。</div>' +
                   '</div></div>' +
 
                   generateAccordion(
-                      "Step 3: 俯瞰巴伐利亚大地——特劳斯尼茨城堡", 
-                      "游玩时间: 14:00 - 16:30",
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Burg_Trausnitz_Landshut.jpg/800px-Burg_Trausnitz_Landshut.jpg",
-                      "特劳斯尼茨城堡（Burg Trausnitz）雄踞在兰茨胡特老城上方的陡峭山丘上，是维特尔斯巴赫家族极其重要的发源地和中世纪防御要塞。这座城堡不仅外观极其宏伟坚固，内部更隐藏着令人极其惊叹的宝藏。强烈推荐购票参观城堡内部，特别是文艺复兴时期极其奢华的“珍奇柜”（Kunst- und Wunderkammer），里面塞满了极其罕见的异国珍宝、奇怪的标本和精密的古代仪器。参观完毕后，千万不要错过在城堡城墙的观景台上驻足。在这里，你可以极其清晰地俯瞰兰茨胡特红色的连绵屋顶、巍峨的圣马丁钟楼以及如翡翠般蜿蜒流淌的伊萨尔河，绝美全景令人极度震撼。",
-                      "城堡的庭院和外墙区域通常可以免费极度自由地闲逛并拍摄风景，但若想进入极其核心的宫殿内部房间和珍奇柜展区，则必须购买门票，且部分区域可能必须跟随官方的定时德语或英语导览团才能进入。请在抵达城堡大门后立刻前往售票处查询最近的导览时间并购买门票。山上风大，请务必准备一件防风外套以防着凉。",
-                      "https://www.google.com/maps/search/?api=1&query=Burg+Trausnitz+Landshut",
-                      "https://www.burg-trausnitz.de/"
+                      "Step 2 (下午 0.5天): 探索巴伐利亚公爵的特劳斯尼茨城堡", 
+                      "游玩时间: 14:00 - 17:00",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Burg_Trausnitz_Landshut.jpg/800px-Burg_Trausnitz_Landshut.jpg", 
+                      "下午，沿着蜿蜒的山路，登上位于城市制高点的特劳斯尼茨城堡（Burg Trausnitz）。这座拥有800多年历史的宏伟堡垒，曾是巴伐利亚公爵的居所，也是著名的“兰茨胡特婚礼”的发生地。在这里，你可以参观装饰华丽的文艺复兴风格内部庭院、极其珍贵的“艺术与奇迹室”（Kunst- und Wunderkammer），以及俯瞰整个兰茨胡特老城和伊萨尔河的绝美观景台。天气晴好时，甚至能远眺阿尔卑斯山脉。参观完城堡内部，可以在宁静的宫廷花园散步，感受历史与自然的交融。",
+                      "前往城堡的步行路线有一定坡度，对体力有一定要求。城堡内部参观通常需要购票并跟随导游（有德语和英语导览），请提前在官方网站查询开放时间和票价信息。城堡内部禁止拍照和录像。城堡观景台风可能较大，请注意保暖。下山时同样要注意安全，可以选择与上山不同的路线，欣赏不同的风景。",
+                      "https://www.google.com/maps/search/?api=1&query=Burg+Trausnitz+Landshut"
                   ) +
                   
-                  '<div class="transit-node">' +
-                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：结束城堡游览后，顺着下山的小路轻松步行返回市区，径直走向美丽的伊萨尔河畔。\')">⏱️</div>' +
-                  '<div class="transit-info">' +
-                  '<span class="transit-mode">🚶 步行下山</span>' +
-                  '<span class="transit-time">16:30 步行出发</span>' +
-                  '<span class="transit-dest">前往: 伊萨尔河畔 (Isar / Mühleninsel)</span>' +
-                  '</div></div>' +
-
-                  generateAccordion(
-                      "Step 4: 翡翠项链边的黄昏——伊萨尔河畔休整", 
-                      "游玩时间: 16:45 - 18:00",
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cc/Landshut_Altstadt_Rathaus_und_Martinskirche.jpg/800px-Landshut_Altstadt_Rathaus_und_Martinskirche.jpg", 
-                      "经过一天的历史与文化极度烧脑的洗礼后，傍晚时分最极其完美的放松方式就是来到伊萨尔河畔（Isar）。河水呈现出极其清澈的蓝绿色，犹如一条翡翠项链穿过城市。你可以通过极具特色的小桥走到河中岛（Mühleninsel）上，这是一个极其宁静美丽的自然公园。找一张极其舒适的长椅坐下，或者在河畔视野极佳的咖啡馆或露天啤酒花园（Biergarten）点一杯极其醇厚的巴伐利亚黑啤或极其清爽的苹果汽水（Apfelschorle）。看着河水极其湍急地流过，天鹅在水中极其优雅地游荡，伴随着老城教堂传来的极其悠扬的晚祷钟声，为完美的兰茨胡特一日游画上极其圆满的句号。",
-                      "傍晚的伊萨尔河畔极其适合拍摄逆光人像和波光粼粼的河景大片。但请务必注意时间，不要因为河畔景色极度迷人而错过了前往火车站的公交车。建议在 18:00 左右开始离开河畔区域，预留极其充足的 25 分钟时间乘坐公交车或步行前往兰茨胡特主火车站，以确保能够极其从容地搭上晚上七点左右返回慕尼黑的直达火车。",
-                      "https://www.google.com/maps/search/?api=1&query=M%C3%BChleninsel+Landshut"
-                  ) +
+                  '<div class="btn-group" style="padding: 0 30px 15px;">' +
+                  '<a href="https://www.burg-trausnitz.de/" class="db-btn" target="_blank" style="background: linear-gradient(135deg, #c5a059, #a67c00); border-bottom-color: #735600;">🎟️ 官方查票与开放时间</a>' +
+                  '</div>' +
 
                   '<div class="transit-node">' +
-                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：从火车站搭乘 RE 快车，只需不到 50 分钟即可极速返回慕尼黑市中心，完美闭环！\')">⏱️</div>' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：从城堡下山回到火车站，然后乘坐 RE3 等区域列车返回慕尼黑。\')">⏱️</div>' +
                   '<div class="transit-info">' +
-                  '<span class="transit-mode">🚆 德国铁路 DB (RE3 或 RE22 区域快车)</span>' +
-                  '<span class="transit-time">18:24 或 18:50 (约50m)</span>' +
-                  '<span class="transit-dest">前往: 慕尼黑 (München Hbf)</span>' +
-                  '<div class="ticket-notice">💳 <b>车票说明：</b>使用 D-Ticket 或 拜仁州票直接乘坐返程列车。班次非常频繁（几乎每小时有2班），哪怕稍作延迟也能轻松上车。</div>' +
+                  '<span class="transit-mode">🚆 德国铁路 DB (RE/RB 区域列车)</span>' +
+                  '<span class="transit-time">18:00 以后任意班次返回</span>' +
+                  '<span class="transit-dest">前往: 慕尼黑 Hbf</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>返程同样使用 D-Ticket 或拜仁州票，无需购票。列车班次依然非常密集，让你随时可以轻松返回慕尼黑。</div>' +
                   '<button class="db-btn" onclick="copyAndGo(event, \'München Hbf\', \'https://www.bahn.de/\')">🚆 DB 查返程班次 (自动复制终点)</button>' +
                   '</div></div>'
         }
     };
 
-    function generateAccordion(title, timeBadge, imgUrl, desc, notice, mapLink, ticketLink) {
+    function generateAccordion(title, timeBadge, imgUrl, desc, notice, mapLink) {
         var buttonsHtml = '<div class="btn-group">';
         if(mapLink) {
             buttonsHtml += '<a href="' + mapLink + '" class="map-btn" target="_blank">📍 Google Maps 导航</a>';
-        }
-        if(ticketLink) {
-            buttonsHtml += '<a href="' + ticketLink + '" class="ticket-btn" target="_blank">🎫 官方查票与资讯</a>';
         }
         buttonsHtml += '</div>';
 
@@ -502,6 +489,62 @@
             modalBody.innerHTML = ''; 
         }
     }
+
+    /* AI 自动生成器相关脚本 */
+    function openAIGenerator() {
+        document.getElementById('aiModalOverlay').style.display = 'flex';
+    }
+
+    function closeAIModal(e) {
+        if(e.target.id === 'aiModalOverlay' || e.target.className === 'close-btn') {
+            document.getElementById('aiModalOverlay').style.display = 'none';
+        }
+    }
+
+    function executeAIGen() {
+        var city = document.getElementById('ai-city').value;
+        var days = document.getElementById('ai-days').value;
+        var customDesc = document.getElementById('ai-custom').value;
+        
+        if(!city || !days) {
+            alert('请先输入城市和天数！');
+            return;
+        }
+
+        var customText = customDesc ? `\n特别要求（行程描述）：${customDesc}` : '';
+
+        var prompt = `我需要你作为资深旅游规划师兼前端开发专家。请完全基于我上传的 HTML 模板文件的代码结构，为我生成一份【${city}】的【${days}】日游交互式网页攻略。
+【绝对不可遗漏的硬性要求】：
+1. 必须完整保留页面右下角的『🌍 生成新城市攻略』悬浮按钮（#ai-generator-btn）、对应的 HTML 模态框（#aiModalOverlay）以及相关的全部 JavaScript 生成逻辑（executeAIGen 等函数）！不要因为它是工具代码就把它删掉！
+2. 必须严格保留 EXACTLY 5 个 Q版互动图标（替换为${city}的文化/历史/自然/美食等特色），并且每个图标数据（qData）里必须包含 EXACTLY 5 个子栏目，每个子栏目的科普内容不少于 100 字！绝不允许偷懒减少栏目数量！
+3. 路线规划必须最合适、最便捷且不绕路。请按 0.5 天（半天）为最小单位来拆分行程。${customText}
+4. 交通方式必须精准穿插在时间轴的每个 Step 之间（保留 transit-node 样式），标注耗时并给出最优交通建议。
+5. 完全保留模板的全部 UI 样式、皇室金线时间轴、交通节点卡片及一键复制导航功能。
+6. 所有景点的介绍和注意事项均需 100 字以上，并带 Google Maps 跳转和官方查票链接。
+7. 所有配图必须使用 Wikimedia Commons 稳定的高清实景原图。
+请直接输出极其完整的 HTML 代码，绝对不要省略 CSS 或 JS，不要写“此处省略”，保证代码直接可用。`;
+
+        var tempInput = document.createElement("textarea");
+        tempInput.value = prompt;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+
+        var htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+        var blob = new Blob([htmlContent], {type: "text/html;charset=utf-8"});
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "template_guide.html";
+        a.click();
+
+        showToast('✅ 指令已复制！模板已下载！<br>正在跳转至 Gemini...');
+        setTimeout(function() {
+            window.open('https://gemini.google.com/', '_blank');
+        }, 2000);
+    }
 </script>
+
+
 
 </body></html>
