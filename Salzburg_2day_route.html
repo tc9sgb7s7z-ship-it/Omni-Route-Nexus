@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>慕尼黑 ⇌ 萨尔茨堡·湖区 2日深度定制游</title>
+    <style>
+        :root {
+            --aus-red: #ED2939; 
+            --aus-white: #FFFFFF;
+            --royal-gold: #C5A059; 
+            --forest-green: #2B4E38; 
+            --bg-color: #F9F8F6;
+            --text-color: #2C2C2C;
+        }
+        body {
+            font-family: 'Georgia', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-color); color: var(--text-color);
+            margin: 0; padding: 0; line-height: 1.8;
+        }
+        
+        header {
+            background: linear-gradient(rgba(237, 41, 57, 0.75), rgba(43, 78, 56, 0.85)), url('https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Salzburg_Cityscape_01.jpg/1920px-Salzburg_Cityscape_01.jpg') center/cover;
+            color: var(--aus-white); text-align: center; padding: 4.5rem 1rem 3.5rem;
+            border-bottom: 6px solid var(--royal-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        header h1 { margin: 0; font-size: 2.6rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.6); letter-spacing: 1px; }
+        header p { font-size: 1.2rem; font-weight: bold; margin-top: 15px; color: #FFF3CD; }
+
+        .q-bar {
+            display: flex; justify-content: center; gap: 25px; flex-wrap: wrap;
+            padding: 20px; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .q-icon {
+            font-size: 2.2rem; cursor: pointer; background: var(--bg-color); 
+            border: 2px solid var(--royal-gold); border-radius: 50%; 
+            width: 70px; height: 70px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;
+        }
+        .q-icon:hover { transform: scale(1.15) translateY(-5px); background: #FFF8E1; box-shadow: 0 8px 15px rgba(197, 160, 89, 0.4); }
+        .q-icon::after {
+            content: attr(data-tooltip); position: absolute; bottom: -30px;
+            font-size: 0.85rem; color: var(--aus-red); font-weight: bold; white-space: nowrap;
+            opacity: 0; transition: opacity 0.3s; background: #fff; padding: 3px 10px; border-radius: 20px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .q-icon:hover::after { opacity: 1; }
+
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 20px; }
+        .day-header {
+            background: var(--aus-red); color: white; padding: 12px 25px; border-radius: 8px; 
+            margin: 40px 0 20px; display: inline-block; font-size: 1.6rem;
+            border-left: 8px solid var(--royal-gold); box-shadow: 0 4px 10px rgba(237, 41, 57, 0.3);
+        }
+
+        .route-timeline {
+            display: flex; align-items: flex-start; justify-content: space-between;
+            background: #fff; padding: 25px 20px 15px; border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; position: relative; overflow-x: auto;
+        }
+        .route-timeline::before {
+            content: ''; position: absolute; top: 41px; left: 50px; right: 50px;
+            height: 3px; background: var(--royal-gold); z-index: 1; opacity: 0.5;
+        }
+        .rt-step { position: relative; z-index: 2; text-align: center; flex: 1; display: flex; flex-direction: column; align-items: center; min-width: 80px; }
+        .rt-icon {
+            width: 36px; height: 36px; background: var(--forest-green); color: white; border-radius: 50%;
+            line-height: 36px; font-size: 1.1rem; border: 3px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.2); margin-bottom: 10px;
+        }
+        .rt-text { font-size: 0.95rem; font-weight: bold; color: var(--forest-green); line-height: 1.2; }
+        .rt-sub { font-size: 0.75rem; color: var(--aus-red); margin-top: 6px; background: #FDE8E9; padding: 3px 8px; border-radius: 12px; font-weight: bold; white-space: nowrap;}
+
+        .spot-card {
+            background: #fff; padding: 30px; border-radius: 12px; margin-bottom: 30px;
+            border-top: 6px solid var(--forest-green); box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+        .spot-time { color: var(--aus-red); font-weight: bold; font-size: 1.2rem; border-bottom: 2px solid #eee; padding-bottom: 8px; display: inline-block; margin-bottom: 20px; }
+        .spot-title { margin: 0 0 15px; color: var(--forest-green); font-size: 1.8rem; font-weight: bold; }
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center;
+            z-index: 1000; backdrop-filter: blur(8px);
+        }
+        .modal {
+            background: var(--bg-color); width: 95%; max-width: 950px; max-height: 88vh;
+            border-radius: 16px; overflow-y: auto; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            border: 2px solid var(--royal-gold);
+        }
+        .close-btn { position: absolute; top: 15px; right: 25px; font-size: 40px; color: #fff; cursor: pointer; z-index: 10; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
+        .modal-header { height: 320px; background-size: cover; background-position: center; position: relative; border-radius: 14px 14px 0 0; background-color: #eee; }
+        .modal-header::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 60%; background: linear-gradient(transparent, rgba(0,0,0,0.95)); }
+        .modal-title { position: absolute; bottom: 25px; left: 30px; color: var(--royal-gold); margin: 0; font-size: 2.3rem; z-index: 2; text-shadow: 0 2px 4px #000; }
+        .modal-body { padding: 40px; font-size: 1.1rem; }
+
+        .transit-node {
+            display: flex; align-items: center; margin: 15px 0 25px 25px;
+            border-left: 3px dashed var(--royal-gold); padding-left: 35px; position: relative;
+        }
+        .time-icon {
+            position: absolute; left: -24px; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px; line-height: 44px; text-align: center;
+            background: #fff; border-radius: 50%; font-size: 1.5rem; cursor: pointer;
+            box-shadow: 0 0 0 4px var(--bg-color), 0 2px 8px rgba(0,0,0,0.2);
+            transition: all 0.2s; z-index: 2;
+        }
+        .time-icon:hover { transform: translateY(-50%) scale(1.15); box-shadow: 0 0 0 4px #FFF8E1, 0 4px 12px rgba(197,160,89,0.5); }
+        
+        .transit-info {
+            background: #FFF8E1; border: 1px solid var(--royal-gold); border-radius: 8px; 
+            padding: 15px 20px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05); width: 100%;
+        }
+        .transit-mode { font-weight: bold; color: var(--forest-green); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+        .transit-time { color: var(--aus-red); font-weight: bold; background: #fff; padding: 4px 12px; border-radius: 20px; border: 1px solid #F5C6CB; font-size: 0.95rem; }
+        .transit-dest { color:#2B4E38; font-weight:bold; margin-left:auto; }
+        .ticket-notice {
+            flex-basis: 100%; margin-top: 10px; font-size: 0.95rem; color: #856404; background: #FFF3CD; 
+            padding: 10px 12px; border-radius: 6px; border-left: 5px solid #FFC107; line-height: 1.6;
+        }
+
+        .btn-group { display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; }
+        .map-btn, .svv-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border-radius: 8px;
+            text-decoration: none; font-weight: bold; font-size: 1rem; transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15); border-bottom: 3px solid; cursor: pointer;
+        }
+        .map-btn { background: linear-gradient(135deg, var(--aus-red), #B71C1C); color: white; border-bottom-color: #8E0000; }
+        .map-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(237,41,57,0.4); color: white; }
+        .svv-btn { background: linear-gradient(135deg, var(--royal-gold), #A28243); color: white; border-bottom-color: #7D612B; border: none; }
+        .svv-btn:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(197,160,89,0.4); color: white; border-bottom: 3px solid #7D612B; }
+
+        .accordion-item { border: 1px solid #ddd; border-radius: 10px; margin-bottom: 15px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .accordion-header {
+            background: #fdfbf7; padding: 22px 25px; cursor: pointer; font-weight: bold; font-size: 1.25rem;
+            color: var(--forest-green); display: flex; justify-content: space-between; align-items: center;
+            border-left: 6px solid var(--royal-gold); transition: background 0.2s;
+        }
+        .accordion-header:hover { background: #faebd7; }
+        .header-title-box { display: flex; align-items: center; justify-content: space-between; width: 100%; padding-right: 15px; }
+        .step-time-badge { background: #FDE8E9; color: var(--aus-red); font-size: 0.9rem; padding: 4px 12px; border-radius: 15px; border: 1px solid #F5C6CB; font-weight: bold; }
+
+        .accordion-content { display: none; padding: 30px; border-top: 1px solid #eee; }
+        .accordion-item.active .accordion-content { display: block; animation: fadeIn 0.4s; }
+        .accordion-content img { width: 100%; border-radius: 10px; margin-bottom: 25px; max-height: 450px; object-fit: cover; border: 1px solid #eee; background-color: #eee; }
+        .notice { background: #F8D7DA; color: #721C24; padding: 18px; border-left: 5px solid #F5C6CB; margin-top: 25px; border-radius: 6px; font-size: 1.05rem; line-height: 1.7; }
+        
+        .main-btn {
+            display: inline-block; font-size: 1.05rem; color: #fff; background: linear-gradient(135deg, var(--aus-red), #B71C1C); 
+            padding: 12px 30px; border-radius: 30px; font-weight: bold; box-shadow: 0 4px 10px rgba(237, 41, 57, 0.4); 
+            transition: all 0.2s; cursor: pointer; border: none; margin-top: 15px; border-bottom: 3px solid #8E0000;
+        }
+        .main-btn:hover { background: #C62828; transform: translateY(-2px); }
+
+        .q-sub-tabs { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+        .q-sub-btn { 
+            background: #eee; border: 2px solid transparent; padding: 10px 20px; font-size: 1.05rem; 
+            border-radius: 30px; cursor: pointer; font-weight: bold; color: #333; transition: all 0.2s;
+        }
+        .q-sub-btn.active { background: #FFF8E1; border-color: var(--royal-gold); color: var(--aus-red); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .q-sub-content { display: none; padding: 30px; background: #fff; border-radius: 12px; border: 1px solid #ddd; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .q-sub-content.active { display: block; animation: fadeIn 0.4s; }
+
+        #toast {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: rgba(43, 78, 56, 0.95); color: white; padding: 15px 30px; border-radius: 30px;
+            font-size: 1.05rem; font-weight: bold; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 9999; border: 2px solid var(--royal-gold); text-align: center;
+        }
+        #toast.show { bottom: 40px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>慕尼黑 ⇌ 萨尔茨堡·湖区 2日深度定制游</h1>
+    <p>莫扎特故乡的古典浪漫 × 阿尔卑斯山脉的绝美倒影</p>
+</header>
+
+<div class="q-bar">
+    <div class="q-icon" data-tooltip="莫扎特与音乐" onclick="openQModal('mozart')">🎻</div>
+    <div class="q-icon" data-tooltip="奥地利咖啡馆" onclick="openQModal('coffee')">☕</div>
+    <div class="q-icon" data-tooltip="皇家硬核美食" onclick="openQModal('food')">🥨</div>
+    <div class="q-icon" data-tooltip="阿尔卑斯自然" onclick="openQModal('alps')">🏔️</div>
+    <div class="q-icon" data-tooltip="哈布斯堡王朝" onclick="openQModal('royal')">👑</div>
+</div>
+
+<div class="container">
+    <h2 class="day-header">Day 1：慕尼黑出发 ➔ 萨尔茨堡 ➔ 沙夫山徒步 ➔ 圣沃尔夫冈 ➔ 萨尔茨堡老城</h2>
+    
+    <div class="spot-card">
+        <span class="spot-time">08:00 - 17:00 | 湖区硬核徒步线</span>
+        <h3 class="spot-title">🥾 路线 A：从慕尼黑直捣沙夫山与沃尔夫冈湖</h3>
+        <p>早起出发，抵达萨尔茨堡酒店寄存行李后直奔湖区。每个景点旁边均已附带到达与游玩时间，所有餐馆、活动均配独立地图导航！</p>
+        <button class="main-btn" onclick="openModal('route_day1_lake')">展开 Day 1 湖区时间轴与导航 ➔</button>
+    </div>
+
+    <div class="spot-card">
+        <span class="spot-time">17:30 - 21:30 | 莫扎特老城夜游线</span>
+        <h3 class="spot-title">🏰 路线 B：萨尔茨堡老城与莫扎特街区深度游</h3>
+        <p>傍晚从湖区返回萨尔茨堡。完整覆盖莫扎特出生地、马卡特故居、粮食胡同、高地要塞及百年咖啡馆，全部配备精确定位！</p>
+        <button class="main-btn" onclick="openModal('route_day1_city')">展开 Day 1 萨尔茨堡老城漫游节点 ➔</button>
+    </div>
+
+    <h2 class="day-header">Day 2：萨尔茨堡 ➔ 巴德伊舍 ➔ 哈尔施塔特 ➔ 戈绍观景 ➔ 返回慕尼黑</h2>
+    
+    <div class="spot-card">
+        <span class="spot-time">🌟 深度体验 | Day 2 主题攻略</span>
+        <h3 class="spot-title">湖区五大极致游玩重点</h3>
+        <p>第二天行程极其紧凑，为了让你精准打卡，这里为你梳理了 5 个维度的游玩重点。请在出发前点击查看：</p>
+        <button class="main-btn" onclick="openQModal('day2_focus')" style="background: linear-gradient(135deg, var(--forest-green), #143020); border-bottom-color: #0b1c11;">查看 5 大极致游玩重点攻略 ➔</button>
+    </div>
+
+    <div class="spot-card">
+        <span class="spot-time">08:15 - 17:00 | 极限压缩时间表</span>
+        <h3 class="spot-title">📸 路线 C：皇家小镇、明信片风光与冰川倒影</h3>
+        <p>下午必须返回慕尼黑！排出了精确到分钟的换乘时间表，快闪打卡巴德伊舍、哈尔施塔特、戈绍湖，配有各换乘站一键复制跳转！</p>
+        <button class="main-btn" onclick="openModal('route_day2')">展开 Day 2 极限环线与查票跳转 ➔</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal" id="modalContent" onclick="event.stopPropagation()">
+        <span class="close-btn" onclick="closeModal(event)">&times;</span>
+        <div class="modal-header" id="modalHeader">
+            <h2 class="modal-title" id="modalTitle">标题</h2>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+    var qData = {
+        'mozart': {
+            title: "音乐之都：莫扎特与萨尔茨堡",
+            tabs: ["1. 莫扎特早年生活", "2. 萨尔茨堡音乐节", "3. 《音乐之声》取景", "4. 街头古典乐文化", "5. 莫扎特晚宴音乐会"],
+            contents: [
+                "<b>沃尔夫冈·阿玛迪乌斯·莫扎特的早年生活：</b> 1756年，这位人类历史上最伟大的音乐天才诞生在萨尔茨堡粮食胡同9号的一栋亮黄色公寓里。在这里，年仅4岁的莫扎特就开始在父亲的指导下学习大键琴，并在5岁时创作了他人生的第一首乐曲。萨尔茨堡不仅是他生命的起点，更是他早期灵感的源泉。他在这里担任宫廷管风琴师，并在大教堂接受了洗礼。如今，他的出生地和后来居住的“马卡特广场故居”都已成为全世界古典乐迷的朝圣地。走在萨尔茨堡的石板路上，你几乎能感受到空气中飘荡的音符。",
+                "<b>享誉全球的萨尔茨堡音乐节 (Salzburger Festspiele)：</b> 创立于1920年的萨尔茨堡音乐节是全球水准最高、规模最大的古典音乐与戏剧艺术节。每年夏天（7月至8月），这座人口不到15万的小城会涌入数十万来自世界各地的社会名流、皇室成员和顶级音乐家。整个城市化身为一个巨大的舞台，从主教广场的露天戏剧《每一个人》(Jedermann)，到音乐节大厅里由维也纳爱乐乐团演奏的顶级交响乐，一票难求。这不仅是一场音乐盛宴，更是欧洲上流社会最重要的社交场合之一。",
+                "<b>《音乐之声》的真实印记：</b> 虽然奥地利本地人其实很少看《音乐之声》，但这部横扫奥斯卡的好莱坞经典电影已经成为萨尔茨堡不可分割的文化名片。电影中玛丽亚和孩子们欢唱“Do-Re-Mi”的阶梯就在米拉贝尔宫的巴洛克花园中；特拉普上校的住宅外景则是利奥波德斯克龙宫。由于电影在全球的巨大影响力，每天都有成百上千的游客报名参加相关巡游。这些场景不仅展现了萨尔茨堡的建筑之美，更将阿尔卑斯的湖光山色推向了世界。",
+                "<b>浸透在骨子里的街头古典乐文化：</b> 在萨尔茨堡，古典音乐绝对不是高高在上的殿堂专属，而是流淌在普通人生活中的日常。当你漫步在老城区的主教广场或粮食胡同，随时都能遇到水平极高、甚至毕业于顶级音乐学院的街头艺人。他们可能拉着小提琴演奏维瓦尔第的《四季》，或者用手风琴弹奏施特劳斯的圆舞曲。这里的街头表演需要经过严格的市政厅考核与持证上岗，确保了极高的艺术水准。在这个城市，给优秀的街头音乐家投下一枚两欧元的硬币，是对艺术最直接的尊重。",
+                "<b>极致的感官盛宴：莫扎特晚宴音乐会：</b> 如果你想体验18世纪的贵族生活，圣彼得酒窖餐厅的莫扎特晚宴音乐会是绝对不可错过的项目。在这个拥有1200年历史的欧洲最古老餐厅的巴洛克大厅里，音乐家们会穿戴着极其考究的18世纪复古宫廷服饰和假发，在摇曳的烛光中为你现场演绎《魔笛》、《费加罗的婚礼》等经典歌剧选段。伴随着音乐的，是严格按照历史食谱烹制的三道式传统奥地利晚宴。这不仅是一顿饭，更是一场跨越时空的深度文化沉浸体验。"
+            ]
+        },
+        'coffee': {
+            title: "舌尖上的奥地利：咖啡馆与甜品",
+            tabs: ["1. Tomaselli百年风华", "2. 纯手工莫扎特球", "3. 萨尔茨堡舒芙蕾", "4. 皇家坚果卷", "5. 维也纳米朗琪咖啡"],
+            contents: [
+                "<b>Tomaselli 咖啡馆的百年风华：</b> 创立于1700年的 Café Tomaselli 是奥地利现存最古老的咖啡馆。这里的每一把椅子、每一盏吊灯都散发着浓厚的中欧帝国气息。这里最独特的是其保留了几百年的“甜品女士”（Kuchendame）制度：服务员只负责点饮品和结账，而各种极其诱人的蛋糕则是由一位穿着传统制服的女士端着巨大的托盘在桌间巡回售卖。你必须准备好现金，直接向这位女士购买你心仪的甜点，这种复古的仪式感是体验奥地利旧时代慢生活的最佳方式。",
+                "<b>只有这里才有：纯手工银蓝色莫扎特球：</b> 满大街红金包装的莫扎特球其实都是机器流水线生产的工业糖果。真正的原创手工莫扎特球诞生于1890年，由甜点大师 Paul Fürst 发明并斩获巴黎博览会金奖。真正的 Fürst 莫扎特球采用【极其低调的银蓝色锡纸包装】，内馅是极其细腻的开心果杏仁糕和优质牛轧糖，外层由手工沾满醇厚的黑巧克力。由于不含任何工业防腐剂，它对温度极其敏感。来到萨尔茨堡，去 Café Fürst 买几颗新鲜的手工球，是最高级的味觉享受。",
+                "<b>云朵般的甜品：萨尔茨堡舒芙蕾 (Salzburger Nockerl)：</b> 这是一道被誉为“甜蜜的萨尔茨堡名片”的传奇甜品。它的造型通常被烤制成三个高高隆起的金黄色山峰形状，象征着环绕萨尔茨堡的三座大山。这道甜品完全由大量的蛋白、糖和少量的香草烘焙而成，外部烤得极其微焦酥脆，内部则像云朵一样轻盈蓬松、入口即化，底部通常会铺上一层酸甜的蔓越莓果酱来中和甜腻。由于必须现点现烤，且极其考验厨师对面糊发泡的控制，它是高级餐厅必点的压轴大作。",
+                "<b>茜茜公主的挚爱：皇家坚果巧克力卷 (Zaunerstollen)：</b> 位于湖区巴德伊舍的 Konditorei Zauner 甜品店，曾是被官方严格认证的“奥匈帝国皇室特供供应商”。这家店独创的 Zaunerstollen 是一款混合了大量极其优质的榛子、核桃、牛轧糖碎块和高级黑巧克力的长条形糕点。它没有普通蛋糕的松软，而是呈现出极其扎实、浓郁且富有咀嚼感的丰富层次。传说当年茜茜公主在巴德伊舍避暑时，对这款甜品爱不释手。买一整条切片品尝，你能真切品尝到哈布斯堡王朝的奢华品味。",
+                "<b>点一杯纯正的维也纳米朗琪 (Wiener Melange)：</b> 在奥地利的咖啡馆，如果你对着服务员喊“来一杯卡布奇诺”，可能会显得不够地道。在这里，最经典的本土咖啡是 Wiener Melange。它的做法是将等比例的意式浓缩咖啡与极其绵密的热牛奶混合，并在最顶端覆盖上厚厚一层如同云朵般丝滑的牛奶奶泡。与意大利的卡布奇诺相比，米朗琪的口感更加柔和、奶香更浓郁，完美契合了奥地利人那种不急不躁、温婉优雅的性格。配上一杯免费的冰水，是标准的下午茶标配。"
+            ]
+        },
+        'food': {
+            title: "硬核奥地利：传统美食大全",
+            tabs: ["1. 维也纳炸小牛排", "2. 皇帝煎饼", "3. 传统烤猪肉", "4. 湖区鲜烤白鲑鱼", "5. 经典碱水结面包"],
+            contents: [
+                "<b>奥地利国菜的尊严：维也纳炸小牛排 (Wiener Schnitzel)：</b> 很多人以为炸肉排是德国菜，但真正的“维也纳炸肉排”是受奥地利法律严格保护的国菜。最正宗的做法必须且只能使用极其鲜嫩的小牛肉（Kalbfleisch），厨师会用肉锤将其疯狂捶打至比脸还大、薄如蝉翼的程度。随后裹上面粉、蛋液和新鲜的面包糠，在大量的澄清黄油中炸至金黄酥脆。吃的时候必须挤上新鲜的柠檬汁，配菜通常是一份极其爽口的土豆沙拉。外壳酥脆、内里多汁，绝对颠覆你对炸肉排的认知。",
+                "<b>源自皇室的甜蜜意外：皇帝煎饼 (Kaiserschmarrn)：</b> 传说这是当年奥地利皇帝弗朗茨一世在打猎途中，由于随从厨师不小心将原本要做的厚煎饼煎碎了，为了掩盖失误而临时加上葡萄干和糖霜端给皇帝，结果皇帝一吃惊为天人，从此命名为“皇帝煎饼”。这道菜的面糊中加入了大量打发的蛋白，因此口感极其松软。在平底锅中用大量黄油煎至表面焦糖化后，用铲子粗暴地撕成小块，撒上厚厚的糖霜，旁边必定会配上一大勺酸甜解腻的李子酱，极其顶饱。",
+                "<b>巴伐利亚与奥地利的交集：传统烤猪肉 (Bratl in der Rein)：</b> 虽说炸牛排是奥地利名片，但在靠近巴伐利亚的萨尔茨堡州和上奥地利州，烤猪肉同样是当地家庭聚餐的绝对主角。与德国常见的烤猪肘不同，这里的烤猪肉通常选用带皮的猪腹肉或猪肩肉，放在烤盘中加入大蒜、葛缕子和大量根茎蔬菜一起长时间慢烤。最精华的部分是烤得极其酥脆、咬下去会发出巨大“咔嚓”声的猪皮，搭配酸菜和两个巨大的面团子，吸收了浓郁的肉汁，极其下饭。",
+                "<b>来自阿尔卑斯冰川水的馈赠：湖区鲜烤白鲑鱼 (Reinanke)：</b> 如果你来到萨尔茨卡默古特湖区，绝对不能错过当地最具特色的水产——白鲑鱼。由于阿尔卑斯高山湖泊的水质极其纯净、水温常年冰冷，生长在这里的鱼类肉质极其紧实且完全没有土腥味。当地最经典的做法非常简单：将整条新鲜打捞的鱼开膛破肚后，只涂抹少量的海盐、胡椒和黄油，直接放在烤架上慢烤，或者在平底锅中香煎。上桌时配上水煮土豆和融化的欧芹黄油，最大程度地保留了原汁原味。",
+                "<b>国民级碳水炸弹：经典碱水结面包 (Brezel)：</b> 无论是在萨尔茨堡的粮食胡同，还是在湖区的小镇集市，你随处都能看到挂满巨大碱水结面包的小摊位。这种面包在烘焙前会浸泡在稀释的碱水中，因此烤出来后表面呈现出极其诱人的深棕色光泽，并带有一种特殊的碱水香气。最经典的吃法是在刚出炉、外壳微脆而内部极其柔韧的 Brezel 上，撒上粗颗粒的海盐。而在奥地利，人们更喜欢将它从中间切开，涂抹上一层厚厚的黄油或红色的奶酪抹酱，作为硬核早餐。"
+            ]
+        },
+        'alps': {
+            title: "冰川与碧波：阿尔卑斯湖区地质",
+            tabs: ["1. 沃尔夫冈湖神奇水质", "2. 达赫斯坦万年冰川", "3. 改变历史的盐矿", "4. 高山草甸生态", "5. 戈绍湖保护机制"],
+            contents: [
+                "<b>沃尔夫冈湖：达到直接饮用级别的神奇水质：</b> 当你站在沃尔夫冈湖边，一定会被它那不可思议的蒂芙尼蓝般的湖水颜色所震撼。这并非人工染料，而是因为湖水主要来自于周边阿尔卑斯山脉纯净的冰雪融水，水中富含极细微的石灰岩矿物质悬浮颗粒。当阳光照射到湖面时，这些颗粒会散射出特定波长的蓝绿色光。更令人惊叹的是，奥地利政府对湖区的排污有着极其严苛的法律限制，周边所有村镇的生活污水必须经过高标准的封闭管道集中处理，使得水质常年保持在可饮用标准。",
+                "<b>达赫斯坦万年冰川：奥地利的冰雪皇冠：</b> 海拔 2995 米的达赫斯坦峰是上奥地利州的第一高峰，也是整个湖区的绝对地标。在它的巅峰和北侧，覆盖着极其壮观的万年冰川。这片冰川是上一冰河时期留下的巨大遗迹。当你站在戈绍湖畔仰望它时，那片终年不化的皑皑白雪与幽绿的湖水形成了极致的视觉反差。除了作为风光摄影的绝佳背景，达赫斯坦冰川内部还隐藏着规模宏大的冰洞，洞内那些由融水渗入并再次冻结形成的巨大冰柱，如同水晶宫殿般令人叹为观止。",
+                "<b>“白金”之源：改变欧洲历史的盐矿地质：</b> 萨尔茨卡默古特这个名字的字面意思就是“皇家盐仓”。几千万年前，这里曾是一片汪洋大海，随着地壳的剧烈运动，海水被封闭并逐渐蒸发，巨量的盐分被深埋在阿尔卑斯的岩石层中。早在 7000 年前的史前时代，人类就已经在哈尔施塔特开始开采这种极其珍贵的“白金”。盐业不仅为后来的大主教和皇室带来了富可敌国的无尽财富，这种独特的地质结构也塑造了今天湖区独特的人文与自然交织的奇特景观。",
+                "<b>阿尔卑斯高山草甸：土拨鼠与奶牛的天堂：</b> 如果你乘坐缆车上升到海拔 1500 米以上的区域，你会进入一个完全不同的生态系统——阿尔卑斯高山草甸（Alm）。这里的夏天开满了极其艳丽的高山野花。更引人注目的是散养在这里的阿尔卑斯奶牛，它们的脖子上挂着巨大的牛铃，在吃草时发出清脆的“叮当”声，这种声音几乎成了奥地利山区的背景音乐。如果你在徒步时保持安静，甚至还能在石缝间看到胖乎乎的土拨鼠站立放哨，生态极其原始和谐。",
+                "<b>戈绍湖的极严格生态保护机制：</b> 戈绍湖之所以能保持那种令人窒息的幽静与绝美倒影，完全归功于奥地利政府对其施加的极度严格的国家级自然保护政策。不同于高度商业化的哈尔施塔特，戈绍湖周围除了入口处的一家餐厅和停车场外，绝对禁止修建任何新的商业酒店或娱乐设施。湖中严格禁止任何燃油机动船只行驶，部分核心生态水域甚至严禁游客下水游泳。正是这种为了保护脆弱高山水资源而做出的牺牲，才为全世界保留下了这片最纯净的秘境。"
+            ]
+        },
+        'royal': {
+            title: "权力的游戏：哈布斯堡王朝",
+            tabs: ["1. 靠联姻征服欧洲", "2. 茜茜公主的爱情", "3. 主教的独立王国", "4. 盐业带来的财富", "5. 皇家温泉疗养"],
+            contents: [
+                "<b>哈布斯堡家族：靠联姻征服欧洲的庞大帝国：</b> “让别人去打仗吧，你，幸福的奥地利，去结婚吧！”这句著名的格言完美概括了哈布斯堡王朝的崛起秘诀。从13世纪末起，这个家族通过极其精明、甚至有些疯狂的政治联姻，迅速将领土扩张到涵盖今天的奥地利、匈牙利、捷克、西班牙甚至是美洲殖民地。在长达 600 多年的统治中，哈布斯堡家族深刻地塑造了奥地利的文化基因，从维也纳极其奢华的美泉宫，到深山中巴德伊舍的皇家猎场，无处不彰显着这个欧洲最古老皇室的绝对权威。",
+                "<b>巴德伊舍：茜茜公主童话破灭的起点：</b> 1853年夏天，年仅15岁的茜茜公主跟随母亲来到巴德伊舍。原本这场会面是为了撮合她的姐姐与23岁的奥地利皇帝弗朗茨，但皇帝却对活泼灵动的茜茜一见钟情，并在几天后于镇上的酒店举行了轰动欧洲的订婚仪式。弗朗茨的母亲随后将镇上的一栋别墅买下作为结婚礼物送给新人，这就是今天的“皇帝别墅”。然而，习惯了自由奔放的茜茜很快就发现，沉闷压抑的维也纳宫廷和繁文缛节，将她原本的童话爱情变成了一座华丽的牢笼。",
+                "<b>萨尔茨堡：游离于帝国之外的独立神权王国：</b> 虽然今天萨尔茨堡是奥地利的一个州，但在历史上长达一千多年的时间里，它其实是一个拥有极高自治权、由天主教大主教实行高度政教合一统治的独立主权国家，并不受维也纳哈布斯堡王朝的直接管辖。这些大主教手握无上的政治与宗教权力，修建了坚固的高地要塞，更引进了大量的意大利建筑师，将萨尔茨堡打造成了阿尔卑斯山以北最华丽的巴洛克之都。直到19世纪初拿破仑战争后，萨尔茨堡才最终并入奥地利版图。",
+                "<b>垄断“白金”：皇室与主教的财富密码：</b> 无论是维也纳的皇室还是萨尔茨堡的大主教，他们能够修建起无数奢华宫殿的底气，都来自于对同一样东西的绝对垄断——岩盐。在缺乏冰箱的中世纪，盐是保存食物、腌制肉类唯一且极其重要的战略物资，被称为“白金”。通过严格控制哈尔施塔特等地盐矿的开采，并向所有途径萨尔察赫河运输盐巴的商船征收极其高昂的过路费，统治者们积累了富可敌国的财富，这也是为什么当年湖区被列为禁区，闲人免进的原因。",
+                "<b>皇家温泉疗养文化：巴德伊舍的崛起：</b> 19世纪初，维也纳的顶级医学家发现，湖区地下极其丰富的盐泉水对治疗呼吸道疾病、风湿病以及不孕不育有着奇效。消息传出后，原本默默无闻的巴德伊舍迅速被开发成了奥地利最高级的皇家温泉疗养胜地。弗朗茨皇帝的父母曾因长期不孕来此疗养，随后奇迹般地生下了包括弗朗茨在内的多位皇子。此后，皇帝每年夏天都会将整个维也纳的宫廷和内阁搬到这里。大批的贵族、音乐家纷纷跟风在此修建奢华别墅，形成了独特的皇家温泉度假文化。"
+            ]
+        },
+        'day2_focus': {
+            title: "🌟 Day 2 湖区五大极致游玩重点攻略",
+            tabs: ["📸 最适合拍大片", "🚶 最适合闲逛", "🍰 最适合品美食", "⛰️ 最刺激户外", "🕊️️ 最具人文沉淀"],
+            contents: [
+                "<b>📸 最适合拍大片：哈尔施塔特明信片机位 & 戈绍冰川倒影</b><br>由于你第二天行程极其紧凑，拍照必须稳、准、狠。在哈尔施塔特，下车后直奔 Gosaumühlstraße 街角。上午时分阳光刚好洒在湖面上，天鹅游过哥特式尖塔前的湖水，是最标准的奥地利大片。而在戈绍湖，你要在下午抵达，此时风力通常减弱，走到前戈绍湖观景台，将相机的镜头贴近水面，可以完美捕捉到达赫斯坦冰川在幽绿湖水中的对称倒影。这两个地方出片率 100%，绝对制霸朋友圈。",
+                "<b>🚶 最适合闲逛：哈尔施塔特集市广场 (Marktplatz)</b><br>如果你想感受最纯正的阿尔卑斯童话氛围，哈尔施塔特的集市广场是不二之选。这个被五颜六色的传统木屋紧紧包围的精致小广场，中央矗立着三位一体纪念柱。四周长满了鲜艳的天竺葵和常春藤，各种出售手工木雕、岩盐纪念品的小店林立。由于时间有限，建议在这里花 20 分钟逛一逛岩盐店，买几瓶带有阿尔卑斯香草的高级食用盐作为伴手礼，比满大街的冰箱贴有质感得多。",
+                "<b>🍰 最适合品尝美食：巴德伊舍 Zauner 皇家甜品店</b><br>在巴德伊舍换乘的间隙，务必冲进车站附近的 Konditorei Zauner。这家曾是茜茜公主最爱的甜品店拥有华丽的洛可可装潢。强烈推荐买一条独创的 Zaunerstollen（皇家坚果巧克力卷），这款甜品混合了榛子、核桃、牛轧糖和高级黑巧克力，口感极其浓郁扎实。由于它常温下不易变质，非常适合你打包带上回慕尼黑的火车，在漫长的旅途中搭配一杯咖啡慢慢享用，完美复刻皇室下午茶。",
+                "<b>⛰️ 最刺激户外：哈尔施塔特悬空天空步道 (Skywalk)</b><br>既然没时间深入盐矿，那就去挑战最刺激的天空步道！乘坐垂直齿轨缆车直达山顶，走到那个呈巨大的三角形、向外悬空延伸在 360 米高悬崖上的钢网上。往下看就是深不见底的哈尔施塔特湖，对面则是连绵起伏的达赫斯坦山脉。风吹过时甚至能感觉到观景台的轻微晃动，视觉冲击力极其震撼。注意：高处风力极大，务必抓紧手机，千万别掉下去！",
+                "<b>🕊️ 最具人文沉淀：哈尔施塔特人骨教堂 (Beinhaus)</b><br>这是一处略带神秘却充满文化敬意的奇特景点。由于小镇墓地面积狭小，过去的传统是将埋葬十余年后的头骨取出，由艺术家精心洗净，并在上面画上美丽的常春藤、橡树叶花环以及逝者的名字，最后存放在圣米歇尔礼拜堂的地下室内。这里存放着超过 1200 个头骨，是对生命轮回的一种极其浪漫的致敬。花 1.5 欧元门票进入，保持绝对安静，感受奥地利人对生死的豁达态度。"
+            ]
+        }
+    };
+
+    var guideData = {
+        'route_day1_lake': {
+            title: "Day 1 路线 A：湖区硬核徒步线",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Wolfgangsee_und_Schafberg.jpg/1200px-Wolfgangsee_und_Schafberg.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">慕尼黑</div><div class="rt-sub">08:00</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">📍</div><div class="rt-text">萨尔茨堡</div><div class="rt-sub">10:00 (寄存)</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">⛰️</div><div class="rt-text">圣吉尔根</div><div class="rt-sub">10:50 (乘船)</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">⛵</div><div class="rt-text">沙夫山起点</div><div class="rt-sub">11:30 (徒步)</div></div>' +
+                  '</div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：慕尼黑前往萨尔茨堡属于跨国路段。使用 Deutschlandticket 或拜仁州票均可乘坐 BRB 慢车。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚆 BRB 列车</span>' +
+                  '<span class="transit-time">08:00 - 10:00 (约2h)</span>' +
+                  '<span class="transit-dest">前往: 萨尔茨堡 Hbf</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>不包含在酒店卡内！需使用 Deutschlandticket 或购买拜仁州票。下车后先去 Four Points Flex 酒店寄存行李并领取 Guest Mobility Ticket。</div>' +
+                  '</div></div>' +
+                  
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 邮政巴士提示：奥地利山区公交极度准点，150路是湖区大动脉，上车请尽量坐在右侧，风景绝佳！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚌 Bus 150 + ⛴️ 游船</span>' +
+                  '<span class="transit-time">10:15 - 11:30 (约1h15m)</span>' +
+                  '<span class="transit-dest">前往: 圣沃尔夫冈沙夫山脚</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>Bus 150 完全包含在酒店免费卡内！圣吉尔根到圣沃尔夫冈的游船需现场购票（约 10 欧）。</div>' +
+                  '<button class="svv-btn" onclick="copyAndGo(event, \'St. Gilgen Busbahnhof\', \'https://salzburg-verkehr.at/\')">🚌 查 Bus 150 班次 (自动复制终点)</button>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 1: 沙夫山极限徒步 (Schafberg Hike)", 
+                      "到达起点: 11:30 | 登顶约: 15:00",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Schafbergbahn_2015.jpg/800px-Schafbergbahn_2015.jpg",
+                      "乘游船抵达圣沃尔夫冈镇后，沿着标记为 20 号的徒步小径一路向上。整条路线海拔拔高近 1200 米，穿过茂密的针叶林、高山草甸以及裸露的石灰岩陡坡。大约需要 3.5 小时。登顶后，你将大汗淋漓地俯瞰脚下深蓝色的沃尔夫冈湖、月亮湖和阿特湖，那种征服高山的成就感绝对无与伦比。",
+                      "徒步沙夫山强度极大！必须穿着专业的防滑徒步鞋，携带足够的饮用水和高热量路餐。山脊处风力极大且无遮挡，务必携带防风冲锋衣。若遇雷雨天气，严禁强行上山！体力不支可在中间站改乘小火车。",
+                      "https://www.google.com/maps/search/?api=1&query=Schafbergspitze"
+                  ) +
+                  
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 交通提示：徒步下山或乘坐小火车下山，返回湖边约需 45 分钟至 1.5 小时。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行下山 / 乘小火车</span>' +
+                  '<span class="transit-time">15:00 - 15:45</span>' +
+                  '<span class="transit-dest">前往: 圣沃尔夫冈湖边码头</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 2: 圣沃尔夫冈湖面泛舟", 
+                      "游玩时间: 15:45 - 16:45",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Wolfgangsee_und_Schafberg.jpg/800px-Wolfgangsee_und_Schafberg.jpg", 
+                      "徒步下山休整时，强烈建议在湖边长廊租一艘无需任何执照的色彩鲜艳的私人电动船（Elektroboot）。自己驾驶着小船驶向湖心深处，关掉马达后躺在船尾的软垫上，看着两岸童话般的木屋和刚才征服过的沙夫山倒影在水中摇曳，这是徒步后最完美的放松方式。",
+                      "租借电动船通常约为 25-30 欧元/小时。商家几乎只接受现金支付（Cash Only），并可能需要留现金押金。商家会强制免费提供救生衣，请务必穿戴好。",
+                      "https://www.google.com/maps/search/?api=1&query=St.+Wolfgang+im+Salzkammergut+boat+rental"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 餐厅提示：白马客栈餐厅就在码头边上，步行仅需 3 分钟！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 湖滨步行</span>' +
+                  '<span class="transit-time">16:45 - 16:50</span>' +
+                  '<span class="transit-dest">前往: 白马客栈湖畔餐厅</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 3: 白马客栈补充体力 (Weisses Rössl)", 
+                      "就餐时间: 16:50 - 17:45",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/St_Wolfgang_Weisses_Roessl_1.jpg/800px-St_Wolfgang_Weisses_Roessl_1.jpg",
+                      "这家外墙刷成醒目红色的著名酒店——白马客栈，是你绝对不容错过的地标。极度推荐去他们建在湖面上的木栈道餐厅，点一条新鲜打捞上来的特色白鲑鱼（Reinanke），用黄油煎制配上水煮土豆，一边吃一边看着湖面上驶过的游船，惬意无比。",
+                      "餐厅风景极佳的湖畔座位非常抢手，如果不提前预订很难有位置。这里的消费水平相对较高，结账时通常习惯性留下账单金额的 5%-10% 作为小费。",
+                      "https://www.google.com/maps/search/?api=1&query=Im+Weissen+Rössl+St+Wolfgang"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 返程提示：乘坐 150 路大巴返回萨尔茨堡市区，车程约 1 小时，路上可以休息回血。\')">⏱️️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚌 Bus 150 返回市区</span>' +
+                  '<span class="transit-time">17:50 - 18:50</span>' +
+                  '<span class="transit-dest">前往: 萨尔茨堡 Mirabellplatz</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>返程 Bus 150 同样完全包含在你的 Guest Mobility Ticket 免费范围内！</div>' +
+                  '<button class="svv-btn" onclick="copyAndGo(event, \'Salzburg Mirabellplatz\', \'https://salzburg-verkehr.at/\')">🚌 查返程 Bus 150 (自动复制终点)</button>' +
+                  '</div></div>'
+        },
+
+        'route_day1_city': {
+            title: "Day 1 路线 B：莫扎特老城夜游线",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Getreidegasse_Salzburg_2019.jpg/1200px-Getreidegasse_Salzburg_2019.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">🚌</div><div class="rt-text">米拉贝尔</div><div class="rt-sub">18:50 抵达</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🎻</div><div class="rt-text">莫扎特街区</div><div class="rt-sub">故居/胡同</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🏰</div><div class="rt-text">高地要塞</div><div class="rt-sub">19:40 缆车夕阳</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">☕</div><div class="rt-text">百年餐厅</div><div class="rt-sub">20:30 晚餐</div></div>' +
+                  '</div>' +
+
+                  generateAccordion(
+                      "Step 1: 莫扎特故居 (Mozart Wohnhaus)", 
+                      "游览时间: 18:55 - 19:15",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Mozarts_Wohnhaus_Salzburg_2019.jpg/800px-Mozarts_Wohnhaus_Salzburg_2019.jpg",
+                      "下车后步行 3 分钟即可到达马卡特广场 8 号。莫扎特一家于 1773 年搬迁至此，莫扎特在此居住了四年多，创作了大量的交响乐、小夜曲和钢琴协奏曲。建筑外观非常大气，对面就是著名的三位一体教堂。傍晚在这里拍照打卡，感受年轻莫扎特的辉煌创作期。",
+                      "内部博物馆一般在 17:30 闭馆，傍晚主要是欣赏建筑外观并拍照打卡。门票若入馆约 12 欧，持萨尔茨堡卡免费。",
+                      "https://www.google.com/maps/search/?api=1&query=Mozart+Wohnhaus+Salzburg"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 步行提示：跨越萨尔察赫河上的情人桥 (Makartsteg)，桥上挂满了爱情锁，远眺要塞视野极佳！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行穿过 Makartsteg 锁桥</span>' +
+                  '<span class="transit-time">19:15 - 19:25 (约10分钟)</span>' +
+                  '<span class="transit-dest">前往: 粮食胡同 9 号</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 2: 莫扎特出生地与粮食胡同 (Getreidegasse)", 
+                      "游览时间: 19:25 - 19:50",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Getreidegasse_Salzburg_2019.jpg/800px-Getreidegasse_Salzburg_2019.jpg",
+                      "穿过大桥即进入老城核心粮食胡同。9号便是著名的亮黄色建筑——莫扎特出生地（Mozarts Geburtshaus）。整条街道挂满了华丽精美的中世纪铁艺行会招牌。傍晚街灯亮起时，古老的石板路倒映着暖黄色灯光，充满巴洛克复古情调。沿途有各种特色精品店和纪念品店。",
+                      "绝大多数商店在 18:00 - 19:00 关门，周日全天关门。傍晚游客仍较多，请注意随身财物安全。莫扎特出生地内部禁止拍照。",
+                      "https://www.google.com/maps/search/?api=1&query=Mozarts+Geburtshaus+Salzburg"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 特产提示：Café Fürst 总店就在主教宫广场附近，买完手工巧克力球直接上山看日落！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行 3 分钟</span>' +
+                  '<span class="transit-time">19:50 - 19:55</span>' +
+                  '<span class="transit-dest">前往: Café Fürst 总店</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 3: Café Fürst 选购纯手工莫扎特巧克力球", 
+                      "采购时间: 19:55 - 20:05",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Original_Salzburger_Mozartkugeln_03.jpg/800px-Original_Salzburger_Mozartkugeln_03.jpg",
+                      "千万不要买机器量产的红金包装货！去 Café Fürst 买包裹在【银蓝色锡纸】中的 100% 纯手工原创莫扎特球，内馅是极其细腻的开心果杏仁糕。这是只有萨尔茨堡本地才能买到的顶级伴手礼。",
+                      "纯手工巧克力不含防腐剂，对温度极其敏感。购买后请务必保存在阴凉处。每颗售价约 1.8 - 2.2 欧。",
+                      "https://www.google.com/maps/search/?api=1&query=Cafe+Konditorei+Fuerst+Alter+Markt"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 缆车提示：齿轨缆车每 10 分钟一班，运行时间通常到晚上 21:00 以后，上山仅需 1 分钟！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚶 步行至缆车站 + 🚋 齿轨缆车</span>' +
+                  '<span class="transit-time">20:05 - 20:15</span>' +
+                  '<span class="transit-dest">前往: 萨尔茨堡高地要塞</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 4: 萨尔茨堡高地要塞日落全景 (Hohensalzburg)", 
+                      "观景时间: 20:15 - 21:00",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Festung_Hohensalzburg_01.jpg/800px-Festung_Hohensalzburg_01.jpg",
+                      "乘齿轨缆车直达中世纪要塞山顶。从观景平台上，你可以 360 度俯瞰整个萨尔茨堡老城的巴洛克穹顶、蜿蜒的萨尔察赫河，以及背后壮丽的阿尔卑斯雪山晚霞。夜幕降临老城亮灯时的景色令人终生难忘。",
+                      "基础票价约 14.5 欧元（含往返缆车）。要塞内部展馆傍晚关闭，但外部大露台和城墙通道完全开放，是夜景观景核心区。",
+                      "https://www.google.com/maps/search/?api=1&query=Festung+Hohensalzburg"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 美食提示：缆车下山后步行 2 分钟即达欧洲最古老的圣彼得酒窖餐厅或托马塞利咖啡馆！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚋 缆车下山 + 🚶 步行</span>' +
+                  '<span class="transit-time">21:00 - 21:10</span>' +
+                  '<span class="transit-dest">前往: 老城历史餐厅</span>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 5: 圣彼得酒窖餐厅或托马塞利咖啡馆 (晚餐/夜宵)", 
+                      "享受时间: 21:10 - 22:30",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Cafe_Tomaselli%2C_Salzburg.jpg/800px-Cafe_Tomaselli%2C_Salzburg.jpg",
+                      "去公元 803 年创立的圣彼得酒窖餐厅（St. Peter Stiftskulinarium）品尝顶级炸牛排，或在托马塞利咖啡馆（Café Tomaselli）吃一份萨尔茨堡舒芙蕾（Salzburger Nockerl），喝一杯马车夫咖啡 Einspänner，为 Day 1 画上完美句号。",
+                      "圣彼得餐厅建议提前预订，消费档次较高；托马塞利部分时段仅收现金，请备足零钱。随后可乘坐夜班公交轻松返回 Four Points Flex 酒店。",
+                      "https://www.google.com/maps/search/?api=1&query=St.+Peter+Stiftskulinarium+Salzburg"
+                  )
+        },
+
+        'route_day2': {
+            title: "Day 2 路线 C：极限压缩时间表",
+            img: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Views_of_Hallstatt%2C_Austria_August_2020_11.jpg/1200px-Views_of_Hallstatt%2C_Austria_August_2020_11.jpg",
+            html: '<div class="route-timeline">' +
+                  '<div class="rt-step"><div class="rt-icon">📍</div><div class="rt-text">萨尔茨堡</div><div class="rt-sub">08:15 出发</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">👑</div><div class="rt-text">巴德伊舍</div><div class="rt-sub">09:45 换乘/甜品</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">📸</div><div class="rt-text">哈尔施塔特</div><div class="rt-sub">10:45 明信片/步道</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🏔️</div><div class="rt-text">戈绍湖</div><div class="rt-sub">13:30 冰川倒影</div></div>' +
+                  '<div class="rt-step"><div class="rt-icon">🚆</div><div class="rt-text">回慕尼黑</div><div class="rt-sub">15:30 萨尔茨堡撤离</div></div>' +
+                  '</div>' +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 时间规划：第二天务必早起！由于下午要赶回慕尼黑，建议坐早上 08:15 左右的 150 路首班车前往巴德伊舍。\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚌 Bus 150</span>' +
+                  '<span class="transit-time">08:15 - 09:45 (约1.5h)</span>' +
+                  '<span class="transit-dest">前往: 巴德伊舍车站</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>此路段完全包含在你的 Guest Mobility Ticket 免费范围内！</div>' +
+                  '<button class="svv-btn" onclick="copyAndGo(event, \'Bad Ischl Bahnhof\', \'https://salzburg-verkehr.at/\')">🚌 点击查 SVV 班次 (自动复制终点)</button>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 1: 途经巴德伊舍买甜品与观景 (Bad Ischl)", 
+                      "到达时间: 09:45 | 停留: 30分钟",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Kaiservilla_Bad_Ischl_2.jpg/800px-Kaiservilla_Bad_Ischl_2.jpg",
+                      "这座宁静的温泉小镇是奥地利皇帝弗朗茨一世与茜茜公主举行订婚仪式的地方。在车站附近的 Zauner 甜品店火速买一条皇家坚果巧克力卷（Zaunerstollen）作为路上的能量补给，然后立刻去火车站换乘前往哈尔施塔特。",
+                      "交通提醒：过了巴德伊舍继续前往哈尔施塔特必须另外买票！请直接在 ÖBB App 购买火车票，皇帝别墅内部严格禁止拍照。",
+                      "https://www.google.com/maps/search/?api=1&query=Konditorei+Zauner+Pfarrgasse+Bad+Ischl"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 渡船提示：哈尔施塔特火车站和镇子隔着湖，下火车后跟着人群走，乘坐 Stefanie 号渡船过湖，风景极美！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚆 ÖBB 火车 + ⛴️ 渡船</span>' +
+                  '<span class="transit-time">10:15 - 10:45 (约30分钟)</span>' +
+                  '<span class="transit-dest">前往: 哈尔施塔特码头</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>不包含在免费卡内！请在 ÖBB 购买至 Hallstatt Bahnhof 的火车票，渡船需准备约 3.5 欧元现金现场购票。</div>' +
+                  '<button class="svv-btn" style="background: linear-gradient(135deg, #E2001A, #A60012); border-color:#60000a;" onclick="copyAndGo(event, \'Hallstatt Bahnhof\', \'https://tickets.oebb.at/\')">🚆 点击去 ÖBB 官网购票 (复制终点)</button>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 2: 哈尔施塔特明信片观景台与天空步道", 
+                      "到达时间: 10:45 | 游玩: 2小时 (至12:45)",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Hallstatt_Skywalk_01.jpg/800px-Hallstatt_Skywalk_01.jpg",
+                      "抵达后快步走到 Gosaumühlstraße 街角，拍下最经典的明信片机位。随后前往缆车站乘坐垂直缆车直达山顶的“天空步道”（Skywalk），走到悬空 360 米的步道尽头，俯瞰整个湖泊与巍峨雪山。",
+                      "缆车往返约 22 欧元/人。严禁大声喧哗，绝对不可跨越栅栏闯入私人庭院。全面禁止放飞无人机。务必卡好下一班去戈绍的公交车时间！",
+                      "https://www.google.com/maps/search/?api=1&query=Hallstatt+Skywalk"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 极限换乘：去戈绍的公交非常少，请在哈尔施塔特 Lahn 车站坐 Bus 543 到 Gosaumühle，立刻无缝换乘 Bus 542！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚌 Bus 543 转 Bus 542</span>' +
+                  '<span class="transit-time">12:50 - 13:30 (约40分钟)</span>' +
+                  '<span class="transit-dest">前往: 戈绍湖 (Gosausee)</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>属于上奥地利州(OÖVV)网络，不含在酒店卡内。请上车直接向司机购买前往 Gosausee 的车票（约 6 欧）。</div>' +
+                  '<button class="svv-btn" onclick="copyAndGo(event, \'Gosausee\', \'https://salzburg-verkehr.at/\')">🚌 查 Bus 542 班次 (自动复制终点)</button>' +
+                  '</div></div>' +
+
+                  generateAccordion(
+                      "Step 3: 戈绍湖极限快闪打卡 (Gosausee)", 
+                      "到达时间: 13:30 | 停留: 45分钟 (至14:15)",
+                      "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Vorderer_Gosausee_mit_Dachstein.jpg/800px-Vorderer_Gosausee_mit_Dachstein.jpg",
+                      "抵达戈绍湖后，直接走到前戈绍湖（Vorderer Gosausee）观景平台上。只要天气晴朗，你就能立刻看到宏伟的达赫斯坦（Dachstein）冰川完美倒映在幽绿湖面上。沿着湖边散步 20 分钟感受静谧，拍下大片后立刻准备撤离。",
+                      "时间是绝对的生命线！下车第一件事必须向站牌确认 14:15 前后返回巴德伊舍的 Bus 542 时间，错过将无法按计划返回慕尼黑！",
+                      "https://www.google.com/maps/search/?api=1&query=Vorderer+Gosausee"
+                  ) +
+
+                  '<div class="transit-node">' +
+                  '<div class="time-icon" onclick="showToast(\'💡 返程提醒：在巴德伊舍火车站换乘 Bus 150 回萨尔茨堡，随后在萨尔茨堡站乘坐 BRB 列车返回慕尼黑！\')">⏱️</div>' +
+                  '<div class="transit-info">' +
+                  '<span class="transit-mode">🚌 Bus 542 转 150 ➔ 🚆 BRB列车</span>' +
+                  '<span class="transit-time">14:15 - 18:30 (车程约4h)</span>' +
+                  '<span class="transit-dest">前往: 慕尼黑 Hbf</span>' +
+                  '<div class="ticket-notice">💳 <b>车票说明：</b>戈绍至巴德伊舍向司机买票，巴德伊舍至萨尔茨堡免费，萨尔茨堡至慕尼黑使用 Deutschlandticket！</div>' +
+                  '</div></div>'
+        }
+    };
+
+    function generateAccordion(title, timeBadge, imgUrl, desc, notice, mapLink) {
+        var buttonsHtml = '<div class="btn-group">';
+        if(mapLink) {
+            buttonsHtml += '<a href="' + mapLink + '" class="map-btn" target="_blank">📍 Google Maps 导航</a>';
+        }
+        buttonsHtml += '</div>';
+
+        return '<div class="accordion-item" onclick="toggleAccordion(this)">' +
+               '<div class="accordion-header">' +
+               '<div class="header-title-box"><span>' + title + '</span><span class="step-time-badge">⏱️ ' + timeBadge + '</span></div>' +
+               '</div>' +
+               '<div class="accordion-content">' +
+               '<img src="' + imgUrl + '" alt="景点实景图" onerror="this.style.display=\'none\'">' +
+               '<p class="spot-desc">' + desc + '</p>' +
+               '<div class="notice"><b>⚠️ 避坑与注意事项：</b><br>' + notice + '</div>' +
+               buttonsHtml +
+               '</div></div>';
+    }
+
+    function toggleAccordion(element) {
+        element.classList.toggle('active');
+    }
+
+    function copyAndGo(event, dest, url) {
+        event.preventDefault();
+        var btn = event.currentTarget;
+        var originalText = btn.innerHTML;
+        
+        try {
+            var tempInput = document.createElement("input");
+            tempInput.value = dest;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+        } catch(e) { console.log('Copy fallback failed'); }
+
+        btn.innerHTML = '✅ 已复制: ' + dest;
+        showToast('💡 已将终点站【' + dest + '】复制到剪贴板！<br>请在跳转后的网页中直接粘贴查询。');
+        
+        setTimeout(function(){
+            window.open(url, '_blank');
+            btn.innerHTML = originalText;
+        }, 1800);
+    }
+
+    function showToast(message) {
+        var toast = document.getElementById("toast");
+        toast.innerHTML = message;
+        toast.classList.add("show");
+        setTimeout(function(){ toast.classList.remove("show"); }, 4000);
+    }
+
+    function switchQTab(tabIndex, category) {
+        var container = document.getElementById('q-content-container');
+        var btns = container.querySelectorAll('.q-sub-btn');
+        var contents = container.querySelectorAll('.q-sub-content');
+        for (var i = 0; i < btns.length; i++) {
+            if (i === tabIndex) {
+                btns[i].classList.add('active');
+                contents[i].classList.add('active');
+            } else {
+                btns[i].classList.remove('active');
+                contents[i].classList.remove('active');
+            }
+        }
+    }
+
+    var modalOverlay = document.getElementById('modalOverlay');
+    var modalHeader = document.getElementById('modalHeader');
+    var modalTitle = document.getElementById('modalTitle');
+    var modalBody = document.getElementById('modalBody');
+
+    function openModal(spotKey) {
+        var data = guideData[spotKey];
+        if(!data) return;
+        modalTitle.innerText = data.title;
+        modalHeader.style.backgroundImage = "url('" + data.img + "')";
+        modalHeader.style.display = "block";
+        modalBody.innerHTML = data.html;
+        
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function openQModal(key) {
+        var data = qData[key];
+        if(!data) return;
+        modalTitle.innerText = data.title;
+        modalHeader.style.display = "none";
+        
+        var html = '<div id="q-content-container"><div class="q-sub-tabs">';
+        for (var i = 0; i < data.tabs.length; i++) {
+            var activeClass = i === 0 ? 'active' : '';
+            html += '<button class="q-sub-btn ' + activeClass + '" onclick="switchQTab(' + i + ', \'' + key + '\')">' + data.tabs[i] + '</button>';
+        }
+        html += '</div>';
+        
+        for (var j = 0; j < data.contents.length; j++) {
+            var contentClass = j === 0 ? 'active' : '';
+            html += '<div class="q-sub-content ' + contentClass + '"><p style="line-height:1.8;">' + data.contents[j] + '</p></div>';
+        }
+        html += '</div>';
+
+        modalBody.innerHTML = html;
+        modalOverlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(e) {
+        if (e.target === modalOverlay || e.target.classList.contains('close-btn')) {
+            modalOverlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            modalBody.innerHTML = ''; 
+        }
+    }
+</script>
+
+</body>
+</html>
