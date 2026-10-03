@@ -30,7 +30,35 @@
             padding-bottom: 80px; 
         }
 
-        .container { max-width: 900px; margin: 0 auto; }
+        /* 左右分栏布局 - 核心修复区 */
+        .page-wrapper {
+            display: flex;
+            max-width: 1300px;
+            margin: 0 auto;
+            gap: 30px;
+            align-items: flex-start;
+            position: relative;
+            transition: all 0.4s ease;
+            justify-content: center; /* 确保容器在屏幕居中 */
+        }
+
+        /* 左侧主容器：永远保持最大 900px 的舒适阅读宽度 */
+        .container { 
+            flex: 1; 
+            max-width: 900px; 
+            transition: all 0.4s ease; 
+        }
+        
+        /* 侧边栏收起时的悬浮定位 */
+        .page-wrapper.sidebar-collapsed .sidebar {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            top: auto;
+            margin: 0;
+            z-index: 1000;
+        }
+
         .header { text-align: center; margin-bottom: 40px; }
         .header h1 { color: var(--nordic-dark); font-size: 28px; margin-bottom: 10px; }
         .header p { color: var(--text-muted); font-size: 14px; }
@@ -65,12 +93,16 @@
         .audio-tag { background-color: #FCE4EC; color: #C2185B; border-color: #F8BBD0; cursor: pointer; }
         .audio-tag:hover { background-color: #F8BBD0; }
 
+        /* 修复按钮排列，确保多个按钮同行显示且对齐 */
         .btn-link {
-            display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border-radius: 20px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 5px; padding: 6px 12px; border-radius: 20px;
             font-size: 12px; text-decoration: none; font-weight: 500; transition: background 0.2s;
-            background: #E8ECEB; color: var(--nordic-dark); margin-right: 8px; margin-bottom: 10px;
+            background: #E8ECEB; color: var(--nordic-dark); margin-right: 8px; margin-bottom: 10px; border: none; cursor: pointer; font-family: inherit;
         }
         .btn-link:hover { background: #D1D8D6; }
+        
+        .btn-action { background: #E3F2FD; color: #1565C0; font-weight: bold; }
+        .btn-action:hover { background: #BBDEFB; }
 
         details { background: #FDFDFD; border: 1px solid #EEEEEE; border-radius: 8px; margin-top: 15px; }
         summary {
@@ -119,395 +151,630 @@
         .p-zh { font-weight: bold; color: #333; margin-bottom: 4px; }
         .p-en { font-size: 13px; color: #1976D2; margin-bottom: 2px; }
         .p-de { font-size: 13px; color: #2E7D32; font-style: italic; }
+
+        /* ================= 侧边栏专属样式 ================= */
+        .sidebar {
+            width: 380px; flex-shrink: 0; position: sticky; top: 20px;
+            background: var(--card-bg); border-radius: 12px; padding: 20px;
+            box-shadow: 0 4px 25px rgba(0,0,0,0.06); border: 2px solid var(--border-light);
+            max-height: 95vh; overflow-y: auto; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: right top; box-sizing: border-box;
+        }
+        
+        .sidebar.collapsed {
+            width: 60px; height: 60px; padding: 0; overflow: hidden;
+            border-radius: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            background: var(--nordic-dark); border: none; box-shadow: 0 4px 15px rgba(44, 62, 56, 0.4);
+        }
+
+        .sidebar.collapsed > *:not(.toggle-btn) { display: none; }
+        
+        .toggle-btn {
+            position: absolute; top: 15px; right: 15px; background: #E8ECEB; border: none;
+            width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 14px; color: var(--nordic-dark);
+            transition: all 0.3s; z-index: 10;
+        }
+        .toggle-btn:hover { background: #D1D8D6; }
+        .sidebar.collapsed .toggle-btn {
+            position: static; background: transparent; color: white; width: 100%; height: 100%; font-size: 20px;
+        }
+
+        .sidebar-title { font-size: 18px; color: var(--nordic-dark); font-weight: bold; margin-bottom: 20px; text-align: center; border-bottom: 2px solid #eee; padding-bottom: 10px; padding-right: 30px;}
+        
+        .som-node { position: relative; padding-left: 30px; margin-bottom: 10px; }
+        .som-line { position: absolute; left: 11px; top: 30px; bottom: -20px; width: 0px; border-left: 2px dashed #B0BEC5; z-index: 1; }
+        .som-arrow { position: absolute; left: 6.5px; top: 50%; color: #B0BEC5; font-size: 12px; z-index: 2; transform: translateY(15px); background: #fff; line-height: 1;}
+        .som-node:last-child .som-line, .som-node:last-child .som-arrow { display: none; }
+
+        .som-box { position: relative; z-index: 3; padding: 15px; border-radius: 10px; margin-bottom: 5px; box-sizing: border-box; width: 100%; }
+        .som-box h4 { margin: 0 0 10px 0; font-size: 16px; border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 8px;}
+        .som-box p { margin: 0 0 12px 0; font-size: 13px; line-height: 1.5; color: #555;}
+        
+        .box-red { border: 2px solid var(--austrian-red); background: #FFF9F9; }
+        .box-red h4 { color: var(--austrian-red); }
+        .box-red::before { content: '📍 打卡'; position: absolute; top: -10px; right: 15px; background: var(--austrian-red); color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 10px; font-weight: bold;}
+        
+        .box-grey { border: 2px solid #B0BEC5; background: #F8F9FA; opacity: 0.9; }
+        .box-grey h4 { color: #607D8B; }
+        .box-grey::before { content: '❌ 略过'; position: absolute; top: -10px; right: 15px; background: #90A4AE; color: #fff; font-size: 11px; padding: 3px 8px; border-radius: 10px; font-weight: bold;}
+
+        .transport-label { font-size: 11px; color: #fff; background: #607D8B; padding: 4px 10px; border-radius: 12px; display: inline-block; margin-bottom: 10px; margin-left: 30px; position: relative; z-index: 3;}
+        .sidebar .btn-link { font-size: 12px; padding: 8px 12px; margin: 4px 0; width: 100%; box-sizing: border-box;}
+
+        /* Toast 提示框 */
+        #toast {
+            visibility: hidden; min-width: 250px; background-color: #4CAF50; color: #fff; text-align: center;
+            border-radius: 8px; padding: 12px; position: fixed; z-index: 3000; left: 50%; transform: translateX(-50%); bottom: 30px; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); font-weight: bold;
+        }
+        #toast.show { visibility: visible; animation: fadein 0.5s, fadeout 0.5s 2.5s; }
+        @keyframes fadein { from {bottom: 0; opacity: 0;} to {bottom: 30px; opacity: 1;} }
+        @keyframes fadeout { from {bottom: 30px; opacity: 1;} to {bottom: 0; opacity: 0;} }
+
+        @media (max-width: 1050px) {
+            .page-wrapper { flex-direction: column; }
+            .sidebar { width: 100%; position: relative; top: 0; margin-top: 40px; }
+            .sidebar.collapsed { width: 60px; position: fixed; bottom: 90px; right: 30px; top: auto; margin:0; z-index: 1000;}
+            .page-wrapper.sidebar-collapsed .container { max-width: 100%; }
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>🏔️ 萨尔茨堡 & 沃尔夫冈湖 Pro Max</h1>
-        <p>Guten Tag | Guten Abend | Gute Nacht</p>
+<div class="page-wrapper">
+    <!-- ================= 左侧主行程 ================= -->
+    <div class="container">
+        <div class="header">
+            <h1>🏔️ 萨尔茨堡 & 沃尔夫冈湖 Pro Max</h1>
+            <p>Guten Tag | Guten Abend | Gute Nacht</p>
+        </div>
+
+        <!-- DAY 1 -->
+        <div class="day-divider"><span>Day 1 : 湖光山色与绝美夜游</span></div>
+        <div class="timeline">
+            
+            <!-- 抵达萨尔茨堡 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">10:46 抵达</span>
+                    <h3 class="event-title">从慕尼黑乘车抵达萨尔茨堡主火车站</h3>
+                </div>
+                <a href="https://www.google.com/maps/search/Salzburg+Hauptbahnhof" target="_blank" class="btn-link">📍 萨尔茨堡火车站 (Salzburg Hbf)</a>
+                <div class="desc">从慕尼黑中央车站乘坐早班列车，顺利抵达萨尔茨堡主火车站。出站后直接背着双肩包轻装上阵，无需寻找寄存处，出站后直接步行或乘坐公交前往米拉贝尔花园方向，正式开启本次旅行的第一站。</div>
+            </div>
+
+            <!-- 米拉贝尔花园 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">10:55 - 11:30</span>
+                    <h3 class="event-title">米拉贝尔宫与花园 (Schloss Mirabell)</h3>
+                </div>
+                <details open>
+                    <summary>📖 深度探索与玩法指引</summary>
+                    <div class="details-content">
+                        <div class="sub-sec"><strong>📜 人文历史</strong>：建于1606年，是沃尔夫·迪特里希大主教为他的情人莎乐美建造的宫殿。这里不仅是权力的象征，更因《音乐之声》中玛丽亚和孩子们围绕喷泉边唱 <a href="https://www.youtube.com/watch?v=drnBMAEA3AM" target="_blank" class="audio-tag">🎵 点击播放《Do-Re-Mi》</a> 而闻名于世，承载着萨尔茨堡最浪漫的岁月记忆。</div>
+                        <div class="sub-sec"><strong>🎫 门票指南</strong>：米拉贝尔花园全年免费向公众开放，无需购买任何门票。宫殿内部的大理石大厅（Marmorsaal）号称世界最美结婚大厅，如果未举行婚礼或音乐会，也可免费参观，请注意在内保持安静。</div>
+                        <div class="sub-sec"><strong>✨ 核心看点</strong>：<a href="https://www.google.com/maps/search/Pegasusbrunnen+Mirabell" target="_blank" class="loc-tag">📍 飞马喷泉 (Pegasusbrunnen)</a>、<a href="https://www.google.com/maps/search/Zwergelgarten+Mirabell" target="_blank" class="loc-tag">📍 侏儒花园 (Zwergelgarten)</a>（藏在侧面小径里的怪诞雕塑群，极其有趣）、以及<a href="https://www.google.com/maps/search/Schloss+Mirabell+Marmorsaal" target="_blank" class="loc-tag">📍 宫殿主楼 (Schloss Mirabell)</a> 内壮丽的大理石楼梯与天使雕塑群。</div>
+                        <div class="sub-sec"><strong>📸 最佳机位</strong>：一定要站在 <a href="https://www.google.com/maps/search/Mirabellgarten+Rose+Garden" target="_blank" class="photo-tag">📷 玫瑰园 (Rosengarten)</a> 的南侧尽头，将前方的对称花坛、飞马喷泉与背景中高高在上的“高地要塞”同框拍下，这是萨尔茨堡最经典的明信片角度。</div>
+                        <div class="sub-sec"><strong>💡 游玩贴士</strong>：花园内部全程平地，拖着轻便行李也完全不费力。早晨游客相对较少，建议预留30-40分钟慢慢闲逛，无需在此处购买任何纪念品。上午的光线拍照最为柔和。</div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Yiyami 午餐 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">11:30 - 12:10</span>
+                    <h3 class="event-title">午餐：Yiyami 亚洲餐厅</h3>
+                </div>
+                <a href="https://www.google.com/maps/search/Yiyami+Salzburg" target="_blank" class="btn-link">📍 餐厅一键导航</a>
+                <details>
+                    <summary>🍽️ 餐厅指南</summary>
+                    <div class="details-content">
+                        <div class="sub-sec"><strong>🌟 推荐理由</strong>：谁说来欧洲只能吃无聊的河粉和拉面？在“万物皆可炸”的德奥菜系包围下，这家店隐藏的重口味中餐才是海外游子的灵魂救赎，热辣滚烫，瞬间唤醒你的味蕾！</div>
+                        <div class="sub-sec"><strong>🌶️ 特色菜推荐</strong>：
+                            <br>• <b>水煮鱼片</b>：红油清透，鱼肉极其滑嫩，配上底部的爽脆豆芽，吃下一口简直回魂。
+                            <br>• <b>正宗麻婆豆腐</b>：麻辣鲜香，拌米饭的绝对神器，为你带来碳水爆炸的极致快乐。
+                            <br>• <b>辣子鸡丁 / 回锅肉</b>：下饭必点，火候和调味完全不输国内街边的高水平小炒店。
+                        </div>
+                        <div class="sub-sec"><strong>💰 预计人均</strong>：大约需要 18 - 25 欧元（在萨尔茨堡市区绝对属于物超所值的水平）。</div>
+                        <div class="sub-sec"><strong>📍 地理位置与动线</strong>：这家店距离米拉贝尔花园南侧出口步行仅仅需要 5 分钟左右的时间，吃完饭出门走几步即可到达市区主干道的公交枢纽（Mirabellplatz 附近），动线极其顺滑。</div>
+                        <div class="sub-sec"><strong>💡 用餐贴士</strong>：中午饭点可能会稍微排队，老板人很好，上菜速度也快。吃饱后记得去洗手间休整一下，准备下午的体力活动。</div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 乘车前往圣吉尔根 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">12:19 - 13:07</span>
+                    <h3 class="event-title">搭乘 150路公交前往圣吉尔根</h3>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <!-- 核心修复：三大按钮并排完整保留 -->
+                    <button class="btn-link btn-action" onclick="copyAndGo('St. Gilgen Busbahnhof', 'https://salzburg-verkehr.at/')">
+                        🚌 查询车次 & 复制终点(St. Gilgen)
+                    </button>
+                    <a href="https://www.google.com/maps/search/Mirabellplatz+Salzburg" target="_blank" class="btn-link">📍 始发站：米拉贝尔广场</a>
+                    <a href="https://www.google.com/maps/search/St.+Gilgen+Busbahnhof" target="_blank" class="btn-link">📍 终点站：圣吉尔根公交总站</a>
+                </div>
+                <div class="desc">在米拉贝尔广场 (Mirabellplatz) 附近的公交站搭乘 150 路大巴车，一路向东驶入美丽的萨尔茨卡默古特湖区。车程大约 45-50 分钟，强烈建议尽量坐在巴士的右侧，可以欣赏到极美的沿途山水风光。</div>
+            </div>
+
+            <!-- 缆车徒步 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">13:45 - 15:30</span>
+                    <h3 class="event-title">十二角峰缆车与山顶徒步 (Zwölferhorn)</h3>
+                </div>
+                <a href="https://www.google.com/maps/search/Zw%C3%B6lferhorn+Seilbahn" target="_blank" class="btn-link">📍 缆车起点导航 (Talstation)</a>
+                <details>
+                    <summary>⛰️ 深度徒步线路与机位跳转</summary>
+                    <div class="details-content">
+                        <div class="sub-sec"><strong>📜 人文与地理</strong>：十二角峰是萨尔茨卡默古特湖区最具标志性的全景观景山峰。2020年全新翻修的全景缆车极大地提升了游客体验。这里常年是滑翔伞爱好者的天堂，天气晴好时抬头即可看到漫天五颜六色的滑翔伞。</div>
+                        <div class="sub-sec"><strong>🎫 门票与购票</strong>：缆车往返票价大约为 30-35 欧元/人，支持信用卡和现金支付，建议现场在购票机器或者人工窗口直接购买即可。</div>
+                        <div class="sub-sec"><strong>🚶‍♂️ 核心环线 (Pillstein-Panorama-Weg) 全节点导航</strong>：</div>
+                        
+                        <div class="sub-sec">
+                            1. <a href="https://www.google.com/maps/search/Zw%C3%B6lferhorn+Bergstation" target="_blank" class="loc-tag">📍 山顶缆车站 (Bergstation)</a>
+                            <div class="node-desc">出站即是壮丽的观景台，这里是俯瞰整个深蓝色的沃尔夫冈湖与沙夫山的绝佳视点。刚下缆车就能感受到高山清新的空气，可以在这里的全景露台拍第一波大片，稍微适应一下高海拔的环境再出发。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            2. <a href="https://www.google.com/maps/search/Arnikah%C3%BCtte+Zw%C3%B6lferhorn" target="_blank" class="photo-tag">📷 休息站 (Arnikahütte)</a>
+                            <div class="node-desc">沿着平缓的碎石路前行大约15分钟，路边有大量的高山草甸植被，这里是绝佳的高山生态打卡地。休息站附近设有木制长椅，非常适合稍作停顿，喝口水呼吸新鲜空气，顺便拍下背后绵延的群山和蓝天。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            3. <a href="https://www.google.com/maps/search/Pillsteinkreuz" target="_blank" class="photo-tag">📷 山顶十字架 (Pillsteinkreuz)</a>
+                            <div class="node-desc">徒步大约40分钟到达的核心高点，这是证明“我登顶了”的绝佳拍照打卡地。站在这里能拍出毫无遮挡的“人、十字架、深蓝湖水”同框大片。风比较大，建议穿上防风外套，在这里多停留一会儿享受一览众山小的快感。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            4. <a href="https://www.google.com/maps/search/Illingerbergalm" target="_blank" class="loc-tag">📍 返程路段 (Illingerbergalm)</a>
+                            <div class="node-desc">绕过山包从平缓的南侧返回，全程无大坡度，极其“护膝”。沿途经常能碰到脖子上挂着牛铃、悠闲吃草的阿尔卑斯奶牛，伴随着清脆的牛铃声，这段下坡路走起来非常轻松惬意，让人忘记疲惫。</div>
+                        </div>
+
+                        <div class="sub-sec"><strong>💡 游玩贴士</strong>：在这条全景徒步环线上，即使是夏天也请务必携带一件轻薄的防风外套，因为海拔超过1500米后，山顶的阿尔卑斯山风会比较大且气温偏低。步道绝大部分是铺满碎石的平缓路面，非常护膝，但仍建议穿着具有良好抓地力的运动鞋或轻量级徒步鞋。此外，强烈建议随身带一瓶水和一些补充能量的小零食，在十字架或者草甸长椅上休息时可以一边补充体力，一边静静享受绝美的湖光山色。</div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 圣吉尔根小镇 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">15:45 - 17:15</span>
+                    <h3 class="event-title">圣吉尔根湖滨小镇漫步</h3>
+                </div>
+                <details>
+                    <summary>📖 小镇闲逛路线节点导航</summary>
+                    <div class="details-content">
+                        <div class="sub-sec">
+                            1. <a href="https://www.google.com/maps/search/Mozartplatz+St.+Gilgen" target="_blank" class="loc-tag">📍 莫扎特广场 (Mozartplatz)</a>
+                            <div class="node-desc">下缆车后直奔小镇中心广场。这里有一座拉小提琴的莫扎特青铜雕像，广场旁就是市政厅，外墙的壁画非常精美，极具奥地利传统风情。喷泉常年流淌清澈的阿尔卑斯山泉水，是整个小镇的灵魂中心。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            2. <a href="https://www.google.com/maps/search/Mozarthaus+St.+Gilgen" target="_blank" class="loc-tag">📍 莫扎特母亲故居 (Mozarthaus)</a>
+                            <div class="node-desc">莫扎特的母亲 Anna Maria 诞生于此，他姐姐也曾在此生活。明黄色外墙与彩绘极其出片，一楼通常可以买到关于莫扎特家族的周边小册子。即便不进博物馆，在外围打卡拍照也能感受到浓厚的古典音乐氛围。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            3. <a href="https://www.google.com/maps/search/Pfarrkirche+St.+Gilgen" target="_blank" class="photo-tag">📷 教区教堂 (Pfarrkirche St. Gilgen)</a>
+                            <div class="node-desc">典型的晚期哥特式洋葱顶教堂，教堂内部宁静庄严。教堂旁边的花海墓园极其安静且精美，鲜花簇拥，充满了当地人对生命的敬意和浪漫态度，非常值得花上十分钟在这里静静漫步感受时光。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            4. <a href="https://www.google.com/maps/search/Seepromenade+St.+Gilgen" target="_blank" class="photo-tag">📷 湖滨长廊 (Seepromenade)</a>
+                            <div class="node-desc">穿过小镇走到沃尔夫冈湖边。湖畔有大量的木制长椅和天鹅，远眺对岸的沙夫山。在日落前的一小时里，这里的湖面会被染成金色，是真正的“发呆圣地”，买杯咖啡坐在长椅上喂喂天鹅，松弛感拉满。</div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 三大晚餐选择 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">17:15 - 18:30</span>
+                    <h3 class="event-title">晚餐抉择：湖畔寻味</h3>
+                </div>
+                <details>
+                    <summary>🍽️ 晚餐三选一指南 (含网红平价烤鱼)</summary>
+                    <div class="details-content">
+                        <div class="shop-item">
+                            <div class="shop-title">
+                                1. Steckerlfisch am See 
+                                <a href="https://www.google.com/maps/search/Steckerlfisch+St.+Gilgen" target="_blank" class="loc-tag">📍 导航</a>
+                            </div>
+                            <p style="margin:5px 0;"><strong>🌟 特色菜品</strong>：奥地利湖区极其传统的“木棍烤鱼”，老板用明火当着你的面现烤，外皮焦脆，鱼肉鲜嫩，极具浓浓的烟火气，再配上冰镇扎啤和土豆沙拉，简直完美。<br>
+                            <strong>📍 地理路线与位置</strong>：就位于圣吉尔根的湖滨长廊附近，是一个露天的售卖亭，买完直接坐在湖边的长椅上边吃边看日落，距离公车站步行大约十分钟。<br>
+                            <strong>💰 预计人均</strong>：约 13 - 16 欧（性价比之王）。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">
+                                2. Restaurant Fischerwirt (高级白鲑鱼正餐)
+                                <a href="https://www.google.com/maps/search/Fischerwirt+St.+Gilgen" target="_blank" class="loc-tag">📍 导航</a>
+                            </div>
+                            <p style="margin:5px 0;"><strong>🌟 特色菜品</strong>：强烈推荐“黄油煎沃尔夫冈湖白鲑鱼 (Gebratene Reinanke)”，配上柠檬汁和欧芹小土豆。鱼肉肉质极其细腻，环境优雅的百年老店，追求精致用餐体验的首选。<br>
+                            <strong>📍 地理路线与位置</strong>：位于圣吉尔根小镇中心稍微靠近湖边的位置，吃完饭走几步就能回到湖边看晚霞，或者走回公交车站（约 5 分钟），动线非常方便。<br>
+                            <strong>💰 预计人均</strong>：约 30 - 45 欧。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">
+                                3. Gasthof Zur Post (传统奥地利地道风味)
+                                <a href="https://www.google.com/maps/search/Gasthof+Zur+Post+St.+Gilgen" target="_blank" class="loc-tag">📍 导航</a>
+                            </div>
+                            <p style="margin:5px 0;"><strong>🌟 特色菜品</strong>：如果不爱吃鱼，这家传统客栈提供最正宗的肉类料理。必点“清炖牛肉 (Tafelspitz)”或者烤猪肉配酸菜，肉质软烂入味，分量极大，能让你充分体验地道奥地利风情。<br>
+                            <strong>📍 地理路线与位置</strong>：直接坐落于莫扎特广场旁边，是镇中心最显眼的历史建筑之一，吃完饭走到车站只需两三分钟，绝不会错过回程的大巴。<br>
+                            <strong>💰 预计人均</strong>：约 20 - 30 欧。</p>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 乘车返回萨尔茨堡 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">19:31 - 20:12</span>
+                    <h3 class="event-title">搭乘 150X 快线巴士返回萨尔茨堡</h3>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <!-- 核心修复：三大按钮并排完整保留 -->
+                    <button class="btn-link btn-action" onclick="copyAndGo('Salzburg Hauptbahnhof', 'https://salzburg-verkehr.at/')">
+                        🚌 查询车次 & 复制终点(Salzburg Hbf)
+                    </button>
+                    <a href="https://www.google.com/maps/search/St.+Gilgen+Busbahnhof" target="_blank" class="btn-link">📍 始发站：圣吉尔根总站</a>
+                    <a href="https://www.google.com/maps/search/Salzburg+Hauptbahnhof" target="_blank" class="btn-link">📍 终点站：萨尔茨堡火车站</a>
+                </div>
+                <div class="desc">在圣吉尔根公交总站搭乘 150X 巴士返回萨尔茨堡市区。这条线通常速度更快，可以在车上稍微闭眼休息一下，为接下来的老城浪漫夜游储备精力。</div>
+            </div>
+
+            <!-- 老城夜游路线 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">20:15 - 21:30</span>
+                    <h3 class="event-title">萨尔茨堡老城绝美夜游路线</h3>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <a href="https://www.google.com/maps/search/magazin:rooms+Salzburg" target="_blank" class="btn-link">📍 酒店导航：magazin:rooms (一键回房)</a>
+                </div>
+                <details>
+                    <summary>🌙 漫步路线与夜景机位导航</summary>
+                    <div class="details-content">
+                        <div class="sub-sec">从巴士下车后，不要急着回酒店，这时的萨尔茨堡在灯光映衬下最为魔幻。</div>
+                        
+                        <div class="sub-sec">
+                            1. <a href="https://www.google.com/maps/search/Makartsteg" target="_blank" class="loc-tag">📍 马卡特桥 (Makartsteg)</a>
+                            <div class="node-desc">站在挂满同心锁的桥上，吹着萨尔察赫河的晚风，拍摄两岸华灯初上的倒影。桥梁连接着新城与老城，夜间的灯光布置极其浪漫，是情侣散步和摄影爱好者捕捉萨尔茨堡夜色“蓝调时刻”的最佳起点。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            2. <a href="https://www.google.com/maps/search/Getreidegasse" target="_blank" class="loc-tag">📍 粮食胡同夜景 (Getreidegasse)</a>
+                            <div class="node-desc">夜晚店铺关门后，街上褪去了白天的喧嚣，空无一人。错落有致的铁艺招牌在昏黄的路灯照射下，拉出长长的影子，极具中世纪探险的神秘氛围。此时漫步其间，仿佛穿越回了莫扎特生活的年代。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            3. <a href="https://www.google.com/maps/search/Residenzplatz" target="_blank" class="photo-tag">📷 主教宫广场 (Residenzplatz)</a>
+                            <div class="node-desc">巨大的巴洛克式主教宫喷泉在夜晚灯光的映衬下显得神圣无比。广场周围的建筑群被柔和的泛光灯照亮，偶尔能听到街头艺人演奏的古典吉他声，这里的空间感极强，是感受老城宏大叙事的完美地点。</div>
+                        </div>
+                        
+                        <div class="sub-sec">
+                            4. <a href="https://www.google.com/maps/search/Kapitelplatz" target="_blank" class="photo-tag">📷 卡皮特广场 (Kapitelplatz)</a>
+                            <div class="node-desc">夜游的终极高潮点。站在这里的“金球雕塑”旁，抬头仰望被探照灯完全打亮的 <a href="https://www.google.com/maps/search/Festung+Hohensalzburg" target="_blank" class="loc-tag">📍 高地要塞 (Festung Hohensalzburg)</a>。这座庞然大物悬浮在夜空中，视觉冲击力满分，拍完这张照就可以导航回酒店休息了。</div>
+                        </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- DAY 2 -->
+        <div class="day-divider"><span>Day 2 : 登高远眺、扫货与归途</span></div>
+        <div class="timeline">
+            
+            <!-- 高地要塞 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">10:00 - 11:15</span>
+                    <h3 class="event-title">高地要塞 (Festung Hohensalzburg) 登顶与游玩</h3>
+                </div>
+                <details>
+                    <summary>🏰 要塞游玩路线与特色纪念品</summary>
+                    <div class="details-content">
+                        <div class="sub-sec"><strong>📜 人文历史</strong>：始建于1077年，是中欧保存最完好的最大中世纪城堡之一。它曾是历代大主教抵御外敌（甚至本市平民暴动）的终极堡垒，历史上从未被强攻攻破过，走在古老的城墙上，历史的厚重感扑面而来。</div>
+                        <div class="sub-sec"><strong>🎫 门票指南</strong>：包含往返缆车的基础票价大约为 14-16 欧元。强烈建议购买“包含缆车”的套票组合，可以为你省去爬陡坡的大量体力，直接快速登顶。</div>
+                        <div class="sub-sec"><strong>🚶‍♂️ 核心游玩路线</strong>：先前往 <a href="https://www.google.com/maps/search/Festungsbahn+Salzburg" target="_blank" class="loc-tag">📍 要塞缆车站 (Festungsbahn)</a> 乘车登顶；随后参观 <a href="https://www.google.com/maps/search/Marionettenmuseum+Salzburg" target="_blank" class="loc-tag">📍 提线木偶博物馆 (Marionettenmuseum)</a>（互动性极强）；紧接着探索 <a href="https://www.google.com/maps/search/Zeughaus+Festung" target="_blank" class="loc-tag">📍 中世纪兵器库 (Zeughaus)</a>。</div>
+                        <div class="sub-sec"><strong>📸 最佳机位</strong>：一出缆车站即可抵达 <a href="https://www.google.com/maps/search/Festung+Hohensalzburg+Panoramaterrasse" target="_blank" class="photo-tag">📷 全景露台 (Panoramaterrasse)</a>。一面可以拍到整个老城区密集的巴洛克教堂圆顶和蜿蜒的河流，另一面则可以拍到雄伟的阿尔卑斯雪山，极其震撼。</div>
+                        
+                        <div class="sub-sec" style="margin-top: 15px;"><strong>🛍️ 8项特色纪念品与硬核小活动 (游玩贴士)</strong>：</div>
+                        <ul style="padding-left: 20px; margin-top:5px;">
+                            <li><b>0欧纪念钞</b>：要塞内通道旁的自动售卖机里，通常售价 2-3 欧元/张，机器支持现金或刷卡，印有高地要塞图案的官方紫版钞票，每张编号唯一，极其精美。</li>
+                            <li><b>手工压制纪念币 (Souvenir Medaillen)</b>：要塞内有2-3处手摇压币机，图案有要塞外观或莫扎特。<b>注意：此机器纯机械运作，仅支持现金！</b>通常需要1欧/2欧服务费，外加一枚5欧分红铜币作为压制母币，必须提前备好！</li>
+                            <li><b>木制儿童剑盾</b>：兵器库旁的商店有售，做工精良的中世纪十字军涂装小木剑，非常适合送给家里的小男孩。</li>
+                            <li><b>Hallein 矿盐 (Salz)</b>：“萨尔茨堡”意为盐堡，购买当地特产的高山香草岩盐，绝对是绝佳的实用厨房伴手礼。</li>
+                            <li><b>提线木偶周边</b>：在木偶博物馆的出口处，可以买到精美的牵线小木偶，充满童话气息。</li>
+                            <li><b>小黄鸭 (莫扎特限定款)</b>：戴着白色假发、穿着红色燕尾服的莫扎特造型鸭子，极度搞怪可爱，摆在桌上十分抢眼。</li>
+                            <li><b>官方要塞导览画册</b>：游客中心有售，里面包含中世纪攻城战的丰富图解和建筑剖面图，是历史爱好者的最爱。</li>
+                            <li><b>免费寻宝地图 (小活动)</b>：在检票口通常可向工作人员索要专为探索设计的“寻宝图（Treasure Map）”，按图索骥去寻找隐藏在城堡各个角落的标志物，游览趣味倍增。</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 粮食胡同购物 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">11:15 - 12:00</span>
+                    <h3 class="event-title">粮食胡同 (Getreidegasse) 20大必逛商铺扫货</h3>
+                </div>
+                <details>
+                    <summary>🛍️️ 20大必买精选店铺详解</summary>
+                    <div class="details-content">
+                        <div class="shop-item">
+                            <div class="shop-title">1. Café Konditorei Fürst <a href="https://www.google.com/maps/search/Cafe+Furst+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>纯手工莫扎特巧克力创始店</b>。这是绝不卖给超市的傲娇品牌，只认准“银箔蓝字”包装！它家巧克力外层是高品质黑巧，内里包裹开心果杏仁糖，甜而不腻，保质期仅6周。无论自己吃还是送贵客，这都是萨尔茨堡唯一无可替代的伴手礼，买一盒精装礼盒绝对撑面子，店内支持刷卡。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">2. 奥地利邮政局 / 集邮店 (Österreichische Post) <a href="https://www.google.com/maps/search/Postfiliale+Salzburg+Residenzplatz" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>小红书强推的隐藏纪念打卡点！</b>奥地利邮政局经常会发行莫扎特主题、萨尔茨堡音乐节主题或高地要塞主题的限量版精美纪念邮票。不仅可以买来精装收藏册，还可以当场买一张明信片，盖上萨尔茨堡的特色邮戳寄给朋友。这份带有实体邮戳的纸质浪漫，绝对比普通的冰箱贴更有温度和纪念意义。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">3. 萨尔茨堡特色冰箱贴专门店 (Souvenir Shops) <a href="https://www.google.com/maps/search/Souvenir+Shop+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>收集控不可错过的精美手信</b>。胡同里有大量的精美纪念品店，小红书上非常火的“立体陶瓷冰箱贴”一定要仔细挑选。推荐购买立体的高地要塞造型、莫扎特故居黄楼造型、或者是带有一把小提琴的音乐主题冰箱贴，做工十分考究，贴在家里冰箱上天天都能回忆起美好旅程。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">4. Manner Shop (粉色威化专卖) <a href="https://www.google.com/maps/search/Manner+Shop+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>奥地利国民粉色威化饼专卖店</b>。走进这家充满粉色元素的店，你能找到各种规格尺寸的 Manner 威化饼。强烈推荐购买经典的榛子原味和清爽的柠檬酸奶味。价格极其亲民，随便买一大袋回去分发给同学或同事，既好吃又拿得出手，绝对的“伴手礼性价比之王”。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">5. Christmas in Salzburg (Käthe Wohlfahrt) <a href="https://www.google.com/maps/search/Kathe+Wohlfahrt+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>全年无休的圣诞奇幻世界</b>。即便是在盛夏，推开门也是浓浓的圣诞气氛。店内售卖极其精致的胡桃夹子、木制熏香小人（Räuchermännchen）以及手工玻璃彩绘挂件。价格小贵，但作为极具德奥风情的艺术收藏品，买一个小挂件带回家非常有纪念意义，质感绝佳。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">6. Red Bull World <a href="https://www.google.com/maps/search/Red+Bull+World+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>红牛全球极客旗舰店</b>。萨尔茨堡是红牛总部所在地。这家店不仅卖各种新奇口味的能量饮料，更有F1赛车队（Red Bull Racing）、萨尔茨堡红牛足球队的官方周边服饰。衣服设计感极强，材质优良，非常适合买一件潮牌T恤或赛车棒球帽送给喜欢体育的硬核朋友。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">7. ZARA (最美历史建筑店) <a href="https://www.google.com/maps/search/ZARA+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>快时尚与中世纪的完美碰撞</b>。推荐这家并不是为了买衣服，而是这家ZARA开在历史悠久的古典建筑里，外墙悬挂着精心设计的传统铁艺招牌，内部则保留了斑驳的石拱门和复古的旋转楼梯。这里是体验“现代商业彻底融入历史街区”的绝佳打卡点，必须要进去转一圈拍个照。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">8. Lanz Trachten (传统服饰) <a href="https://www.google.com/maps/search/Lanz+Trachten+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>传统阿尔卑斯服饰天花板</b>。自1922年起，这里就贩卖最正宗的奥地利传统裙装（Dirndl）和皮裤（Lederhosen）。真正的纯手工刺绣和高级亚麻材质，一套衣服动辄几百欧。买不起昂贵的衣服也没关系，可以买带有经典“雪绒花（Edelweiss）”刺绣图案的布袋或精美配饰。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">9. Alte Hofapotheke (百年古老药局) <a href="https://www.google.com/maps/search/Alte+Hofapotheke+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>拥有数百年历史的古老魔药局</b>。保留了大量精美的木制药柜和复古瓷罐，仿佛走进了哈利波特的魔药课教室。这里不仅卖现代药品，还能买到药局自己独家配制的阿尔卑斯高山草本茶（天然助眠或消食功效显著）、手工润唇膏和复古包装的护手霜，作为小众伴手礼极其独特。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">10. Swarovski (奥地利水晶世界) <a href="https://www.google.com/maps/search/Swarovski+Salzburg+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>奥地利国宝级水晶品牌发源地</b>。虽然全球都有，但在奥地利本土店购买款式绝对最全，且经常有本土限定的精美首饰。这家店在粮食胡同的装潢极其耀眼，橱窗本身就是艺术品。如果需要给女性长辈或女友带礼物，一条经典闪耀的天鹅项链是绝对不会出错的安全牌。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">11. Stiegl-Brauwelt Shop (本土啤酒周边) <a href="https://www.google.com/maps/search/Stiegl+Shop+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>萨尔茨堡标志性啤酒授权店</b>。这是萨尔茨堡人最引以为傲的本地啤酒品牌 Stiegl 的专卖店。你不仅能买到各种新鲜的精酿啤酒，更强烈推荐购买极具奥地利传统风格的陶瓷啤酒杯（带金属翻盖的那种，质感无敌）、复古开瓶器。这些物件不仅实用，而且充满了浓浓的德奥啤酒文化气息。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">12. Gehmacher (奥地利高奢家居生活馆) <a href="https://www.google.com/maps/search/Gehmacher+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>阿尔卑斯高级生活方式的缩影</b>。这家店不仅卖东西，更是极具品味的艺术馆。店内陈列着极度精美的室内香薰、陶瓷杯具、抱枕以及手工编织的羊毛毯。即便不买大件家具，带一块带有萨尔茨堡刺绣的高级亚麻餐布，或者一瓶充满高山松木香气的室内香氛，都能把旅行的精致感完美带回家。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">13. Aïda Café (维也纳粉色咖啡馆周边) <a href="https://www.google.com/maps/search/Aida+Cafe+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>少女心爆棚的复古甜品店伴手礼</b>。这是著名的维也纳粉色连锁咖啡馆在萨尔茨堡的分店。除了品尝美味的苹果派，你可以在这里买到包装极其复古、颜色骚粉的精装咖啡豆、手工巧克力、以及带有标志性粉色 Logo 的马克杯和帆布袋。对于喜欢复古甜美风的女生来说，这里的伴手礼绝对让人爱不释手。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">14. Jahn-Markl (百年传统皮具定制铺) <a href="https://www.google.com/maps/search/Jahn-Markl+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>拥有数百年历史的顶级皮革工坊</b>。这里专门定制奥地利传统皮裤（Lederhosen）和各种皮制配件。虽然定制一条高级皮裤价格十分昂贵，但你可以在这里买到手工细致缝制的真皮零钱包、高品质的皮带、或者是带有鹿角装饰的皮质小挂件。每一件物品都散发着高级皮革的独特香气，是送给男士的完美手信。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">15. Salzburger Mozartkugeln Mirabell <a href="https://www.google.com/maps/search/Mirabell+Mozartkugeln" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>平价实惠的超市版红金巧克力</b>。区别于昂贵的纯手工 Fürst，Mirabell 的“金箔红字”版本虽然是现代化的流水线生产，但胜在购买极其方便且价格非常亲民。如果你需要带给一大群公司同事或者普通同学作为大批量的伴手礼，买这种大包装的 Mirabell 巧克力绝对是最经济实惠且不出错的选项。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">16. Stiftsbäckerei St. Peter (中世纪水车面包房) <a href="https://www.google.com/maps/search/Stiftsb%C3%A4ckerei+St.+Peter" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>隐藏在修道院旁的八百年历史古老面包房</b>。这家店至今仍在用传统的水车驱动石磨磨制面粉，并在燃木烤炉中进行烘烤。这里几乎只卖一种极具特色的硬欧酸面团面包（Sourdough bread）。买一小个带着木柴焦香的热乎面包，不管是当明天的早餐还是带回慕尼黑，都充满了极其纯粹的历史厚重感。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">17. Mühlbauer Hutmanufaktur (顶级手工制帽坊) <a href="https://www.google.com/maps/search/M%C3%BChlbauer+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>好莱坞巨星都爱的奥地利手工帽</b>。如果你对奥地利传统的阿尔卑斯毡帽感兴趣，这家高级手工帽店绝对不容错过。帽子由顶级羊毛毡压制而成，旁边还会配上一根传统的羽毛装饰。即便不打算购买昂贵的帽子，买一个极具当地特色的传统小羽毛别针作为胸针，也非常有格调，彰显品味。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">18. Salzburg Salt & Souvenir (特色高山岩盐专卖) <a href="https://www.google.com/maps/search/Salzburg+Salt+Shop" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>来自萨尔茨堡深山的天然馈赠</b>。这家店专门卖萨尔茨堡周遭盐矿产出的食用盐和天然浴盐。这里不仅有普通的细盐，还有加入了阿尔卑斯高山香草、蒜香、甚至是辣椒的复方调味盐，装在非常精美的玻璃小磨床瓶子里。用来煎牛排或者做西餐时现磨撒一点，风味瞬间提升，是送给热爱烹饪的长辈的绝佳好物。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">19. Tomaselli Café Shop (莫扎特最爱咖啡馆周边) <a href="https://www.google.com/maps/search/Cafe+Tomaselli+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>萨尔茨堡最古老的百年咖啡馆</b>。莫扎特生前曾是这里的常客。吃完甜点后，强烈建议在他们的前台购买自家精湛烘焙的特选咖啡豆礼盒，或者带有古老咖啡馆 Logo 的银质小咖啡勺。将这份沉淀了数百年的悠久咖啡文化带回国，无论是自己在家冲泡还是送给咖啡发烧友，都显得极其有内涵。</p>
+                        </div>
+                        <div class="shop-item">
+                            <div class="shop-title">20. Pfeifen Huber / 烟斗与传统金属烟具店 <a href="https://www.google.com/maps/search/Pfeifen+Huber+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
+                            <p><b>老城胡同里的复古绅士隐秘老店</b>。橱窗里摆满了各式各样手工雕刻的石楠木烟斗和精致的金属打火机，这里充满了中世纪老派绅士的优雅气息。即使你不抽烟，买一个做工极其精美的复古火柴盒，或者一件沉甸甸的铜制雪茄剪作为桌面摆件，都能完美展现出极佳的复古品味和独特的旅行眼光。</p>
+                        </div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- 午餐 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">12:00 - 12:45</span>
+                    <h3 class="event-title">重返 Yiyami 享用午餐</h3>
+                </div>
+                <a href="https://www.google.com/maps/search/Yiyami+Salzburg" target="_blank" class="btn-link">📍 餐厅一键导航</a>
+                <div class="desc">不用犹豫，买完满载心意的纪念品后，直接穿过萨尔察赫河的桥，再次回到心心念念的 Yiyami 享用一顿热腾腾的中餐，用最熟悉的安全感和最饱满的胃为萨尔茨堡之行画上完美的句号。</div>
+            </div>
+
+            <!-- 乘车返回慕尼黑 -->
+            <div class="event-card">
+                <div class="event-header">
+                    <span class="time-badge">12:45 - 15:09</span>
+                    <h3 class="event-title">准时登车，搭乘 RE5 返回慕尼黑</h3>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <!-- 核心修复：三大按钮并排完整保留 -->
+                    <button class="btn-link btn-action" onclick="copyAndGo('München Hbf', 'https://www.bahn.com/en')">
+                        🚆 查询车次 & 复制终点(München Hbf)
+                    </button>
+                    <a href="https://www.google.com/maps/search/Salzburg+Hauptbahnhof" target="_blank" class="btn-link">📍 始发站：萨尔茨堡火车站</a>
+                    <a href="https://www.google.com/maps/search/Munich+Central+Station" target="_blank" class="btn-link">📍 终点站：慕尼黑火车站</a>
+                </div>
+                <div class="desc">吃饱喝足后从容前往萨尔茨堡主火车站。准时搭乘 13:05 发车的 RE 5 列车。一路上可以在车厢里安心补觉，或者回味手机里拍下的大片，预计于 15:09 顺顺利利抵达慕尼黑中央车站，傍晚就能舒舒服服地开启宅家躺平模式！</div>
+            </div>
+
+        </div>
     </div>
 
-    <!-- DAY 1 -->
-    <div class="day-divider"><span>Day 1 : 湖光山色与绝美夜游</span></div>
-    <div class="timeline">
+    <!-- ================= 右侧：《音乐之声》巡礼特辑 ================= -->
+    <div class="sidebar" id="somSidebar">
+        <!-- 收起/展开按钮 -->
+        <button class="toggle-btn" onclick="toggleSidebar()" title="收起/展开面板">▶</button>
         
-        <!-- 抵达萨尔茨堡 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">10:46 抵达</span>
-                <h3 class="event-title">从慕尼黑乘车抵达萨尔茨堡主火车站</h3>
-            </div>
-            <a href="https://www.google.com/maps/search/Salzburg+Hauptbahnhof" target="_blank" class="btn-link">📍 萨尔茨堡火车站 (Salzburg Hbf)</a>
-            <div class="desc">从慕尼黑中央车站乘坐早班列车，顺利抵达萨尔茨堡主火车站。出站后直接背着双肩包轻装上阵，无需寻找寄存处，出站后直接步行或乘坐公交前往米拉贝尔花园方向，正式开启本次旅行的第一站。</div>
-        </div>
-
-        <!-- 米拉贝尔花园 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">10:55 - 11:30</span>
-                <h3 class="event-title">米拉贝尔宫与花园 (Schloss Mirabell)</h3>
-            </div>
-            <details open>
-                <summary>📖 深度探索与玩法指引</summary>
-                <div class="details-content">
-                    <div class="sub-sec"><strong>📜 人文历史</strong>：建于1606年，是沃尔夫·迪特里希大主教为他的情人莎乐美建造的宫殿。这里不仅是权力的象征，更因《音乐之声》中玛丽亚和孩子们围绕喷泉边唱 <a href="https://www.youtube.com/watch?v=drnBMAEA3AM" target="_blank" class="audio-tag">🎵 点击播放《Do-Re-Mi》</a> 而闻名于世，承载着萨尔茨堡最浪漫的岁月记忆。</div>
-                    <div class="sub-sec"><strong>🎫 门票指南</strong>：米拉贝尔花园全年免费向公众开放，无需购买任何门票。宫殿内部的大理石大厅（Marmorsaal）号称世界最美结婚大厅，如果未举行婚礼或音乐会，也可免费参观，请注意在内保持安静。</div>
-                    <div class="sub-sec"><strong>✨ 核心看点</strong>：<a href="https://www.google.com/maps/search/Pegasusbrunnen+Mirabell" target="_blank" class="loc-tag">📍 飞马喷泉 (Pegasusbrunnen)</a>、<a href="https://www.google.com/maps/search/Zwergelgarten+Mirabell" target="_blank" class="loc-tag">📍 侏儒花园 (Zwergelgarten)</a>（藏在侧面小径里的怪诞雕塑群，极其有趣）、以及<a href="https://www.google.com/maps/search/Schloss+Mirabell+Marmorsaal" target="_blank" class="loc-tag">📍 宫殿主楼 (Schloss Mirabell)</a> 内壮丽的大理石楼梯与天使雕塑群。</div>
-                    <div class="sub-sec"><strong>📸 最佳机位</strong>：一定要站在 <a href="https://www.google.com/maps/search/Mirabellgarten+Rose+Garden" target="_blank" class="photo-tag">📷 玫瑰园 (Rosengarten)</a> 的南侧尽头，将前方的对称花坛、飞马喷泉与背景中高高在上的“高地要塞”同框拍下，这是萨尔茨堡最经典的明信片角度。</div>
-                    <div class="sub-sec"><strong>💡 游玩贴士</strong>：花园内部全程平地，拖着轻便行李也完全不费力。早晨游客相对较少，建议预留30-40分钟慢慢闲逛，无需在此处购买任何纪念品。上午的光线拍照最为柔和。</div>
-                </div>
-            </details>
-        </div>
-
-        <!-- Yiyami 午餐 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">11:30 - 12:10</span>
-                <h3 class="event-title">午餐：Yiyami 亚洲餐厅</h3>
-            </div>
-            <a href="https://www.google.com/maps/search/Yiyami+Salzburg" target="_blank" class="btn-link">📍 餐厅一键导航</a>
-            <details>
-                <summary>🍽️ 餐厅指南</summary>
-                <div class="details-content">
-                    <div class="sub-sec"><strong>🌟 推荐理由</strong>：谁说来欧洲只能吃无聊的河粉和拉面？在“万物皆可炸”的德奥菜系包围下，这家店隐藏的重口味中餐才是海外游子的灵魂救赎，热辣滚烫，瞬间唤醒你的味蕾！</div>
-                    <div class="sub-sec"><strong>🌶️ 特色菜推荐</strong>：
-                        <br>• <b>水煮鱼片</b>：红油清透，鱼肉极其滑嫩，配上底部的爽脆豆芽，吃下一口简直回魂。
-                        <br>• <b>正宗麻婆豆腐</b>：麻辣鲜香，拌米饭的绝对神器，为你带来碳水爆炸的极致快乐。
-                        <br>• <b>辣子鸡丁 / 回锅肉</b>：下饭必点，火候和调味完全不输国内街边的高水平小炒店。
-                    </div>
-                    <div class="sub-sec"><strong>💰 预计人均</strong>：大约需要 18 - 25 欧元（在萨尔茨堡市区绝对属于物超所值的水平）。</div>
-                    <div class="sub-sec"><strong>📍 地理位置与动线</strong>：这家店距离米拉贝尔花园南侧出口步行仅仅需要 5 分钟左右的时间，吃完饭出门走几步即可到达市区主干道的公交枢纽（Mirabellplatz 附近），动线极其顺滑。</div>
-                    <div class="sub-sec"><strong>💡 用餐贴士</strong>：中午饭点可能会稍微排队，老板人很好，上菜速度也快。吃饱后记得去洗手间休整一下，准备下午的体力活动。</div>
-                </div>
-            </details>
-        </div>
-
-        <!-- 乘车前往圣吉尔根 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">12:19 - 13:07</span>
-                <h3 class="event-title">搭乘 150路公交前往圣吉尔根</h3>
-            </div>
-            <div style="margin-bottom: 10px;">
-                <a href="https://salzburg-verkehr.at/" target="_blank" class="btn-link">🚌 萨尔茨堡交通时刻查询</a>
-                <a href="https://www.google.com/maps/search/Mirabellplatz+Salzburg" target="_blank" class="btn-link">📍 始发站：米拉贝尔广场</a>
-                <a href="https://www.google.com/maps/search/St.+Gilgen+Busbahnhof" target="_blank" class="btn-link">📍 终点站：圣吉尔根公交总站</a>
-            </div>
-            <div class="desc">在米拉贝尔广场 (Mirabellplatz) 附近的公交站搭乘 150 路大巴车，一路向东驶入美丽的萨尔茨卡默古特湖区。车程大约 45-50 分钟，强烈建议尽量坐在巴士的右侧，可以欣赏到极美的沿途山水风光。</div>
-        </div>
-
-        <!-- 缆车徒步 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">13:45 - 15:30</span>
-                <h3 class="event-title">十二角峰缆车与山顶徒步 (Zwölferhorn)</h3>
-            </div>
-            <a href="https://www.google.com/maps/search/Zw%C3%B6lferhorn+Seilbahn" target="_blank" class="btn-link">📍 缆车起点导航 (Talstation)</a>
-            <details>
-                <summary>⛰️ 深度徒步线路与机位跳转</summary>
-                <div class="details-content">
-                    <div class="sub-sec"><strong>📜 人文与地理</strong>：十二角峰是萨尔茨卡默古特湖区最具标志性的全景观景山峰。2020年全新翻修的全景缆车极大地提升了游客体验。这里常年是滑翔伞爱好者的天堂，天气晴好时抬头即可看到漫天五颜六色的滑翔伞。</div>
-                    <div class="sub-sec"><strong>🎫 门票与购票</strong>：缆车往返票价大约为 30-35 欧元/人，支持信用卡和现金支付，建议现场在购票机器或者人工窗口直接购买即可。</div>
-                    <div class="sub-sec"><strong>🚶‍♂️ 核心环线 (Pillstein-Panorama-Weg) 全节点导航</strong>：</div>
-                    
-                    <div class="sub-sec">
-                        1. <a href="https://www.google.com/maps/search/Zw%C3%B6lferhorn+Bergstation" target="_blank" class="loc-tag">📍 山顶缆车站 (Bergstation)</a>
-                        <div class="node-desc">出站即是壮丽的观景台，这里是俯瞰整个深蓝色的沃尔夫冈湖与沙夫山的绝佳视点。刚下缆车就能感受到高山清新的空气，可以在这里的全景露台拍第一波大片，稍微适应一下高海拔的环境再出发。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        2. <a href="https://www.google.com/maps/search/Arnikah%C3%BCtte+Zw%C3%B6lferhorn" target="_blank" class="photo-tag">📷 休息站 (Arnikahütte)</a>
-                        <div class="node-desc">沿着平缓的碎石路前行大约15分钟，路边有大量的高山草甸植被，这里是绝佳的高山生态打卡地。休息站附近设有木制长椅，非常适合稍作停顿，喝口水呼吸新鲜空气，顺便拍下背后绵延的群山和蓝天。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        3. <a href="https://www.google.com/maps/search/Pillsteinkreuz" target="_blank" class="photo-tag">📷 山顶十字架 (Pillsteinkreuz)</a>
-                        <div class="node-desc">徒步大约40分钟到达的核心高点，这是证明“我登顶了”的绝佳拍照打卡地。站在这里能拍出毫无遮挡的“人、十字架、深蓝湖水”同框大片。风比较大，建议穿上防风外套，在这里多停留一会儿享受一览众山小的快感。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        4. <a href="https://www.google.com/maps/search/Illingerbergalm" target="_blank" class="loc-tag">📍 返程路段 (Illingerbergalm)</a>
-                        <div class="node-desc">绕过山包从平缓的南侧返回，全程无大坡度，极其“护膝”。沿途经常能碰到脖子上挂着牛铃、悠闲吃草的阿尔卑斯奶牛，伴随着清脆的牛铃声，这段下坡路走起来非常轻松惬意，让人忘记疲惫。</div>
-                    </div>
-
-                    <div class="sub-sec"><strong>💡 游玩贴士</strong>：在这条全景徒步环线上，即使是夏天也请务必携带一件轻薄的防风外套，因为海拔超过1500米后，山顶的阿尔卑斯山风会比较大且气温偏低。步道绝大部分是铺满碎石的平缓路面，非常护膝，但仍建议穿着具有良好抓地力的运动鞋或轻量级徒步鞋。此外，强烈建议随身带一瓶水和一些补充能量的小零食，在十字架或者草甸长椅上休息时可以一边补充体力，一边静静享受绝美的湖光山色。</div>
-                </div>
-            </details>
-        </div>
-
-        <!-- 圣吉尔根小镇 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">15:45 - 17:15</span>
-                <h3 class="event-title">圣吉尔根湖滨小镇漫步</h3>
-            </div>
-            <details>
-                <summary>📖 小镇闲逛路线节点导航</summary>
-                <div class="details-content">
-                    <div class="sub-sec">
-                        1. <a href="https://www.google.com/maps/search/Mozartplatz+St.+Gilgen" target="_blank" class="loc-tag">📍 莫扎特广场 (Mozartplatz)</a>
-                        <div class="node-desc">下缆车后直奔小镇中心广场。这里有一座拉小提琴的莫扎特青铜雕像，广场旁就是市政厅，外墙的壁画非常精美，极具奥地利传统风情。喷泉常年流淌清澈的阿尔卑斯山泉水，是整个小镇的灵魂中心。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        2. <a href="https://www.google.com/maps/search/Mozarthaus+St.+Gilgen" target="_blank" class="loc-tag">📍 莫扎特母亲故居 (Mozarthaus)</a>
-                        <div class="node-desc">莫扎特的母亲 Anna Maria 诞生于此，他姐姐也曾在此生活。明黄色外墙与彩绘极其出片，一楼通常可以买到关于莫扎特家族的周边小册子。即便不进博物馆，在外围打卡拍照也能感受到浓厚的古典音乐氛围。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        3. <a href="https://www.google.com/maps/search/Pfarrkirche+St.+Gilgen" target="_blank" class="photo-tag">📷 教区教堂 (Pfarrkirche St. Gilgen)</a>
-                        <div class="node-desc">典型的晚期哥特式洋葱顶教堂，教堂内部宁静庄严。教堂旁边的花海墓园极其安静且精美，鲜花簇拥，充满了当地人对生命的敬意和浪漫态度，非常值得花上十分钟在这里静静漫步感受时光。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        4. <a href="https://www.google.com/maps/search/Seepromenade+St.+Gilgen" target="_blank" class="photo-tag">📷 湖滨长廊 (Seepromenade)</a>
-                        <div class="node-desc">穿过小镇走到沃尔夫冈湖边。湖畔有大量的木制长椅和天鹅，远眺对岸的沙夫山。在日落前的一小时里，这里的湖面会被染成金色，是真正的“发呆圣地”，买杯咖啡坐在长椅上喂喂天鹅，松弛感拉满。</div>
-                    </div>
-                </div>
-            </details>
-        </div>
-
-        <!-- 三大晚餐选择 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">17:15 - 18:30</span>
-                <h3 class="event-title">晚餐抉择：湖畔寻味</h3>
-            </div>
-            <details>
-                <summary>🍽️ 晚餐三选一指南 (含网红平价烤鱼)</summary>
-                <div class="details-content">
-                    <div class="shop-item">
-                        <div class="shop-title">
-                            1. Steckerlfisch am See 
-                            <a href="https://www.google.com/maps/search/Steckerlfisch+St.+Gilgen" target="_blank" class="loc-tag">📍 导航</a>
-                        </div>
-                        <p style="margin:5px 0;"><strong>🌟 特色菜品</strong>：奥地利湖区极其传统的“木棍烤鱼”，老板用明火当着你的面现烤，外皮焦脆，鱼肉鲜嫩，极具浓浓的烟火气，再配上冰镇扎啤和土豆沙拉，简直完美。<br>
-                        <strong>📍 地理路线与位置</strong>：就位于圣吉尔根的湖滨长廊附近，是一个露天的售卖亭，买完直接坐在湖边的长椅上边吃边看日落，距离公车站步行大约十分钟。<br>
-                        <strong>💰 预计人均</strong>：约 13 - 16 欧（性价比之王）。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">
-                            2. Restaurant Fischerwirt (高级白鲑鱼正餐)
-                            <a href="https://www.google.com/maps/search/Fischerwirt+St.+Gilgen" target="_blank" class="loc-tag">📍 导航</a>
-                        </div>
-                        <p style="margin:5px 0;"><strong>🌟 特色菜品</strong>：强烈推荐“黄油煎沃尔夫冈湖白鲑鱼 (Gebratene Reinanke)”，配上柠檬汁和欧芹小土豆。鱼肉肉质极其细腻，环境优雅的百年老店，追求精致用餐体验的首选。<br>
-                        <strong>📍 地理路线与位置</strong>：位于圣吉尔根小镇中心稍微靠近湖边的位置，吃完饭走几步就能回到湖边看晚霞，或者走回公交车站（约 5 分钟），动线非常方便。<br>
-                        <strong>💰 预计人均</strong>：约 30 - 45 欧。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">
-                            3. Gasthof Zur Post (传统奥地利地道风味)
-                            <a href="https://www.google.com/maps/search/Gasthof+Zur+Post+St.+Gilgen" target="_blank" class="loc-tag">📍 导航</a>
-                        </div>
-                        <p style="margin:5px 0;"><strong>🌟 特色菜品</strong>：如果不爱吃鱼，这家传统客栈提供最正宗的肉类料理。必点“清炖牛肉 (Tafelspitz)”或者烤猪肉配酸菜，肉质软烂入味，分量极大，能让你充分体验地道奥地利风情。<br>
-                        <strong>📍 地理路线与位置</strong>：直接坐落于莫扎特广场旁边，是镇中心最显眼的历史建筑之一，吃完饭走到车站只需两三分钟，绝不会错过回程的大巴。<br>
-                        <strong>💰 预计人均</strong>：约 20 - 30 欧。</p>
-                    </div>
-                </div>
-            </details>
-        </div>
-
-        <!-- 乘车返回萨尔茨堡 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">19:31 - 20:12</span>
-                <h3 class="event-title">搭乘 150X 快线巴士返回萨尔茨堡</h3>
-            </div>
-            <div style="margin-bottom: 10px;">
-                <a href="https://salzburg-verkehr.at/" target="_blank" class="btn-link">🚌 萨尔茨堡交通时刻查询</a>
-                <a href="https://www.google.com/maps/search/St.+Gilgen+Busbahnhof" target="_blank" class="btn-link">📍 始发站：圣吉尔根公交总站</a>
-                <a href="https://www.google.com/maps/search/Salzburg+Hauptbahnhof" target="_blank" class="btn-link">📍 终点站：萨尔茨堡主火车站</a>
-            </div>
-            <div class="desc">在圣吉尔根公交总站搭乘 150X 巴士返回萨尔茨堡市区。这条线通常速度更快，可以在车上稍微闭眼休息一下，为接下来的老城浪漫夜游储备精力。</div>
-        </div>
-
-        <!-- 老城夜游路线 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">20:15 - 21:30</span>
-                <h3 class="event-title">萨尔茨堡老城绝美夜游路线</h3>
-            </div>
-            <div style="margin-bottom: 15px;">
-                <a href="https://www.google.com/maps/search/magazin:rooms+Salzburg" target="_blank" class="btn-link">📍 酒店导航：magazin:rooms (一键回房)</a>
-            </div>
-            <details>
-                <summary>🌙 漫步路线与夜景机位导航</summary>
-                <div class="details-content">
-                    <div class="sub-sec">从巴士下车后，不要急着回酒店，这时的萨尔茨堡在灯光映衬下最为魔幻。</div>
-                    
-                    <div class="sub-sec">
-                        1. <a href="https://www.google.com/maps/search/Makartsteg" target="_blank" class="loc-tag">📍 马卡特桥 (Makartsteg)</a>
-                        <div class="node-desc">站在挂满同心锁的桥上，吹着萨尔察赫河的晚风，拍摄两岸华灯初上的倒影。桥梁连接着新城与老城，夜间的灯光布置极其浪漫，是情侣散步和摄影爱好者捕捉萨尔茨堡夜色“蓝调时刻”的最佳起点。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        2. <a href="https://www.google.com/maps/search/Getreidegasse" target="_blank" class="loc-tag">📍 粮食胡同夜景 (Getreidegasse)</a>
-                        <div class="node-desc">夜晚店铺关门后，街上褪去了白天的喧嚣，空无一人。错落有致的铁艺招牌在昏黄的路灯照射下，拉出长长的影子，极具中世纪探险的神秘氛围。此时漫步其间，仿佛穿越回了莫扎特生活的年代。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        3. <a href="https://www.google.com/maps/search/Residenzplatz" target="_blank" class="photo-tag">📷 主教宫广场 (Residenzplatz)</a>
-                        <div class="node-desc">巨大的巴洛克式主教宫喷泉在夜晚灯光的映衬下显得神圣无比。广场周围的建筑群被柔和的泛光灯照亮，偶尔能听到街头艺人演奏的古典吉他声，这里的空间感极强，是感受老城宏大叙事的完美地点。</div>
-                    </div>
-                    
-                    <div class="sub-sec">
-                        4. <a href="https://www.google.com/maps/search/Kapitelplatz" target="_blank" class="photo-tag">📷 卡皮特广场 (Kapitelplatz)</a>
-                        <div class="node-desc">夜游的终极高潮点。站在这里的“金球雕塑”旁，抬头仰望被探照灯完全打亮的 <a href="https://www.google.com/maps/search/Festung+Hohensalzburg" target="_blank" class="loc-tag">📍 高地要塞 (Festung Hohensalzburg)</a>。这座庞然大物悬浮在夜空中，视觉冲击力满分，拍完这张照就可以导航回酒店休息了。</div>
-                    </div>
-                </div>
-            </details>
-        </div>
-    </div>
-
-    <!-- DAY 2 -->
-    <div class="day-divider"><span>Day 2 : 登高远眺、扫货与归途</span></div>
-    <div class="timeline">
+        <div class="sidebar-title">🎵《音乐之声》巡礼图鉴</div>
         
-        <!-- 高地要塞 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">10:00 - 11:15</span>
-                <h3 class="event-title">高地要塞 (Festung Hohensalzburg) 登顶与游玩</h3>
+        <!-- 景点 1 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-red">
+                <h4>米拉贝尔花园 (Mirabellgarten)</h4>
+                <p>《Do-Re-Mi》经典花坛背景。<br>Day 1 上午已完美安排！</p>
+                <a href="https://www.google.com/maps/search/Mirabellgarten" target="_blank" class="btn-link">📍 景点导航</a>
+                <button class="btn-link btn-action" onclick="copyAndGo('Mirabellplatz', 'https://salzburg-verkehr.at/')">🚌 查车次 & 复制站名</button>
             </div>
-            <details>
-                <summary>🏰 要塞游玩路线与特色纪念品</summary>
-                <div class="details-content">
-                    <div class="sub-sec"><strong>📜 人文历史</strong>：始建于1077年，是中欧保存最完好的最大中世纪城堡之一。它曾是历代大主教抵御外敌（甚至本市平民暴动）的终极堡垒，历史上从未被强攻攻破过，走在古老的城墙上，历史的厚重感扑面而来。</div>
-                    <div class="sub-sec"><strong>🎫 门票指南</strong>：包含往返缆车的基础票价大约为 14-16 欧元。强烈建议购买“包含缆车”的套票组合，可以为你省去爬陡坡的大量体力，直接快速登顶。</div>
-                    <div class="sub-sec"><strong>🚶‍♂️ 核心游玩路线</strong>：先前往 <a href="https://www.google.com/maps/search/Festungsbahn+Salzburg" target="_blank" class="loc-tag">📍 要塞缆车站 (Festungsbahn)</a> 乘车登顶；随后参观 <a href="https://www.google.com/maps/search/Marionettenmuseum+Salzburg" target="_blank" class="loc-tag">📍 提线木偶博物馆 (Marionettenmuseum)</a>（互动性极强）；紧接着探索 <a href="https://www.google.com/maps/search/Zeughaus+Festung" target="_blank" class="loc-tag">📍 中世纪兵器库 (Zeughaus)</a>。</div>
-                    <div class="sub-sec"><strong>📸 最佳机位</strong>：一出缆车站即可抵达 <a href="https://www.google.com/maps/search/Festung+Hohensalzburg+Panoramaterrasse" target="_blank" class="photo-tag">📷 全景露台 (Panoramaterrasse)</a>。一面可以拍到整个老城区密集的巴洛克教堂圆顶和蜿蜒的河流，另一面则可以拍到雄伟的阿尔卑斯雪山，极其震撼。</div>
-                    
-                    <div class="sub-sec" style="margin-top: 15px;"><strong>🛍️ 8项特色纪念品与硬核小活动 (游玩贴士)</strong>：</div>
-                    <ul style="padding-left: 20px; margin-top:5px;">
-                        <li><b>0欧纪念钞</b>：要塞内通道旁的自动售卖机里，通常售价 2-3 欧元/张，机器支持现金或刷卡，印有高地要塞图案的官方紫版钞票，每张编号唯一，极其精美。</li>
-                        <li><b>手工压制纪念币 (Souvenir Medaillen)</b>：要塞内有2-3处手摇压币机，图案有要塞外观或莫扎特。<b>注意：此机器纯机械运作，仅支持现金！</b>通常需要1欧/2欧服务费，外加一枚5欧分红铜币作为压制母币，必须提前备好！</li>
-                        <li><b>木制儿童剑盾</b>：兵器库旁的商店有售，做工精良的中世纪十字军涂装小木剑，非常适合送给家里的小男孩。</li>
-                        <li><b>Hallein 矿盐 (Salz)</b>：“萨尔茨堡”意为盐堡，购买当地特产的高山香草岩盐，绝对是绝佳的实用厨房伴手礼。</li>
-                        <li><b>提线木偶周边</b>：在木偶博物馆的出口处，可以买到精美的牵线小木偶，充满童话气息。</li>
-                        <li><b>小黄鸭 (莫扎特限定款)</b>：戴着白色假发、穿着红色燕尾服的莫扎特造型鸭子，极度搞怪可爱，摆在桌上十分抢眼。</li>
-                        <li><b>官方要塞导览画册</b>：游客中心有售，里面包含中世纪攻城战的丰富图解和建筑剖面图，是历史爱好者的最爱。</li>
-                        <li><b>免费寻宝地图 (小活动)</b>：在检票口通常可向工作人员索要专为探索设计的“寻宝图（Treasure Map）”，按图索骥去寻找隐藏在城堡各个角落的标志物，游览趣味倍增。</li>
-                    </ul>
-                </div>
-            </details>
         </div>
+        <div class="transport-label">🚶 同一景区内步行</div>
 
-        <!-- 粮食胡同购物 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">11:15 - 12:00</span>
-                <h3 class="event-title">粮食胡同 (Getreidegasse) 20大必逛商铺扫货</h3>
+        <!-- 景点 2 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-red">
+                <h4>飞马喷泉 (Pegasusbrunnen)</h4>
+                <p>玛丽亚和孩子们跳舞的喷泉。<br>位于花园正中心。</p>
+                <a href="https://www.google.com/maps/search/Pegasusbrunnen+Mirabell" target="_blank" class="btn-link">📍 景点导航</a>
             </div>
-            <details>
-                <summary>🛍️ 20大必买精选店铺详解</summary>
-                <div class="details-content">
-                    <div class="shop-item">
-                        <div class="shop-title">1. Café Konditorei Fürst <a href="https://www.google.com/maps/search/Cafe+Furst+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>纯手工莫扎特巧克力创始店</b>。这是绝不卖给超市的傲娇品牌，只认准“银箔蓝字”包装！它家巧克力外层是高品质黑巧，内里包裹开心果杏仁糖，甜而不腻，保质期仅6周。无论自己吃还是送贵客，这都是萨尔茨堡唯一无可替代的伴手礼，买一盒精装礼盒绝对撑面子，店内支持刷卡。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">2. 奥地利邮政局 / 集邮店 (Österreichische Post) <a href="https://www.google.com/maps/search/Postfiliale+Salzburg+Residenzplatz" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>小红书强推的隐藏纪念打卡点！</b>奥地利邮政局经常会发行莫扎特主题、萨尔茨堡音乐节主题或高地要塞主题的限量版精美纪念邮票。不仅可以买来精装收藏册，还可以当场买一张明信片，盖上萨尔茨堡的特色邮戳寄给朋友。这份带有实体邮戳的纸质浪漫，绝对比普通的冰箱贴更有温度和纪念意义。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">3. 萨尔茨堡特色冰箱贴专门店 (Souvenir Shops) <a href="https://www.google.com/maps/search/Souvenir+Shop+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>收集控不可错过的精美手信</b>。胡同里有大量的精美纪念品店，小红书上非常火的“立体陶瓷冰箱贴”一定要仔细挑选。推荐购买立体的高地要塞造型、莫扎特故居黄楼造型、或者是带有一把小提琴的音乐主题冰箱贴，做工十分考究，贴在家里冰箱上天天都能回忆起美好旅程。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">4. Manner Shop (粉色威化专卖) <a href="https://www.google.com/maps/search/Manner+Shop+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>奥地利国民粉色威化饼专卖店</b>。走进这家充满粉色元素的店，你能找到各种规格尺寸的 Manner 威化饼。强烈推荐购买经典的榛子原味和清爽的柠檬酸奶味。价格极其亲民，随便买一大袋回去分发给同学或同事，既好吃又拿得出手，绝对的“伴手礼性价比之王”。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">5. Christmas in Salzburg (Käthe Wohlfahrt) <a href="https://www.google.com/maps/search/Kathe+Wohlfahrt+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>全年无休的圣诞奇幻世界</b>。即便是在盛夏，推开门也是浓浓的圣诞气氛。店内售卖极其精致的胡桃夹子、木制熏香小人（Räuchermännchen）以及手工玻璃彩绘挂件。价格小贵，但作为极具德奥风情的艺术收藏品，买一个小挂件带回家非常有纪念意义，质感绝佳。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">6. Red Bull World <a href="https://www.google.com/maps/search/Red+Bull+World+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>红牛全球极客旗舰店</b>。萨尔茨堡是红牛总部所在地。这家店不仅卖各种新奇口味的能量饮料，更有F1赛车队（Red Bull Racing）、萨尔茨堡红牛足球队的官方周边服饰。衣服设计感极强，材质优良，非常适合买一件潮牌T恤或赛车棒球帽送给喜欢体育的硬核朋友。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">7. ZARA (最美历史建筑店) <a href="https://www.google.com/maps/search/ZARA+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>快时尚与中世纪的完美碰撞</b>。推荐这家并不是为了买衣服，而是这家ZARA开在历史悠久的古典建筑里，外墙悬挂着精心设计的传统铁艺招牌，内部则保留了斑驳的石拱门和复古的旋转楼梯。这里是体验“现代商业彻底融入历史街区”的绝佳打卡点，必须要进去转一圈拍个照。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">8. Lanz Trachten (传统服饰) <a href="https://www.google.com/maps/search/Lanz+Trachten+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>传统阿尔卑斯服饰天花板</b>。自1922年起，这里就贩卖最正宗的奥地利传统裙装（Dirndl）和皮裤（Lederhosen）。真正的纯手工刺绣和高级亚麻材质，一套衣服动辄几百欧。买不起昂贵的衣服也没关系，可以买带有经典“雪绒花（Edelweiss）”刺绣图案的布袋或精美配饰。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">9. Alte Hofapotheke (百年古老药局) <a href="https://www.google.com/maps/search/Alte+Hofapotheke+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>拥有数百年历史的古老魔药局</b>。保留了大量精美的木制药柜和复古瓷罐，仿佛走进了哈利波特的魔药课教室。这里不仅卖现代药品，还能买到药局自己独家配制的阿尔卑斯高山草本茶（天然助眠或消食功效显著）、手工润唇膏和复古包装的护手霜，作为小众伴手礼极其独特。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">10. Swarovski (奥地利水晶世界) <a href="https://www.google.com/maps/search/Swarovski+Salzburg+Getreidegasse" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>奥地利国宝级水晶品牌发源地</b>。虽然全球都有，但在奥地利本土店购买款式绝对最全，且经常有本土限定的精美首饰。这家店在粮食胡同的装潢极其耀眼，橱窗本身就是艺术品。如果需要给女性长辈或女友带礼物，一条经典闪耀的天鹅项链是绝对不会出错的安全牌。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">11. Stiegl-Brauwelt Shop (本土啤酒周边) <a href="https://www.google.com/maps/search/Stiegl+Shop+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>萨尔茨堡标志性啤酒授权店</b>。这是萨尔茨堡人最引以为傲的本地啤酒品牌 Stiegl 的专卖店。你不仅能买到各种新鲜的精酿啤酒，更强烈推荐购买极具奥地利传统风格的陶瓷啤酒杯（带金属翻盖的那种，质感无敌）、复古开瓶器。这些物件不仅实用，而且充满了浓浓的德奥啤酒文化气息。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">12. Gehmacher (奥地利高奢家居生活馆) <a href="https://www.google.com/maps/search/Gehmacher+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>阿尔卑斯高级生活方式的缩影</b>。这家店不仅卖东西，更是极具品味的艺术馆。店内陈列着极度精美的室内香薰、陶瓷杯具、抱枕以及手工编织的羊毛毯。即便不买大件家具，带一块带有萨尔茨堡刺绣的高级亚麻餐布，或者一瓶充满高山松木香气的室内香氛，都能把旅行的精致感完美带回家。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">13. Aïda Café (维也纳粉色咖啡馆周边) <a href="https://www.google.com/maps/search/Aida+Cafe+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>少女心爆棚的复古甜品店伴手礼</b>。这是著名的维也纳粉色连锁咖啡馆在萨尔茨堡的分店。除了品尝美味的苹果派，你可以在这里买到包装极其复古、颜色骚粉的精装咖啡豆、手工巧克力、以及带有标志性粉色 Logo 的马克杯和帆布袋。对于喜欢复古甜美风的女生来说，这里的伴手礼绝对让人爱不释手。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">14. Jahn-Markl (百年传统皮具定制铺) <a href="https://www.google.com/maps/search/Jahn-Markl+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>拥有数百年历史的顶级皮革工坊</b>。这里专门定制奥地利传统皮裤（Lederhosen）和各种皮制配件。虽然定制一条高级皮裤价格十分昂贵，但你可以在这里买到手工细致缝制的真皮零钱包、高品质的皮带、或者是带有鹿角装饰的皮质小挂件。每一件物品都散发着高级皮革的独特香气，是送给男士的完美手信。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">15. Salzburger Mozartkugeln Mirabell <a href="https://www.google.com/maps/search/Mirabell+Mozartkugeln" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>平价实惠的超市版红金巧克力</b>。区别于昂贵的纯手工 Fürst，Mirabell 的“金箔红字”版本虽然是现代化的流水线生产，但胜在购买极其方便且价格非常亲民。如果你需要带给一大群公司同事或者普通同学作为大批量的伴手礼，买这种大包装的 Mirabell 巧克力绝对是最经济实惠且不出错的选项。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">16. Stiftsbäckerei St. Peter (中世纪水车面包房) <a href="https://www.google.com/maps/search/Stiftsb%C3%A4ckerei+St.+Peter" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>隐藏在修道院旁的八百年历史古老面包房</b>。这家店至今仍在用传统的水车驱动石磨磨制面粉，并在燃木烤炉中进行烘烤。这里几乎只卖一种极具特色的硬欧酸面团面包（Sourdough bread）。买一小个带着木柴焦香的热乎面包，不管是当明天的早餐还是带回慕尼黑，都充满了极其纯粹的历史厚重感。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">17. Mühlbauer Hutmanufaktur (顶级手工制帽坊) <a href="https://www.google.com/maps/search/M%C3%BChlbauer+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>好莱坞巨星都爱的奥地利手工帽</b>。如果你对奥地利传统的阿尔卑斯毡帽感兴趣，这家高级手工帽店绝对不容错过。帽子由顶级羊毛毡压制而成，旁边还会配上一根传统的羽毛装饰。即便不打算购买昂贵的帽子，买一个极具当地特色的传统小羽毛别针作为胸针，也非常有格调，彰显品味。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">18. Salzburg Salt & Souvenir (特色高山岩盐专卖) <a href="https://www.google.com/maps/search/Salzburg+Salt+Shop" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>来自萨尔茨堡深山的天然馈赠</b>。这家店专门卖萨尔茨堡周遭盐矿产出的食用盐和天然浴盐。这里不仅有普通的细盐，还有加入了阿尔卑斯高山香草、蒜香、甚至是辣椒的复方调味盐，装在非常精美的玻璃小磨床瓶子里。用来煎牛排或者做西餐时现磨撒一点，风味瞬间提升，是送给热爱烹饪的长辈的绝佳好物。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">19. Tomaselli Café Shop (莫扎特最爱咖啡馆周边) <a href="https://www.google.com/maps/search/Cafe+Tomaselli+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>萨尔茨堡最古老的百年咖啡馆</b>。莫扎特生前曾是这里的常客。吃完甜点后，强烈建议在他们的前台购买自家精湛烘焙的特选咖啡豆礼盒，或者带有古老咖啡馆 Logo 的银质小咖啡勺。将这份沉淀了数百年的悠久咖啡文化带回国，无论是自己在家冲泡还是送给咖啡发烧友，都显得极其有内涵。</p>
-                    </div>
-                    <div class="shop-item">
-                        <div class="shop-title">20. Pfeifen Huber / 烟斗与传统金属烟具店 <a href="https://www.google.com/maps/search/Pfeifen+Huber+Salzburg" target="_blank" class="loc-tag">📍 导航</a></div>
-                        <p><b>老城胡同里的复古绅士隐秘老店</b>。橱窗里摆满了各式各样手工雕刻的石楠木烟斗和精致的金属打火机，这里充满了中世纪老派绅士的优雅气息。即使你不抽烟，买一个做工极其精美的复古火柴盒，或者一件沉甸甸的铜制雪茄剪作为桌面摆件，都能完美展现出极佳的复古品味和独特的旅行眼光。</p>
-                    </div>
-                </div>
-            </details>
         </div>
+        <div class="transport-label">🚶 同一景区内步行</div>
 
-        <!-- 午餐 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">12:00 - 12:45</span>
-                <h3 class="event-title">重返 Yiyami 享用午餐</h3>
+        <!-- 景点 3 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-red">
+                <h4>花园藤蔓隧道 (Heckentheater)</h4>
+                <p>孩子们穿过的绿色拱廊。<br>位于花园西侧。</p>
+                <a href="https://www.google.com/maps/search/Mirabellgarten" target="_blank" class="btn-link">📍 景点导航</a>
             </div>
-            <a href="https://www.google.com/maps/search/Yiyami+Salzburg" target="_blank" class="btn-link">📍 餐厅一键导航</a>
-            <div class="desc">不用犹豫，买完满载心意的纪念品后，直接穿过萨尔察赫河的桥，再次回到心心念念的 Yiyami 享用一顿热腾腾的中餐，用最熟悉的安全感和最饱满的胃为萨尔茨堡之行画上完美的句号。</div>
         </div>
+        <div class="transport-label">🚶 同一景区内步行</div>
 
-        <!-- 乘车返回慕尼黑 -->
-        <div class="event-card">
-            <div class="event-header">
-                <span class="time-badge">12:45 - 15:09</span>
-                <h3 class="event-title">准时登车，搭乘 RE5 返回慕尼黑</h3>
+        <!-- 景点 4 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-red">
+                <h4>雕像廊 (Zwergelgarten 附近)</h4>
+                <p>两侧石像张开双臂伴奏场景。<br>顺路即可打卡。</p>
+                <a href="https://www.google.com/maps/search/Zwergelgarten+Mirabell" target="_blank" class="btn-link">📍 景点导航</a>
             </div>
-            <a href="https://www.bahn.com/en" target="_blank" class="btn-link">🚆 DB 德铁时刻查询</a>
-            <a href="https://www.google.com/maps/search/Munich+Central+Station" target="_blank" class="btn-link">📍 慕尼黑中央火车站 (München Hbf)</a>
-            <div class="desc">吃饱喝足后从容前往萨尔茨堡主火车站。准时搭乘 13:05 发车的 RE 5 列车。一路上可以在车厢里安心补觉，或者回味手机里拍下的大片，预计于 15:09 顺顺利利抵达慕尼黑中央车站，傍晚就能舒舒服服地开启宅家躺平模式！</div>
         </div>
+        <div class="transport-label">🚶 同一景区内步行</div>
 
+        <!-- 景点 5 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-red">
+                <h4>大喷泉 (Grand Fountain)</h4>
+                <p>背后是萨尔茨堡老城天际线。<br>绝佳仰拍机位。</p>
+                <a href="https://www.google.com/maps/search/Mirabellgarten" target="_blank" class="btn-link">📍 景点导航</a>
+            </div>
+        </div>
+        <div class="transport-label">🚶 穿过新城前往老城</div>
+
+        <!-- 景点 6 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-red">
+                <h4>莫扎特铁桥 (Mozartsteg)</h4>
+                <p>玛丽亚指着城市给孩子们看的一幕。<br>夜游和前往中餐厅必经之路！</p>
+                <a href="https://www.google.com/maps/search/Mozartsteg" target="_blank" class="btn-link">📍 景点导航</a>
+                <button class="btn-link btn-action" onclick="copyAndGo('Mozartsteg', 'https://salzburg-verkehr.at/')">🚌 查车次 & 复制站名</button>
+            </div>
+        </div>
+        <div class="transport-label" style="background:#B0BEC5;">🚫 偏离主线 (开始略过)</div>
+
+        <!-- 景点 7 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-grey">
+                <h4>依山修道院 (Stift Nonnberg)</h4>
+                <p>玛丽亚原修道院，位于山脚下。<br>不顺路且内部不对外开放。</p>
+                <a href="https://www.google.com/maps/search/Stift+Nonnberg" target="_blank" class="btn-link">📍 景点导航</a>
+                <button class="btn-link" onclick="copyAndGo('Nonntal', 'https://salzburg-verkehr.at/')">🚌 查车次 & 复制站名</button>
+            </div>
+        </div>
+        <div class="transport-label" style="background:#B0BEC5;">🚌 需额外半天时间</div>
+
+        <!-- 景点 8 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-grey">
+                <h4>玻璃亭子 (Schloss Hellbrunn)</h4>
+                <p>Sixteen Going on Seventeen 取景地。<br>位于南郊海尔布伦宫深处，太耗时。</p>
+                <a href="https://www.google.com/maps/search/Schloss+Hellbrunn" target="_blank" class="btn-link">📍 景点导航</a>
+                <button class="btn-link" onclick="copyAndGo('Schloss Hellbrunn', 'https://salzburg-verkehr.at/')">🚌 查车次 & 复制站名</button>
+            </div>
+        </div>
+        <div class="transport-label" style="background:#B0BEC5;">🚌 需乘公交前往郊外</div>
+
+        <!-- 景点 9 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-grey">
+                <h4>上校家取景地 (Schloss Leopoldskron)</h4>
+                <p>现为莱奥波尔兹克罗恩宫酒店。<br>在郊外湖畔，非住客很难入内。</p>
+                <a href="https://www.google.com/maps/search/Schloss+Leopoldskron" target="_blank" class="btn-link">📍 景点导航</a>
+            </div>
+        </div>
+        <div class="transport-label" style="background:#B0BEC5;">🚌 需公交前往不同区域</div>
+
+        <!-- 景点 10 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-grey">
+                <h4>上校家别墅 (Schloss Fronburg)</h4>
+                <p>别墅正面取景地，现为莫扎特音乐学院。<br>周边无其他景点，特意去不划算。</p>
+                <a href="https://www.google.com/maps/search/Schloss+Fronburg" target="_blank" class="btn-link">📍 景点导航</a>
+            </div>
+        </div>
+        <div class="transport-label" style="background:#B0BEC5;">🚶 位于老城边缘</div>
+
+        <!-- 景点 11 -->
+        <div class="som-node">
+            <div class="som-line"></div>
+            <div class="som-arrow">▼</div>
+            <div class="som-box box-grey">
+                <h4>王宫广场马头喷泉 (Pferdeschwemme)</h4>
+                <p>昔日洗马池。<br>虽然在市区，但偏离我们紧凑的扫货主线。</p>
+                <a href="https://www.google.com/maps/search/Pferdeschwemme+Salzburg" target="_blank" class="btn-link">📍 景点导航</a>
+            </div>
+        </div>
+        <div class="transport-label" style="background:#B0BEC5;">🚆 极远郊外大拉练</div>
+
+        <!-- 景点 12 -->
+        <div class="som-node">
+            <div class="som-box box-grey">
+                <h4>韦尔芬小径 (The Sound of Music Trail)</h4>
+                <p>电影中的山野欢唱小径与逃亡路线。<br>位于几十公里外的山区，彻底放弃。</p>
+                <a href="https://www.google.com/maps/search/Sound+of+Music+Trail+Werfen" target="_blank" class="btn-link">📍 景点导航</a>
+                <button class="btn-link" onclick="copyAndGo('Werfen', 'https://www.bahn.com/en')">🚆 查车次 & 复制站名</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -552,6 +819,66 @@
         </div>
     </div>
 </div>
+
+<!-- 隐藏的 Toast 弹窗 -->
+<div id="toast">复制成功</div>
+
+<script>
+    // 侧边栏折叠功能 - 修复居中展示逻辑
+    function toggleSidebar() {
+        const wrapper = document.querySelector('.page-wrapper');
+        const sidebar = document.getElementById('somSidebar');
+        const toggleBtn = sidebar.querySelector('.toggle-btn');
+        
+        sidebar.classList.toggle('collapsed');
+        wrapper.classList.toggle('sidebar-collapsed'); // 触发父级容器状态
+        
+        if (sidebar.classList.contains('collapsed')) {
+            toggleBtn.innerHTML = '🎵';
+            toggleBtn.title = "展开《音乐之声》巡礼";
+        } else {
+            toggleBtn.innerHTML = '▶';
+            toggleBtn.title = "收起面板";
+        }
+    }
+
+    // 复制站名并跳转功能
+    function copyAndGo(stationName, url) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(stationName).then(showToastAndRedirect);
+        } else {
+            let textArea = document.createElement("textarea");
+            textArea.value = stationName;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showToastAndRedirect();
+            } catch (err) {
+                console.error('复制失败', err);
+            }
+            textArea.remove();
+        }
+
+        function showToastAndRedirect() {
+            var toast = document.getElementById("toast");
+            toast.innerText = "✅ 已复制站名: " + stationName + "\n请在打开的网页中粘贴搜索";
+            toast.className = "show";
+            
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+
+            setTimeout(function(){
+                window.open(url, '_blank');
+            }, 500);
+        }
+    }
+</script>
 
 </body>
 </html>
