@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Omni-Route-Nexus | 城市攻略指南</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        :root { --bg-page: #f5f5f7; --bg-card: #ffffff; --text-main: #1d1d1f; --text-sec: #86868b; --border: #d2d2d7; --bh-blue: #0033A0; --bh-red: #E2001A; --bh-black: #111111; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg-page); color: var(--text-main); margin: 0; padding: 40px; padding-bottom: 120px; line-height: 1.5; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { border-bottom: 3px solid var(--bh-black); padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 15px;}
+        h1 { font-size: 28px; margin: 0; font-weight: 700; }
+        
+        .btn { padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: 0.2s; border: none; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 6px;}
+        .btn-primary { background: var(--bh-blue); color: #fff; }
+        .btn-primary:hover { background: #002277; }
+        .btn-dark { background: var(--bh-black); color: #fff; }
+        .btn-outline { background: transparent; color: var(--bh-black); border: 2px solid var(--bh-black); }
+        .btn-outline:hover { background: var(--bh-black); color: #fff; }
+        .search-input { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; transition: 0.2s; width: 220px; }
+        .search-input:focus { border-color: var(--bh-blue); box-shadow: 0 0 0 3px rgba(0,51,160,0.1); }
+        
+        .tool-box { background: var(--bg-card); padding: 20px; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.04); margin-bottom: 30px; border: 1px solid var(--border); }
+        .input-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .input-row input { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; flex: 1; min-width: 200px; outline: none; font-size: 14px; }
+        .input-row input:focus { border-color: var(--bh-blue); }
+
+        .gallery-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+        .card { background: var(--bg-card); padding: 16px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--bh-blue); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--bh-red); transform: scaleY(0); transition: transform 0.2s; transform-origin: bottom; }
+        .card:hover::before { transform: scaleY(1); }
+        .c-title { font-weight: 700; font-size: 15px; margin: 0 0 8px 0; color: var(--text-main); }
+        .c-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+        .s-tag { font-size: 10px; background: #f0f0f5; padding: 4px 8px; border-radius: 4px; color: #444; font-weight: 600; }
+        .c-desc { font-size: 12px; color: var(--text-sec); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+        .modal { position: fixed; top:0; left:0; width:100vw; height:100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: none; justify-content: center; align-items: center; z-index: 1000; opacity: 0; transition: opacity 0.3s; }
+        .modal.active { display: flex; opacity: 1; }
+        .modal-content { background: var(--bg-card); width: 720px; max-width: 92%; max-height: 88vh; overflow-y: auto; padding: 30px; border-radius: 16px; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.15); transform: scale(0.95); transition: 0.3s;}
+        .modal.active .modal-content { transform: scale(1); }
+        .close-btn { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 20px; background: #f1f1f4; color: #555; border:none; width:34px; height:34px; border-radius:50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; z-index: 10;}
+        .close-btn:hover { background: #e0e0e5; color: var(--bh-red); }
+
+        .sd-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 8px; padding-right: 40px;}
+        .sd-title { font-size: 24px; font-weight: 700; color: #111; margin: 0; line-height: 1.2; }
+        .sd-btn-icon { background: #f0f4fb; color: var(--bh-blue); padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s; flex-shrink: 0; }
+        .sd-btn-icon:hover { background: #f0f4fb; color: #fff; }
+        .tabs { display: flex; gap: 8px; margin: 20px 0; border-bottom: 1px solid #eee; padding-bottom: 15px; flex-wrap: wrap; }
+        .tab-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid transparent; background: #f5f5f7; cursor: pointer; font-size:13px; font-weight: 600; color: #555; transition: 0.2s;}
+        .tab-btn:hover { background: #e8e8ed; color: #111; }
+        .tab-btn.active { background: var(--bh-black); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        .tab-content { display: none; font-size: 14px; line-height: 1.6; animation: fadeIn 0.3s ease; color: #333;}
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .spot-filters { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; align-items: center; }
+        .spot-filters select { padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; cursor: pointer; background: #fff;}
+        .btn-clear-filter { padding: 10px 14px; background: #fdf2f3; color: var(--bh-red); border: 1px solid #f9dadd; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .btn-clear-filter:hover { background: #fad1d4; }
+        
+        .start-point-box { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; background: #f0f6ff; padding: 12px 16px; border-radius: 8px; border: 1px solid #d9e3f4; font-size: 14px; }
+        .start-point-box select { flex: 1; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; outline: none;}
+        
+        .spot-tools { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 600; color: #333;}
+        .spot-tools a { cursor: pointer; text-decoration: none; padding: 6px 12px; border-radius: 6px; margin-left: 8px; transition: 0.2s;}
+        
+        .spot-list { max-height: 40vh; overflow-y: auto; padding-right: 5px; display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .spot-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px; border: 1px solid #e5e5ea; border-radius: 8px; cursor: pointer; transition: 0.2s; background: #fafafa; }
+        .spot-item:hover { border-color: #ccc; }
+        .spot-item.selected { border-color: var(--bh-blue); background: #f0f6ff; }
+        .spot-item input { width: 18px; height: 18px; margin-top: 2px; accent-color: var(--bh-blue); cursor: pointer; }
+        .spot-item-name { font-weight: 600; font-size: 15px; color: var(--text-main); margin-bottom: 6px;}
+
+        .timeline { display: flex; flex-direction: column; padding-top: 10px; }
+        .tl-node { display: flex; align-items: flex-start; gap: 16px; position: relative; z-index: 2; }
+        .tl-text { display: flex; flex-direction: column; width: 100%; padding-bottom: 5px;}
+        .tl-station-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .tl-station-name { font-weight: 700; font-size: 16px; color: #111; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 8px;}
+        .tl-station-name:hover { color: var(--bh-blue); text-decoration: underline; }
+        .tl-nav { font-size: 11px; color: var(--bh-blue); text-decoration: none; padding: 4px 8px; background: #eaf0fc; border-radius: 6px; font-weight: 600; }
+        .tl-nav:hover { background: var(--bh-blue); color: #fff; }
+        .tl-desc { font-size: 13px; color: #666; margin-top: 4px; }
+        .tl-dot { width: 14px; height: 14px; border-radius: 50%; border: 3px solid #111; background: #fff; flex-shrink: 0; margin-top: 3px; }
+        .tl-dot.dest { border-color: var(--bh-red); background: var(--bh-red); box-shadow: 0 0 0 4px rgba(226,0,26,0.15); }
+        .tl-segment { margin-left: 7px; border-left: 2px solid var(--border); padding: 25px 0 25px 24px; position: relative; display: flex; align-items: center; }
+        .t-tag { display: inline-block; padding: 4px 8px; border-radius: 6px; font-family: ui-monospace, monospace; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; }
+        .t-s { background: #f0f8f5; color: #00754A; border: 1px solid #cce8dd; }
+        .t-re { background: #fdf2f3; color: var(--bh-red); border: 1px solid #f9dadd; }
+
+        .radar-box { width: 100%; height: 450px; background-color: #fafafa; background-image: linear-gradient(#e5e5ea 1px, transparent 1px), linear-gradient(90deg, #e5e5ea 1px, transparent 1px); background-size: 40px 40px; border: 1px solid var(--border); position: relative; border-radius: 12px; margin-top: 20px; overflow: hidden;}
+        .dot { position: absolute; width: 14px; height: 14px; background: var(--bh-red); border-radius: 50%; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,0.3); transform: translate(-50%, -50%); cursor: pointer; transition: 0.2s; z-index: 2;}
+        .dot:hover { transform: translate(-50%, -50%) scale(2); z-index: 10; background: var(--bh-blue); }
+        .dot-label { position: absolute; background: rgba(255,255,255,0.95); border: 1px solid #ccc; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 600; color: #111; pointer-events: none; transform: translate(12px, -18px); white-space: nowrap; z-index: 3;}
+        
+        .bottom-bar { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #111; color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); display: flex; gap: 15px; align-items: center; z-index: 999;}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <h1 id="cityTitle">Omni-Route-Nexus | 引擎载入中...</h1>
+                <p style="color: #666; font-size: 14px; margin-top: 8px;"> </p>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <!-- 筛选器 1：国家/地区二级联动 Filter -->
+                <select id="countryFilter" onchange="onCountryChange()" style="padding: 10px 14px; border: 2px solid var(--bh-black); border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; cursor: pointer; background: #fff;">
+                    <option value="">🌍 全部国家 (All)</option>
+                    <option value="德国">🇩🇪 德国</option>
+                    <option value="法国">🇫🇷 法国</option>
+                    <option value="奥地利">🇦🇹 奥地利</option>
+                    <option value="瑞士">🇨🇭 瑞士</option>
+                    <option value="英国">🇬🇧 英国</option>
+                </select>
+
+                <!-- 筛选器 2：城市联动 Filter -->
+                <select id="cityFilter" onchange="onCitySelected()" style="padding: 10px 14px; border: 2px solid var(--bh-black); border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; cursor: pointer; background: #fff; min-width: 180px;">
+                    <option value="">📍 请先选择国家或城市</option>
+                </select>
+                
+                <button class="btn btn-outline" onclick="openSelectorModal()" style="padding: 12px 24px;">🚩 自由定制矩阵</button>
+            </div>
+        </header>
+
+        <div class="tool-box">
+            <h3 style="margin-top:0; display: flex; align-items: center; gap: 8px;">🤖 智能 N 日动态规划引擎</h3>
+            <div class="input-row">
+                <input type="number" id="planDays" placeholder="游玩天数 (例: 1.5, 2)" step="0.5" min="0.5">
+                <input type="text" id="planPref" placeholder="偏好需求 (例: 喜欢徒步自然，不去博物馆)">
+                <button class="btn btn-primary" onclick="generateItinerary()">⚡ 一键生成专属路线</button>
+                <button class="btn btn-dark" onclick="openRadar()">📍 查看全城坐标雷达</button>
+            </div>
+            <div id="itineraryResult"></div>
+        </div>
+
+        <div class="gallery-header">
+            <h3 style="margin: 0;">📸 高价值地标全景图鉴</h3>
+            <input type="text" id="gallerySearch" class="search-input" placeholder="🔍 搜索景点名称或标签..." onkeyup="filterGallery()">
+        </div>
+        <div class="grid" id="spotGrid"></div>
+    </div>
+
+    <!-- 弹窗 1：多维情报详情胶囊 -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('detailModal')">×</button>
+            <div class="sd-title-row">
+                <div>
+                    <h2 id="m-title" class="sd-title">景点名称</h2>
+                    <div style="font-size: 13px; color: #666; margin-top: 8px;" id="m-meta"></div>
+                </div>
+                <a id="m-nav-btn" href="#" target="_blank" class="sd-btn-icon">🧭 导航直达</a>
+            </div>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('t-desc')">🏛️ 深度解码</button>
+                <button class="tab-btn" onclick="switchTab('t-ticket')">🎫 票务策略</button>
+                <button class="tab-btn" onclick="switchTab('t-weather')">⛅ 气象穿衣</button>
+                <button class="tab-btn" onclick="switchTab('t-transit')">🚇 交通接驳</button>
+                <button class="tab-btn" onclick="switchTab('t-live')">📡 动态情报</button>
+                <button class="tab-btn" onclick="switchTab('t-food')">🍴 附近美食</button>
+            </div>
+            
+            <div id="t-desc" class="tab-content active" style="background:#fafafa; padding:20px; border-radius:8px; border: 1px solid #eee;"></div>
+            <div id="t-ticket" class="tab-content" style="border-left: 4px solid #FFCC00; padding-left: 16px; background: #fffcf0; padding-top: 10px; padding-bottom: 10px;"></div>
+            <div id="t-weather" class="tab-content"></div>
+            <div id="t-transit" class="tab-content"></div>
+            <div id="t-live" class="tab-content"></div>
+            <div id="t-food" class="tab-content"></div>
+        </div>
+    </div>
+
+    <!-- 弹窗 2：雷达图 -->
+    <div class="modal" id="radarModal">
+        <div class="modal-content" style="width: 760px;">
+            <button class="close-btn" onclick="closeModal('radarModal')">×</button>
+            <h2 style="margin-top:0; margin-bottom: 5px;">📍 坐标映射雷达图</h2>
+            <p style="font-size:13px; color:#666; margin-top:0;">根据城市 JSON 经纬度自动测算投射（悬浮查看名称，点击红点直达 Google Maps）</p>
+            <div class="radar-box" id="radarBox"></div>
+        </div>
+    </div>
+
+    <!-- 弹窗 3：自由定制矩阵 -->
+    <div class="modal" id="selectorModal">
+        <div class="modal-content" style="width: 680px;">
+            <button class="close-btn" onclick="closeModal('selectorModal')">×</button>
+            <h2 style="margin-top:0; display: flex; align-items: center; gap: 10px;">🚩 自由定制矩阵</h2>
+            
+            <div class="spot-filters">
+                <select id="f-season" onchange="applyMatrixFilters()"><option value="">🌍 季节 (全部)</option><option value="春">🌸 春季</option><option value="夏">☀️ 夏季</option><option value="秋">🍁 秋季</option><option value="冬">❄️ 冬季</option></select>
+                <select id="f-act" onchange="applyMatrixFilters()"><option value="">🏃 活动 (全部)</option><option value="徒步">徒步远足</option><option value="购物">血拼购物</option><option value="城市游览">城市游览</option><option value="科技与艺术">科技与艺术</option><option value="自然风光">自然风光</option></select>
+                <select id="f-dist" onchange="applyMatrixFilters()"><option value="">📍 距离 (全部)</option><option value="2公里内">核心区 2公里内</option><option value="5公里内">市区 5公里内</option><option value="10公里以上">郊区 10km+</option></select>
+                <button class="btn-clear-filter" onclick="clearMatrixFilters()">清空筛选</button>
+            </div>
+            
+            <div class="start-point-box">
+                <strong>📍 出发原点:</strong>
+                <select id="startPointSelector"></select>
+            </div>
+
+            <div class="spot-tools">
+                <span>✅ 勾选您感兴趣的景点，系统将规划最优路线：</span>
+                <div>
+                    <a style="background: #eaf0fc; color: var(--bh-blue);" onclick="toggleAllMatrix(true)">全选当前列表</a> 
+                    <a style="background: #fdf2f3; color: var(--bh-red);" onclick="toggleAllMatrix(false)">清空已选</a>
+                </div>
+            </div>
+
+            <div class="spot-list" id="selectorList"></div>
+            
+            <button class="btn btn-dark" style="width: 100%; padding: 14px; font-size: 16px; margin-top: 10px;" onclick="generateCustomRoute()">🚀 依据勾选计算最优专属路线</button>
+        </div>
+    </div>
+
+    <!-- 底部 Copy 工具栏 -->
+    <div class="bottom-bar">
+        <span style="font-size: 14px; font-weight: 600;">🛠️ 生成新城市数据包：</span>
+        <input type="text" id="targetCityInput" placeholder="输入城市 (如: 伦敦)" style="padding: 10px 14px; border-radius: 6px; border:none; outline:none; font-size: 14px; width: 180px;">
+        <button class="btn" style="background: #fff; color: #111;" onclick="copySkillPrompt()">📋 复制生成 Skill指令</button>
+    </div>
+
+    <!-- === 核心 JS 逻辑区域（结构化二级联动与动态加载引擎） === -->
+    <script>
+        let spots = [];
+        let cityMeta = {};
+        
+        // 结构化城市数据库：随着以后扩充到 100 个城市，只需要在这里继续往数组里加条目即可！
+        const cityDatabase = [
+            { name: "慕尼黑 (München)", country: "德国", file: "cities/city_data.js" },
+            { name: "卡尔斯鲁厄 (Karlsruhe)", country: "德国", file: "cities/karlsruhe.js" },
+            { name: "巴黎 (Paris)", country: "法国", file: "cities/paris.js" },
+            { name: "维桑堡 (Wissembourg)", country: "法国", file: "cities/wissembourg.js" },
+            { name: "萨尔茨堡 (Salzburg)", country: "奥地利", file: "cities/salzburg.js" },
+            { name: "巴塞尔 (Basel)", country: "瑞士", file: "cities/basel.js" },
+            { name: "伦敦 (London)", country: "英国", file: "cities/london.js" }
+        ];
+        
+        let currentValidFile = "cities/city_data.js";
+
+        // 网页启动，默认初始化城市下拉框并加载默认城市
+        window.onload = () => {
+            updateCityDropdown(""); // 初始显示全部城市
+            document.getElementById('cityFilter').value = "cities/city_data.js";
+            loadCityData(currentValidFile);
+        };
+
+        // 当“国家 Filter”发生改变时触发
+        function onCountryChange() {
+            const selectedCountry = document.getElementById('countryFilter').value;
+            updateCityDropdown(selectedCountry); // 联动刷新城市下拉菜单
+        }
+
+        // 动态渲染城市下拉菜单
+        function updateCityDropdown(filterCountry) {
+            const citySelect = document.getElementById('cityFilter');
+            let filteredCities = cityDatabase;
+            
+            if (filterCountry) {
+                filteredCities = cityDatabase.filter(c => c.country === filterCountry);
+            }
+
+            let html = `<option value="">📍 请选择城市 (${filteredCities.length}座)</option>`;
+            filteredCities.forEach(c => {
+                html += `<option value="${c.file}">${c.name} [${c.country}]</option>`;
+            });
+            citySelect.innerHTML = html;
+        }
+
+        // 当在“城市 Filter”中选中具体城市时触发
+        function onCitySelected() {
+            const citySelect = document.getElementById('cityFilter');
+            const selectedFile = citySelect.value;
+            
+            if (selectedFile && selectedFile !== currentValidFile) {
+                currentValidFile = selectedFile;
+                loadCityData(selectedFile); // 瞬间触发跨维度城市跃迁！
+            }
+        }
+
+        // 核心跃迁引擎：动态挂载并执行 JS 文件
+        function loadCityData(fileName) {
+            document.getElementById('spotGrid').innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">🚀 正在跨维度拉取城市数据，请稍候...</div>';
+            
+            const oldScript = document.getElementById('dynamicCityScript');
+            if(oldScript) oldScript.remove();
+
+            const script = document.createElement('script');
+            script.id = 'dynamicCityScript';
+            script.src = fileName;
+            
+            script.onload = () => {
+                if(!window.CITY_DATA || !window.CITY_DATA.spots) return alert("❌ 数据解析失败，请检查 JS 文件内的 JSON 格式！");
+                
+                spots = window.CITY_DATA.spots;
+                cityMeta = window.CITY_DATA.city_meta;
+                document.getElementById('cityTitle').innerText = `Omni-Route-Nexus | ${cityMeta.city_name}`;
+                
+                document.getElementById('itineraryResult').innerHTML = '';
+                document.getElementById('gallerySearch').value = '';
+                
+                renderGrid(spots);
+                initStartPointSelector();
+            };
+            
+            script.onerror = () => {
+                document.getElementById('spotGrid').innerHTML = `<div style="grid-column:1/-1; padding:40px; text-align:center; color:var(--bh-red);">❌ 找不到数据文件 <b>${fileName}</b>。<br>请确保你在 cities 目录下创建了该文件，并放入了正确的数据。</div>`;
+                document.getElementById('cityTitle').innerText = `Omni-Route-Nexus | 链接失败`;
+            };
+            
+            document.body.appendChild(script);
+        }
+
+        // --- 画廊渲染与搜索 ---
+        function renderGrid(dataToRender) {
+            const grid = document.getElementById('spotGrid');
+            grid.innerHTML = dataToRender.map(s => {
+                const tagHtml = (Array.isArray(s.act) ? s.act : [s.act]).map(t => `<span class="s-tag">${t}</span>`).join('');
+                return `
+                <div class="card" onclick="openSpot('${s.id}')">
+                    <h4 class="c-title">${s.name.split(' ')[0]}</h4>
+                    <div class="c-tags">${tagHtml}<span class="s-tag" style="background:#eaf0fc; color:var(--bh-blue);">${s.dur}</span></div>
+                    <div class="c-desc">${s.desc_long.replace(/<[^>]+>/g, '')}</div>
+                </div>`;
+            }).join('');
+        }
+
+        function filterGallery() {
+            const query = document.getElementById('gallerySearch').value.toLowerCase();
+            const filtered = spots.filter(s => s.name.toLowerCase().includes(query) || (s.act && s.act.join('').includes(query)));
+            renderGrid(filtered);
+        }
+
+        // --- 详情弹窗 ---
+        function openSpot(id) {
+            const s = spots.find(x => x.id === id);
+            document.getElementById('m-title').innerText = s.name;
+            document.getElementById('m-meta').innerHTML = `⏱️ 建议游玩: ${s.dur} &nbsp;|&nbsp; 📍 距主火/中心: ${s.dist}`;
+            document.getElementById('m-nav-btn').href = `https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lon}`;
+            
+            document.getElementById('t-desc').innerHTML = s.desc_long;
+            document.getElementById('t-ticket').innerHTML = `<b>【票务准入】</b><br><br>${s.ticket || '公共区域，免费开放。'}`;
+            
+            // 天气卫星数据
+            document.getElementById('t-weather').innerHTML = '📡 正在调取气象卫星数据...';
+            fetch(`https://api.open-meteo.com/v1/forecast?latitude=${s.lat}&longitude=${s.lon}&current=temperature_2m,relative_humidity_2m`)
+                .then(r => r.json()).then(data => {
+                    if(data && data.current) {
+                        document.getElementById('t-weather').innerHTML = `
+                            <div style="background:#f0f6ff; padding:20px; border-radius:12px; border: 1px solid #d9e3f4;">
+                                <div style="font-size:24px; font-weight:700; color:var(--bh-blue); margin-bottom:10px;">${data.current.temperature_2m}°C</div>
+                                <div><b>💧 相对湿度：</b> ${data.current.relative_humidity_2m}%</div>
+                                <div style="margin-top:10px; font-size:13px; color:#555;">💡 提示：实时气象数据可能存在滞后，请以外部体感为准。</div>
+                            </div>`;
+                    }
+                }).catch(() => document.getElementById('t-weather').innerHTML = '气象接口调用失败。');
+
+            // 交通自适应网关
+            const country = cityMeta.country || '';
+            const isDBRegion = country.includes('德国') || country.includes('奥地利') || country.includes('瑞士') || country.includes('Germany');
+            const transitTab = document.getElementById('t-transit');
+            
+            if (isDBRegion) {
+                transitTab.innerHTML = `
+                    <div style="background:#f0f6ff; padding:20px; border-radius:12px; border: 1px solid #d9e3f4;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                            <b style="color:var(--bh-blue);">🚆 DB Hafas 实时接驳系统已激活</b>
+                            <span style="font-size:12px; background:var(--bh-red); color:#fff; padding:2px 6px; border-radius:4px;">LIVE</span>
+                        </div>
+                        <p style="font-size:13px; color:#555;">正在扫描 [${s.lat}, ${s.lon}] 周边 500m 内的 S-Bahn、Tram 与公交站发车牌...</p>
+                        <a href="https://reiseauskunft.bahn.de/bin/query.exe/dn?Z=${s.lat},${s.lon}" target="_blank" class="btn btn-outline" style="border-color:var(--bh-blue); color:var(--bh-blue); margin-top:10px; width:100%;">在 DB Navigator 中打开接驳方案</a>
+                    </div>`;
+            } else {
+                transitTab.innerHTML = `
+                    <div style="background:#fffcf0; padding:20px; border-radius:12px; border: 1px solid #ffeb99;">
+                        <b style="color:#b38f00;">🌍 全球标准交通接驳模式</b>
+                        <p style="font-size:13px; color:#666; margin-top:8px;">当前城市（${country}）不在 DB 交通网覆盖范围内，已自动降级为通用公交规划接口。</p>
+                        <a href="https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lon}&travelmode=transit" target="_blank" class="btn btn-dark" style="margin-top:10px; width:100%;">前往 Google Maps 查看本国公交路线</a>
+                    </div>`;
+            }
+
+            // 动态情报与美食
+            document.getElementById('t-live').innerHTML = `
+                <div style="background:#fafafa; padding:20px; border-radius:12px; border: 1px solid #eee;">
+                    <b style="font-size:15px;">📊 基于时间维度的基站负载测算：</b><br><br>
+                    <span style="font-size:16px; font-weight:600; color:${new Date().getHours() >= 10 && new Date().getHours() <= 16 ? 'var(--bh-red)' : '#00754A'}">
+                        ${new Date().getHours() >= 10 && new Date().getHours() <= 16 ? '🔴 当前处于客流高峰区，请注意排队' : '🟢 当前客流平稳，游览舒适度高'}
+                    </span>
+                </div>`;
+                
+            document.getElementById('t-food').innerHTML = `
+                <div style="background:#fffcf0; padding:20px; border-radius:12px; border: 1px solid #ffeb99;">
+                    <p style="margin-top:0;"><b>🔥 AI 精选推荐：</b> <br><br>${s.rest || '探索周边美食'}</p>
+                    <a href="https://www.google.com/maps/search/restaurants+near+${s.lat},${s.lon}" target="_blank" class="btn btn-outline" style="border-color:#b38f00; color:#b38f00;">🗺️ 在 Google Maps 搜寻周边高分餐厅 ↗</a>
+                </div>`;
+
+            document.getElementById('detailModal').classList.add('active');
+            document.querySelectorAll('.tab-btn')[0].click(); 
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        // --- 雷达图 ---
+        function openRadar() {
+            const box = document.getElementById('radarBox');
+            box.innerHTML = '';
+            const lats = spots.map(s => s.lat), lons = spots.map(s => s.lon);
+            const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+            const minLon = Math.min(...lons), maxLon = Math.max(...lons);
+
+            spots.forEach(s => {
+                const xPercent = ((s.lon - minLon) / (maxLon - minLon)) * 90 + 5; 
+                const yPercent = 100 - (((s.lat - minLat) / (maxLat - minLat)) * 90 + 5); 
+                box.innerHTML += `
+                    <div class="dot" style="left: ${xPercent}%; top: ${yPercent}%;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lon}')">
+                        <div class="dot-label">${s.name.split(' ')[0]}</div>
+                    </div>`;
+            });
+            document.getElementById('radarModal').classList.add('active');
+        }
+
+        // --- 核心算法 ---
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371, dLat = (lat2 - lat1) * Math.PI / 180, dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        }
+
+        // --- 自由定制矩阵功能 ---
+        function initStartPointSelector() {
+            const sel = document.getElementById('startPointSelector');
+            let opts = `<option value="default" selected>🚆 主站/市中心 (${cityMeta.main_station_name || 'Hbf'})</option>`;
+            opts += `<optgroup label="或从特定景点出发">`;
+            spots.forEach(s => { opts += `<option value="${s.id}">${s.name.split(' ')[0]}</option>`; });
+            opts += `</optgroup>`;
+            sel.innerHTML = opts;
+        }
+
+        function openSelectorModal() {
+            renderMatrixList(spots);
+            document.getElementById('selectorModal').classList.add('active');
+        }
+
+        function renderMatrixList(data) {
+            const list = document.getElementById('selectorList');
+            list.innerHTML = data.map(s => {
+                const tagHtml = (Array.isArray(s.act) ? s.act : [s.act]).map(t => `<span class="s-tag">${t}</span>`).join('');
+                return `
+                <div class="spot-item" onclick="toggleCb('${s.id}')" id="box_${s.id}">
+                    <input type="checkbox" id="cb_${s.id}" value="${s.id}" onclick="event.stopPropagation(); toggleCb('${s.id}')">
+                    <div style="flex:1;">
+                        <div class="spot-item-name">${s.name}</div>
+                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                            ${tagHtml}
+                            <span class="s-tag" style="background:#eaf0fc; color:var(--bh-blue);">${s.dist}</span>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function toggleCb(id) {
+            const cb = document.getElementById('cb_' + id);
+            const box = document.getElementById('box_' + id);
+            if(event && event.target && event.target.tagName !== 'INPUT') { cb.checked = !cb.checked; }
+            cb.checked ? box.classList.add('selected') : box.classList.remove('selected');
+        }
+
+        function toggleAllMatrix(checkStatus) {
+            document.querySelectorAll('#selectorList .spot-item').forEach(item => {
+                if (item.style.display !== 'none') {
+                    const cb = item.querySelector('input');
+                    cb.checked = checkStatus;
+                    checkStatus ? item.classList.add('selected') : item.classList.remove('selected');
+                }
+            });
+        }
+
+        function applyMatrixFilters() {
+            const fSeason = document.getElementById('f-season').value;
+            const fAct = document.getElementById('f-act').value;
+            const fDist = document.getElementById('f-dist').value;
+            
+            document.querySelectorAll('#selectorList .spot-item').forEach(item => {
+                const id = item.querySelector('input').value;
+                const s = spots.find(x => x.id === id);
+                let match = true;
+                if (fSeason && (!s.season || !s.season.includes(fSeason))) match = false;
+                if (fAct && (!s.act || !s.act.includes(fAct))) match = false;
+                if (fDist && s.dist !== fDist) match = false;
+                item.style.display = match ? 'flex' : 'none';
+            });
+        }
+
+        function clearMatrixFilters() {
+            document.getElementById('f-season').value = '';
+            document.getElementById('f-act').value = '';
+            document.getElementById('f-dist').value = '';
+            applyMatrixFilters();
+        }
+
+        function generateCustomRoute() {
+            const cbs = document.querySelectorAll('#selectorList input[type="checkbox"]:checked');
+            const selectedIds = Array.from(cbs).map(c => c.value);
+            if(selectedIds.length === 0) return alert('请至少勾选 1 个景点！');
+            
+            const pool = spots.filter(s => selectedIds.includes(s.id));
+            closeModal('selectorModal');
+            document.getElementById('planDays').value = Math.ceil(pool.length / 4); // 自动回填天数
+            
+            const startVal = document.getElementById('startPointSelector').value;
+            let startNode = { id: 'START', name: cityMeta.main_station_name || '市中心原点', lat: cityMeta.center_lat, lon: cityMeta.center_lon, dur: '起点' };
+            if(startVal !== 'default') {
+                const target = spots.find(x => x.id === startVal);
+                if(target) startNode = { id: target.id, name: target.name, lat: target.lat, lon: target.lon, dur: '起点' };
+            }
+            
+            renderTimelineRoute(pool, pool.length, Math.ceil(pool.length / 4), '🚩 专属定制矩阵路线', startNode);
+        }
+
+        function generateItinerary() {
+            const days = parseFloat(document.getElementById('planDays').value);
+            const pref = document.getElementById('planPref').value.toLowerCase();
+            if(!days || days < 0.5) return alert('请输入合法游玩天数！');
+
+            let pool = [...spots];
+            if(pref) {
+                const wantNature = pref.includes('自然') || pref.includes('徒步');
+                const wantShop = pref.includes('购物');
+                const wantArt = pref.includes('博物馆') || pref.includes('艺术');
+                if(wantNature || wantShop || wantArt) {
+                    pool = spots.filter(s => {
+                        let t = s.act.join('');
+                        if(wantNature && (t.includes('自然') || t.includes('徒步'))) return true;
+                        if(wantShop && t.includes('购物')) return true;
+                        if(wantArt && (t.includes('艺术') || t.includes('科技'))) return true;
+                        return false;
+                    });
+                }
+            }
+
+            const targetCount = Math.min(Math.ceil(days * 4), pool.length);
+            if(targetCount === 0) return alert('未匹配到符合您严苛偏好的景点，请放宽条件。');
+            
+            let startNode = { id: 'START', name: cityMeta.main_station_name || '市中心原点', lat: cityMeta.center_lat, lon: cityMeta.center_lon, dur: '起点' };
+            renderTimelineRoute(pool, targetCount, days, `🤖 智能 N 日路线 (${days}天)`, startNode);
+        }
+
+        // --- 路线渲染引擎 (时间轴) ---
+        function renderTimelineRoute(pool, targetCount, days, title, startNode) {
+            let route = [];
+            route.push(startNode);
+            
+            let current = startNode;
+            let availablePool = [...pool];
+            availablePool = availablePool.filter(p => p.id !== startNode.id);
+
+            for(let i = 0; i < targetCount; i++) {
+                if(availablePool.length === 0) break;
+                availablePool.sort((a,b) => getDistance(current.lat, current.lon, a.lat, a.lon) - getDistance(current.lat, current.lon, b.lat, b.lon));
+                current = availablePool[0];
+                route.push(current);
+                availablePool.shift(); 
+            }
+
+            let html = `<div style="border-top: 3px solid var(--bh-black); padding-top:25px; margin-top:25px;">
+                        <h3 style="margin-top:0; font-size:20px;">✅ ${title}</h3>`;
+            
+            let actualSpotsCount = route.length - 1;
+            let spotsPerDay = Math.ceil(actualSpotsCount / days) || 1;
+            
+            for(let d = 0; d < Math.ceil(days); d++) {
+                let sliceStartIdx = d === 0 ? 0 : (d * spotsPerDay);
+                let sliceEndIdx = sliceStartIdx + spotsPerDay + 1;
+                let dayNodes = route.slice(sliceStartIdx, sliceEndIdx);
+                if(dayNodes.length <= 1) break; 
+                
+                html += `<div style="margin-bottom: 25px; background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.03);">`;
+                html += `<div style="font-weight: 700; font-size: 16px; color: var(--bh-blue); border-bottom: 1px dashed #ddd; padding-bottom: 10px; margin-bottom: 15px;">🗓️ Day ${d+1} 行程</div>`;
+                html += `<div class="timeline">`;
+                
+                for(let idx = 0; idx < dayNodes.length; idx++) {
+                    const spot = dayNodes[idx];
+                    const isLastNodeOfDay = (idx === dayNodes.length - 1);
+                    
+                    html += `
+                    <div class="tl-node">
+                        <div class="tl-dot ${isLastNodeOfDay ? 'dest' : ''}"></div>
+                        <div class="tl-text">
+                            <div class="tl-station-row">
+                                <span class="tl-station-name" ${spot.id !== 'START' ? `onclick="openSpot('${spot.id}')"` : ''}>
+                                    ${spot.name} ${spot.id !== 'START' ? 'ℹ️' : ''}
+                                </span>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${spot.lat},${spot.lon}" target="_blank" class="tl-nav">↗ 导航</a>
+                            </div>
+                            <div class="tl-desc">${idx === 0 ? '📍 本日始发原点' : `⏱️ 游玩耗时: ${spot.dur}`}</div>
+                        </div>
+                    </div>`;
+
+                    if (!isLastNodeOfDay) {
+                        const nextSpot = dayNodes[idx+1];
+                        const distKm = getDistance(spot.lat, spot.lon, nextSpot.lat, nextSpot.lon);
+                        let transitClass = distKm > 8 ? 't-re' : 't-s';
+                        let transitTag = distKm > 8 ? 'Regio/跨区列车' : 'Tram/步行/公交';
+                        
+                        html += `
+                        <div class="tl-segment">
+                            <span class="t-tag ${transitClass}">${transitTag} (约 ${distKm.toFixed(1)} km)</span>
+                        </div>`;
+                    }
+                }
+                
+                html += `</div></div>`; 
+            }
+            html += `</div>`; 
+            document.getElementById('itineraryResult').innerHTML = html;
+        }
+
+        // --- Skill 拷贝器 ---
+        function copySkillPrompt() {
+            const city = document.getElementById('targetCityInput').value.trim() || '任意指定城市';
+            const prompt = `你现在是 Omni-Route-Nexus 系统的“城市数据生成引擎”。
+我的静态网页引擎已经搭建完毕。**你绝对不允许输出任何 HTML 或前端代码，只允许输出标准化的 JS 数据对象。**
+
+请为城市【${city}】生成包含 50 个高价值地标的数据集，并严格按照以下 JS 格式输出，不要包含任何废话：
+
+\`\`\`javascript
+window.CITY_DATA = {
+  "city_meta": {
+    "city_name": "${city}",
+    "country": "[所属国家，如 德国、英国]",
+    "main_station_name": "[主火车站全称]",
+    "center_lat": [城市中心纬度数字],
+    "center_lon": [城市中心经度数字]
+  },
+  "spots": [
+    {
+      "id": "[城市简写_序号，例: par_1]",
+      "name": "[中文名 (外语原名)]",
+      "dur": "[建议耗时，例: 1.5小时]",
+      "nav": "[用于Google导航的地名]",
+      "dist": "[2公里内 / 5公里内 / 10公里以上]",
+      "season": ["春", "夏", "秋", "冬"], 
+      "act": ["自然风光"], // 限选: 自然风光/科技与艺术/城市游览/购物/徒步
+      "lat": [精确纬度数字],
+      "lon": [精确经度数字],
+      "desc_long": "【历史解码】[80字以上介绍]<br><br>【亮点】[核心特色]",
+      "ticket": "🎫 [票价政策]",
+      "rest": "[推荐1家附近高分餐厅名]"
+    }
+    // ...请严格输出满 50 个 spot 对象，绝对不能删减
+  ]
+};
+\`\`\`
+`;
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert(`✨ 成功！已将生成【${city}】的专属 Skill 规范复制到剪贴板。\n\n请使用网页版 Gemini 生成数据，存为 ${city}.js 放入 cities 文件夹，并在代码顶部的 cityDatabase 数组里加一行配置！`);
+            });
+        }
+    </script>
+</body>
+</html>
