@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Omni-Route-Nexus | 城市攻略规划</title>
+    <title>Omni-Route-Nexus | 智能城市跃迁引擎</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         :root { --bg-page: #f5f5f7; --bg-card: #ffffff; --text-main: #1d1d1f; --text-sec: #86868b; --border: #d2d2d7; --bh-blue: #0033A0; --bh-red: #E2001A; --bh-black: #111111; }
@@ -105,25 +105,16 @@
                 <p style="color: #666; font-size: 14px; margin-top: 8px;"> </p>
             </div>
             
-            <div style="position: relative; display: flex; align-items: center; gap: 15px;">
-                <!-- 核心跃迁切换器 (已升级为智能搜索补全) -->
-                 <input type="text" id="citySearchInput" list="city-options" placeholder="🔍 搜索或选择城市..." 
-                       style="padding: 10px 14px; border: 2px solid var(--bh-black); border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; width: 240px; background: #fff;"
-                       onfocus="clearForSearch(this)"
-                       onblur="restoreCityName(this)"
-                       onchange="triggerCityLoad()">
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <!-- 核心跃迁切换器 -->
+                <select id="citySelector" onchange="loadCityData(this.value)" style="padding: 10px 14px; border: 2px solid var(--bh-black); border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; cursor: pointer; background: #fff;">
+                    <!-- 在这里添加你生成的城市 JS 文件名 -->
+                    <option value="city_data.js">🇩🇪 慕尼黑 (默认)</option>
+                    <option value="london.js">🇬🇧 伦敦</option>
+                    <option value="paris.js">🇫🇷 巴黎</option>
+                </select>
                 
-                <datalist id="city-options">
-                    <option value="🇩🇪 慕尼黑 (München)"></option>
-                    <option value="🇩🇪 卡尔斯鲁厄 (Karlsruhe)"></option>
-                    <option value="🇦🇹 萨尔茨堡 (Salzburg)"></option>
-                    <option value="🇨🇭 巴塞尔 (Basel)"></option>
-                    <option value="🇫🇷 维桑堡 (Wissembourg)"></option>
-		      <option value="🇫🇷 巴黎 (Paris)"></option>
-		      <option value="🇬🇧 伦敦 (London)"></option>
-                </datalist>
-                
-                <button class="btn btn-outline" onclick="openSelectorModal()" style="padding: 12px 24px;">🚩 自由定制矩阵</button>
+                <button class="btn btn-outline" onclick="openSelectorModal()" style="padding: 12px 24px;">🚩 自由定制城市游玩矩阵</button>
             </div>
         </header>
 
@@ -224,54 +215,17 @@
         <button class="btn" style="background: #fff; color: #111;" onclick="copySkillPrompt()">📋 复制生成 Skill指令</button>
     </div>
 
-    <!-- === 核心 JS 逻辑区域（彻底动态加载字典路由引擎） === -->
+    <!-- === 核心 JS 逻辑区域（彻底动态加载，移除了静态 script 标签） === -->
     <script>
         let spots = [];
         let cityMeta = {};
         
-         // 构建城市名称与底层 JS 文件的映射字典 (保留你的修改)
-        const cityDatabase = {
-            "🇩🇪 慕尼黑 (München)": "cities/city_data.js", 
-            "🇩🇪 卡尔斯鲁厄 (Karlsruhe)": "cities/karlsruhe.js",
-            "🇦🇹 萨尔茨堡 (Salzburg)": "cities/salzburg.js",
-            "🇨🇭 巴塞尔 (Basel)": "cities/basel.js",
-            "🇫🇷 维桑堡 (Wissembourg)": "cities/wissembourg.js",
-            "🇫🇷 巴黎 (Paris)": "cities/paris.js",
-            "🇬🇧 伦敦 (London)": "cities/london.js"
-        };
-        
-        let currentValidCity = "🇩🇪 慕尼黑 (München)"; // 新增：全局记录当前成功加载的城市
-
-        // 网页启动，默认拉取初始城市
+        // 网页启动，直接拉取下拉菜单里选中的默认文件
         window.onload = () => {
-            document.getElementById('citySearchInput').value = currentValidCity;
-            loadCityData(cityDatabase[currentValidCity]);
+            const defaultCity = document.getElementById('citySelector').value;
+            loadCityData(defaultCity);
         };
 
-        // ✨ 新增交互：鼠标点进搜索框时，瞬间清空，呼出完整的下拉菜单
-        function clearForSearch(inputElem) {
-            inputElem.value = '';
-        }
-
-        // ✨ 新增交互：鼠标点击网页其他地方（失去焦点）时，如果没选城市或乱输，自动恢复原样
-        function restoreCityName(inputElem) {
-            if (!cityDatabase[inputElem.value.trim()]) {
-                inputElem.value = currentValidCity;
-            }
-        }
-
-        // 监听搜索框的选项变化
-        function triggerCityLoad() {
-            const selectedName = document.getElementById('citySearchInput').value.trim();
-            const fileName = cityDatabase[selectedName];
-            
-            // 只有当选中了一个合法的、且不是当前正在看的城市时，才触发跃迁
-            if(fileName && selectedName !== currentValidCity) {
-                currentValidCity = selectedName; // 更新当前城市状态
-                loadCityData(fileName);
-                document.getElementById('citySearchInput').blur(); // 选完自动取消焦点，收起菜单
-            }
-        }
         // 核心跃迁引擎：动态挂载并执行 JS 文件
         function loadCityData(fileName) {
             document.getElementById('spotGrid').innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">🚀 正在跨维度拉取城市数据，请稍候...</div>';
@@ -659,7 +613,7 @@ window.CITY_DATA = {
 \`\`\`
 `;
             navigator.clipboard.writeText(prompt).then(() => {
-                alert(`✨ 成功！已将生成【${city}】的专属 Skill 规范复制到剪贴板。\n\n请使用网页版 Gemini 生成数据，存为 ${city}.js 等文件，并添加到 HTML 顶部的数据字典中。`);
+                alert(`✨ 成功！已将生成【${city}】的专属 Skill 规范复制到剪贴板。\n\n请使用网页版 Gemini 生成数据，存为 ${city}.js 等文件，并添加到 HTML 顶部的下拉菜单中。`);
             });
         }
     </script>
