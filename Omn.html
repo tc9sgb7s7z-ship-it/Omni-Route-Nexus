@@ -127,14 +127,29 @@
             </div>
             
             <div style="display: flex; align-items: center; gap: 10px;">
-                <!-- 筛选器 1：国家/地区二级联动 Filter -->
+                
+                 <!-- 筛选器 1：国家/地区二级联动 Filter -->
                 <select id="countryFilter" onchange="onCountryChange()" style="padding: 10px 14px; border: 2px solid var(--bh-black); border-radius: 8px; font-size: 14px; font-weight: 600; outline: none; cursor: pointer; background: #fff;">
                     <option value="">🌍 全部国家 (All)</option>
                     <option value="德国">🇩🇪 德国</option>
                     <option value="法国">🇫🇷 法国</option>
-                    <option value="奥地利">🇦🇹 奥地利</option>
-                    <option value="瑞士">🇨🇭 瑞士</option>
                     <option value="英国">🇬🇧 英国</option>
+                    <option value="意大利">🇮🇹 意大利</option>
+                    <option value="西班牙">🇪🇸 西班牙</option>
+                    <option value="瑞士">🇨🇭 瑞士</option>
+                    <option value="奥地利">🇦🇹 奥地利</option>
+                    <option value="荷兰">🇳🇱 荷兰</option>
+                    <option value="比利时">🇧🇪 比利时</option>
+                    <option value="葡萄牙">🇵🇹 葡萄牙</option>
+                    <option value="波兰">🇵🇱 波兰</option>
+                    <option value="捷克">🇨🇿 捷克</option>
+                    <option value="希腊">🇬🇷 希腊</option>
+                    <option value="瑞典">🇸🇪 瑞典</option>
+                    <option value="挪威">🇳🇴 挪威</option>
+                    <option value="丹麦">🇩🇰 丹麦</option>
+                    <option value="爱尔兰">🇮🇪 爱尔兰</option>
+                    <option value="匈牙利">🇭🇺 匈牙利</option>
+                    <option value="芬兰">🇫🇮 芬兰</option>
                 </select>
 
                 <!-- 筛选器 2：城市联动 Filter -->
@@ -249,14 +264,145 @@
         let cityMeta = {};
         
         // 结构化城市数据库：随着以后扩充到 100 个城市，只需要在这里继续往数组里加条目即可！
+        // 结构化城市数据库：包含 100 个欧洲热门旅游城市
         const cityDatabase = [
+            // 🇩🇪 德国 (15)
             { name: "慕尼黑 (München)", country: "德国", file: "cities/city_data.js" },
             { name: "卡尔斯鲁厄 (Karlsruhe)", country: "德国", file: "cities/karlsruhe.js" },
+            { name: "柏林 (Berlin)", country: "德国", file: "cities/berlin.js" },
+            { name: "法兰克福 (Frankfurt)", country: "德国", file: "cities/frankfurt.js" },
+            { name: "汉堡 (Hamburg)", country: "德国", file: "cities/hamburg.js" },
+            { name: "科隆 (Köln)", country: "德国", file: "cities/koeln.js" },
+            { name: "斯图加特 (Stuttgart)", country: "德国", file: "cities/stuttgart.js" },
+            { name: "杜塞尔多夫 (Düsseldorf)", country: "德国", file: "cities/duesseldorf.js" },
+            { name: "纽伦堡 (Nürnberg)", country: "德国", file: "cities/nuernberg.js" },
+            { name: "德累斯顿 (Dresden)", country: "德国", file: "cities/dresden.js" },
+            { name: "莱比锡 (Leipzig)", country: "德国", file: "cities/leipzig.js" },
+            { name: "海德堡 (Heidelberg)", country: "德国", file: "cities/heidelberg.js" },
+            { name: "不来梅 (Bremen)", country: "德国", file: "cities/bremen.js" },
+            { name: "汉诺威 (Hannover)", country: "德国", file: "cities/hannover.js" },
+            { name: "弗赖堡 (Freiburg)", country: "德国", file: "cities/freiburg.js" },
+
+            // 🇫🇷 法国 (15)
             { name: "巴黎 (Paris)", country: "法国", file: "cities/paris.js" },
             { name: "维桑堡 (Wissembourg)", country: "法国", file: "cities/wissembourg.js" },
-            { name: "萨尔茨堡 (Salzburg)", country: "奥地利", file: "cities/salzburg.js" },
+            { name: "尼斯 (Nice)", country: "法国", file: "cities/nice.js" },
+            { name: "里昂 (Lyon)", country: "法国", file: "cities/lyon.js" },
+            { name: "马赛 (Marseille)", country: "法国", file: "cities/marseille.js" },
+            { name: "波尔多 (Bordeaux)", country: "法国", file: "cities/bordeaux.js" },
+            { name: "斯特拉斯堡 (Strasbourg)", country: "法国", file: "cities/strasbourg.js" },
+            { name: "图卢兹 (Toulouse)", country: "法国", file: "cities/toulouse.js" },
+            { name: "里尔 (Lille)", country: "法国", file: "cities/lille.js" },
+            { name: "南特 (Nantes)", country: "法国", file: "cities/nantes.js" },
+            { name: "蒙彼利埃 (Montpellier)", country: "法国", file: "cities/montpellier.js" },
+            { name: "阿维尼翁 (Avignon)", country: "法国", file: "cities/avignon.js" },
+            { name: "安纳西 (Annecy)", country: "法国", file: "cities/annecy.js" },
+            { name: "科尔马 (Colmar)", country: "法国", file: "cities/colmar.js" },
+            { name: "霞慕尼 (Chamonix)", country: "法国", file: "cities/chamonix.js" },
+
+            // 🇬🇧 英国 (15)
+            { name: "伦敦 (London)", country: "英国", file: "cities/london.js" },
+            { name: "爱丁堡 (Edinburgh)", country: "英国", file: "cities/edinburgh.js" },
+            { name: "曼彻斯特 (Manchester)", country: "英国", file: "cities/manchester.js" },
+            { name: "伯明翰 (Birmingham)", country: "英国", file: "cities/birmingham.js" },
+            { name: "利物浦 (Liverpool)", country: "英国", file: "cities/liverpool.js" },
+            { name: "格拉斯哥 (Glasgow)", country: "英国", file: "cities/glasgow.js" },
+            { name: "布里斯托 (Bristol)", country: "英国", file: "cities/bristol.js" },
+            { name: "牛津 (Oxford)", country: "英国", file: "cities/oxford.js" },
+            { name: "剑桥 (Cambridge)", country: "英国", file: "cities/cambridge.js" },
+            { name: "约克 (York)", country: "英国", file: "cities/york.js" },
+            { name: "巴斯 (Bath)", country: "英国", file: "cities/bath.js" },
+            { name: "加的夫 (Cardiff)", country: "英国", file: "cities/cardiff.js" },
+            { name: "贝尔法斯特 (Belfast)", country: "英国", file: "cities/belfast.js" },
+            { name: "布莱顿 (Brighton)", country: "英国", file: "cities/brighton.js" },
+            { name: "纽卡斯尔 (Newcastle)", country: "英国", file: "cities/newcastle.js" },
+
+            // 🇮🇹 意大利 (8)
+            { name: "罗马 (Roma)", country: "意大利", file: "cities/roma.js" },
+            { name: "米兰 (Milano)", country: "意大利", file: "cities/milano.js" },
+            { name: "威尼斯 (Venezia)", country: "意大利", file: "cities/venezia.js" },
+            { name: "佛罗伦萨 (Firenze)", country: "意大利", file: "cities/firenze.js" },
+            { name: "那不勒斯 (Napoli)", country: "意大利", file: "cities/napoli.js" },
+            { name: "都灵 (Torino)", country: "意大利", file: "cities/torino.js" },
+            { name: "博洛尼亚 (Bologna)", country: "意大利", file: "cities/bologna.js" },
+            { name: "维罗纳 (Verona)", country: "意大利", file: "cities/verona.js" },
+
+            // 🇪🇸 西班牙 (8)
+            { name: "马德里 (Madrid)", country: "西班牙", file: "cities/madrid.js" },
+            { name: "巴塞罗那 (Barcelona)", country: "西班牙", file: "cities/barcelona.js" },
+            { name: "瓦伦西亚 (Valencia)", country: "西班牙", file: "cities/valencia.js" },
+            { name: "塞维利亚 (Sevilla)", country: "西班牙", file: "cities/sevilla.js" },
+            { name: "毕尔巴鄂 (Bilbao)", country: "西班牙", file: "cities/bilbao.js" },
+            { name: "格拉纳达 (Granada)", country: "西班牙", file: "cities/granada.js" },
+            { name: "马拉加 (Málaga)", country: "西班牙", file: "cities/malaga.js" },
+            { name: "萨拉戈萨 (Zaragoza)", country: "西班牙", file: "cities/zaragoza.js" },
+
+            // 🇨🇭 瑞士 (6)
             { name: "巴塞尔 (Basel)", country: "瑞士", file: "cities/basel.js" },
-            { name: "伦敦 (London)", country: "英国", file: "cities/london.js" }
+            { name: "苏黎世 (Zürich)", country: "瑞士", file: "cities/zuerich.js" },
+            { name: "日内瓦 (Genève)", country: "瑞士", file: "cities/geneve.js" },
+            { name: "伯尔尼 (Bern)", country: "瑞士", file: "cities/bern.js" },
+            { name: "卢塞恩 (Luzern)", country: "瑞士", file: "cities/luzern.js" },
+            { name: "因特拉肯 (Interlaken)", country: "瑞士", file: "cities/interlaken.js" },
+
+            // 🇦🇹 奥地利 (5)
+            { name: "萨尔茨堡 (Salzburg)", country: "奥地利", file: "cities/salzburg.js" },
+            { name: "维也纳 (Wien)", country: "奥地利", file: "cities/wien.js" },
+            { name: "因斯布鲁克 (Innsbruck)", country: "奥地利", file: "cities/innsbruck.js" },
+            { name: "格拉茨 (Graz)", country: "奥地利", file: "cities/graz.js" },
+            { name: "林茨 (Linz)", country: "奥地利", file: "cities/linz.js" },
+
+            // 🇳🇱 荷兰 (4)
+            { name: "阿姆斯特丹 (Amsterdam)", country: "荷兰", file: "cities/amsterdam.js" },
+            { name: "鹿特丹 (Rotterdam)", country: "荷兰", file: "cities/rotterdam.js" },
+            { name: "海牙 (Den Haag)", country: "荷兰", file: "cities/denhaag.js" },
+            { name: "乌得勒支 (Utrecht)", country: "荷兰", file: "cities/utrecht.js" },
+
+            // 🇧🇪 比利时 (4)
+            { name: "布鲁塞尔 (Bruxelles)", country: "比利时", file: "cities/bruxelles.js" },
+            { name: "布鲁日 (Brugge)", country: "比利时", file: "cities/brugge.js" },
+            { name: "安特卫普 (Antwerpen)", country: "比利时", file: "cities/antwerpen.js" },
+            { name: "根特 (Gent)", country: "比利时", file: "cities/gent.js" },
+
+            // 🇵🇹 葡萄牙 (3)
+            { name: "里斯本 (Lisboa)", country: "葡萄牙", file: "cities/lisboa.js" },
+            { name: "波尔图 (Porto)", country: "葡萄牙", file: "cities/porto.js" },
+            { name: "法鲁 (Faro)", country: "葡萄牙", file: "cities/faro.js" },
+
+            // 🇵🇱 波兰 (3)
+            { name: "华沙 (Warszawa)", country: "波兰", file: "cities/warszawa.js" },
+            { name: "克拉科夫 (Kraków)", country: "波兰", file: "cities/krakow.js" },
+            { name: "格但斯克 (Gdańsk)", country: "波兰", file: "cities/gdansk.js" },
+
+            // 🇨🇿 捷克 (2)
+            { name: "布拉格 (Praha)", country: "捷克", file: "cities/praha.js" },
+            { name: "布尔诺 (Brno)", country: "捷克", file: "cities/brno.js" },
+
+            // 🇬🇷 希腊 (2)
+            { name: "雅典 (Athens)", country: "希腊", file: "cities/athens.js" },
+            { name: "圣托里尼 (Santorini)", country: "希腊", file: "cities/santorini.js" },
+
+            // 🇸🇪 瑞典 (2)
+            { name: "斯德哥尔摩 (Stockholm)", country: "瑞典", file: "cities/stockholm.js" },
+            { name: "哥德堡 (Gothenburg)", country: "瑞典", file: "cities/gothenburg.js" },
+
+            // 🇳🇴 挪威 (2)
+            { name: "奥斯陆 (Oslo)", country: "挪威", file: "cities/oslo.js" },
+            { name: "卑尔根 (Bergen)", country: "挪威", file: "cities/bergen.js" },
+
+            // 🇩🇰 丹麦 (2)
+            { name: "哥本哈根 (Copenhagen)", country: "丹麦", file: "cities/copenhagen.js" },
+            { name: "奥胡斯 (Aarhus)", country: "丹麦", file: "cities/aarhus.js" },
+
+            // 🇮🇪 爱尔兰 (2)
+            { name: "都柏林 (Dublin)", country: "爱尔兰", file: "cities/dublin.js" },
+            { name: "高威 (Galway)", country: "爱尔兰", file: "cities/galway.js" },
+
+            // 🇭🇺 匈牙利 (1)
+            { name: "布达佩斯 (Budapest)", country: "匈牙利", file: "cities/budapest.js" },
+
+            // 🇫🇮 芬兰 (1)
+            { name: "赫尔辛基 (Helsinki)", country: "芬兰", file: "cities/helsinki.js" }
         ];
         
         let currentValidFile = "cities/city_data.js";
