@@ -304,7 +304,7 @@ window.CITY_DATA = {
     {
       "id": "gra_22",
       "name": "埃尔维拉街 (Calle Elvira)",
-      2.5 dur: "1.5小时",
+      "dur": "1.5小时",
       "nav": "Calle Elvira, Granada",
       "dist": "2公里内",
       "season": ["春", "夏", "秋", "冬"],
