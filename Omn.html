@@ -458,47 +458,104 @@
             citySelect.innerHTML = html;
         }
 
-        // 当在“城市 Filter”中选中具体城市时触发
+        // 城市数据加载状态：只允许最后一次选城请求更新页面
+        let cityLoadSequence = 0;
+        let pendingCityFile = null;
+
+        // 当“城市 Filter”选中城市时触发
         function onCitySelected() {
-            const citySelect = document.getElementById('cityFilter');
-            const selectedFile = citySelect.value;
-            
-            if (selectedFile && selectedFile !== currentValidFile) {
-                currentValidFile = selectedFile;
-                loadCityData(selectedFile); // 瞬间触发跨维度城市跃迁！
+            const selectedFile = document.getElementById('cityFilter').value;
+            if (selectedFile && selectedFile !== pendingCityFile &&
+                selectedFile !== currentValidFile) {
+                loadCityData(selectedFile);
             }
         }
 
-        // 核心跃迁引擎：动态挂载并执行 JS 文件
+        // 数据文件仍采用 cities/*.js 和 window.CITY_DATA，无需修改已有城市数据文件。
         function loadCityData(fileName) {
-            document.getElementById('spotGrid').innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">🚀 正在跨维度拉取城市数据，请稍候...</div>';
-            
+            const entry = cityDatabase.find(c => c.file === fileName);
+            const requestId = ++cityLoadSequence;
+            pendingCityFile = fileName;
+            const grid = document.getElementById('spotGrid');
+            grid.innerHTML = '<div style="grid-column:1/-1; padding:40px; text-align:center; color:#888;">🚀 正在跨维度拉取城市数据，请稍候...</div>';
+
             const oldScript = document.getElementById('dynamicCityScript');
-            if(oldScript) oldScript.remove();
+            if (oldScript) oldScript.remove();
+
+            // 关键修复：消除上一个城市的全局数据，防止 JS 语法错误后错误沿用旧数据。
+            window.CITY_DATA = undefined;
 
             const script = document.createElement('script');
             script.id = 'dynamicCityScript';
             script.src = fileName;
-            
-            script.onload = () => {
-                if(!window.CITY_DATA || !window.CITY_DATA.spots) return alert("❌ 数据解析失败，请检查 JS 文件内的 JSON 格式！");
-                
-                spots = window.CITY_DATA.spots;
-                cityMeta = window.CITY_DATA.city_meta;
-                document.getElementById('cityTitle').innerText = `Omni-Route-Nexus | ${cityMeta.city_name}`;
-                
+
+            function failCityLoad(message) {
+                if (requestId !== cityLoadSequence) return;
+                pendingCityFile = null;
+                currentValidFile = '';
+                spots = [];
+                cityMeta = {};
+                window.CITY_DATA = undefined;
+                document.getElementById('cityTitle').innerText = 'Omni-Route-Nexus | 城市加载失败';
                 document.getElementById('itineraryResult').innerHTML = '';
-                document.getElementById('gallerySearch').value = '';
-                
-                renderGrid(spots);
-                initStartPointSelector();
+                grid.textContent = '';
+                const errorBox = document.createElement('div');
+                errorBox.style.cssText = 'grid-column:1/-1;padding:40px;text-align:center;color:var(--bh-red);';
+                errorBox.textContent = '❌ ' + message + '（文件：' + fileName + '）';
+                grid.appendChild(errorBox);
+                console.error('[Omni-Route-Nexus] City loading failed:', fileName, message);
+            }
+
+            script.onload = () => {
+                if (requestId !== cityLoadSequence) return;
+                const data = window.CITY_DATA;
+                if (!data || typeof data !== 'object' ||
+                    !data.city_meta || !Array.isArray(data.spots) ||
+                    data.spots.length === 0) {
+                    failCityLoad('城市文件未正确注册 CITY_DATA，或景点列表为空；请检查文件语法和数据结构');
+                    return;
+                }
+
+                // 验证选中的城市身份：阻止复制错城市内容或加载旧城市数据。
+                const expectedName = entry ? entry.name.split(' (')[0].trim() : '';
+                if (expectedName && data.city_meta.city_name !== expectedName) {
+                    failCityLoad('数据城市不匹配：期望“' + expectedName +
+                                 '”，实际为“' + (data.city_meta.city_name || '未知') + '”');
+                    return;
+                }
+
+                const requiredSpotFields = ['id', 'name', 'desc_long', 'lat', 'lon'];
+                const invalidIndex = data.spots.findIndex(spot =>
+                    !spot || requiredSpotFields.some(field =>
+                        spot[field] === undefined || spot[field] === null) ||
+                    !Number.isFinite(Number(spot.lat)) ||
+                    !Number.isFinite(Number(spot.lon)));
+                if (invalidIndex !== -1) {
+                    failCityLoad('第 ' + (invalidIndex + 1) + ' 个景点缺少必要字段或经纬度无效');
+                    return;
+                }
+
+                try {
+                    // 先完成显示，再标记切换成功。若渲染抛错，不保留错误城市状态。
+                    spots = data.spots;
+                    cityMeta = data.city_meta;
+                    renderGrid(spots);
+                    initStartPointSelector();
+                    document.getElementById('cityTitle').innerText =
+                        'Omni-Route-Nexus | ' + cityMeta.city_name;
+                    document.getElementById('itineraryResult').innerHTML = '';
+                    document.getElementById('gallerySearch').value = '';
+                    currentValidFile = fileName;
+                    pendingCityFile = null;
+                } catch (error) {
+                    failCityLoad('城市数据渲染失败：' + error.message);
+                }
             };
-            
+
             script.onerror = () => {
-                document.getElementById('spotGrid').innerHTML = `<div style="grid-column:1/-1; padding:40px; text-align:center; color:var(--bh-red);">❌ 找不到数据文件 <b>${fileName}</b>。<br>请确保你在 cities 目录下创建了该文件，并放入了正确的数据。</div>`;
-                document.getElementById('cityTitle').innerText = `Omni-Route-Nexus | 链接失败`;
+                failCityLoad('无法下载城市数据文件，请检查文件路径及网络连接');
             };
-            
+
             document.body.appendChild(script);
         }
 
