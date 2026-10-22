@@ -260,7 +260,7 @@ window.CITY_DATA = {
       "rest": "Restauracja Rewers"
     },
     {
-      "id": "krk_19" /* mapped to gdn_19 */,
+      "id": "gdn_19",
       "name": "奥利瓦大教堂 (Katedra w Oliwie)",
       "dur": "1.5小时",
       "nav": "Oliwa Cathedral",
