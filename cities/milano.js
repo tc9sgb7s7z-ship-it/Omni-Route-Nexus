@@ -312,7 +312,6 @@ window.CITY_DATA = {
       "lat": 45.5185,
       "lon": 9.2135,
       "desc_long": "【历史解码】Pirelli HangarBicocca是由著名轮胎品牌倍耐力支持的巨型工业厂房改造当代美术馆。这里长期展示大型震撼装置艺术，其中极为著名的是德国艺术家安塞尔姆·基弗的巨型永久装置《七座宫殿》（The Seven Heavenly Palaces）。<br><br>【亮点】巨型工业厂房改建的当代美术馆、震撼人心的巨型装置艺术永久展",
-      >【票价政策】展览免费向公众开放（需提前网上预约）",
       "ticket": "🎫 展览免费开放（需官网预约）",
       "rest": "Hangar Bicocca Cafe"
     },
