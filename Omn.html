@@ -520,11 +520,22 @@
                     return;
                 }
 
-                // 验证选中的城市身份：阻止复制错城市内容或加载旧城市数据。
+                // 支持不同中文译名，但仍检查国家及已知城市身份。
                 const expectedName = entry ? entry.name.split(' (')[0].trim() : '';
-                if (expectedName && data.city_meta.city_name !== expectedName) {
+                const actualName = String(data.city_meta.city_name || '').trim();
+                const cityAliases = {
+                    '弗赖堡': ['弗莱堡'],
+                    '佛罗伦萨': ['弗洛伦萨', '翡冷翠']
+                };
+                const allowedNames = [expectedName, ...(cityAliases[expectedName] || [])];
+                if (entry && data.city_meta.country !== entry.country) {
+                    failCityLoad('国家不匹配：期望“' + entry.country +
+                                 '”，实际为“' + (data.city_meta.country || '未知') + '”');
+                    return;
+                }
+                if (expectedName && !allowedNames.includes(actualName)) {
                     failCityLoad('数据城市不匹配：期望“' + expectedName +
-                                 '”，实际为“' + (data.city_meta.city_name || '未知') + '”');
+                                 '”，实际为“' + (actualName || '未知') + '”');
                     return;
                 }
 
