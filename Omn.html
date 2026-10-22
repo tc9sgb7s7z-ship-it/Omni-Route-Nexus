@@ -175,6 +175,13 @@
                 <button class="btn btn-primary" onclick="generateItinerary()">⚡ 一键生成专属路线</button>
                 <button class="btn btn-dark" onclick="openRadar()">📍 查看全城坐标雷达</button>
             </div>
+            <div class="input-row" style="margin-top:10px;align-items:center;flex-wrap:wrap;">
+                <label for="smartStartSelector">📍 出发点：</label>
+                <select id="smartStartSelector" onchange="toggleCoordinateInputs('smart')" style="max-width:360px;"></select>
+                <input type="number" id="smartStartLat" step="any" min="-90" max="90" placeholder="纬度" style="display:none;width:120px;">
+                <input type="number" id="smartStartLon" step="any" min="-180" max="180" placeholder="经度" style="display:none;width:120px;">
+            </div>
+            <div style="font-size:12px;color:var(--text-sec);margin:6px 0;">直线距离优化（非实时交通）；可使用酒店或车站的准确经纬度作为起点。</div>
             <div id="itineraryResult"></div>
         </div>
 
@@ -240,7 +247,9 @@
             
             <div class="start-point-box">
                 <strong>📍 出发原点:</strong>
-                <select id="startPointSelector"></select>
+                <select id="startPointSelector" onchange="toggleCoordinateInputs('custom')"></select>
+                <input type="number" id="customStartLat" step="any" min="-90" max="90" placeholder="纬度" style="display:none;width:120px;">
+                <input type="number" id="customStartLon" step="any" min="-180" max="180" placeholder="经度" style="display:none;width:120px;">
             </div>
 
             <div class="spot-tools">
@@ -698,12 +707,58 @@
 
         // --- 自由定制矩阵功能 ---
         function initStartPointSelector() {
-            const sel = document.getElementById('startPointSelector');
-            let opts = `<option value="default" selected>🚆 主站/市中心 (${cityMeta.main_station_name || 'Hbf'})</option>`;
-            opts += `<optgroup label="或从特定景点出发">`;
-            spots.forEach(s => { opts += `<option value="${s.id}">${s.name.split(' ')[0]}</option>`; });
-            opts += `</optgroup>`;
-            sel.innerHTML = opts;
+            ['startPointSelector', 'smartStartSelector'].forEach(id => {
+                const selector = document.getElementById(id);
+                if (!selector) return;
+                selector.replaceChildren();
+                const center = document.createElement('option');
+                center.value = 'default';
+                center.textContent = '🏙️ 城市中心（近似位置，非车站坐标）';
+                selector.appendChild(center);
+                const manual = document.createElement('option');
+                manual.value = 'coordinates';
+                manual.textContent = '📌 自定义经纬度（酒店／车站）';
+                selector.appendChild(manual);
+                const group = document.createElement('optgroup');
+                group.label = '从已有景点出发';
+                spots.forEach(spot => {
+                    const option = document.createElement('option');
+                    option.value = spot.id;
+                    option.textContent = spot.name;
+                    group.appendChild(option);
+                });
+                selector.appendChild(group);
+            });
+            toggleCoordinateInputs('smart');
+            toggleCoordinateInputs('custom');
+        }
+
+        function toggleCoordinateInputs(mode) {
+            const selector = document.getElementById(mode === 'smart' ? 'smartStartSelector' : 'startPointSelector');
+            const show = selector && selector.value === 'coordinates';
+            ['Lat', 'Lon'].forEach(suffix => {
+                document.getElementById(mode + 'Start' + suffix).style.display = show ? 'inline-block' : 'none';
+            });
+        }
+
+        function resolveStartPoint(mode) {
+            const selector = document.getElementById(mode === 'smart' ? 'smartStartSelector' : 'startPointSelector');
+            if (selector.value === 'coordinates') {
+                const latText = document.getElementById(mode + 'StartLat').value.trim();
+                const lonText = document.getElementById(mode + 'StartLon').value.trim();
+                const lat = Number(latText), lon = Number(lonText);
+                if (!latText || !lonText || !Number.isFinite(lat) || !Number.isFinite(lon) ||
+                    Math.abs(lat) > 90 || Math.abs(lon) > 180) {
+                    alert('请输入有效经纬度：纬度范围 -90～90，经度范围 -180～180。');
+                    return null;
+                }
+                return { id: 'START', name: '自定义起点 (' + lat + ', ' + lon + ')', lat, lon, dur: '起点' };
+            }
+            if (selector.value !== 'default') {
+                const spot = spots.find(item => item.id === selector.value);
+                if (spot) return { id: spot.id, name: spot.name, lat: spot.lat, lon: spot.lon, dur: '起点' };
+            }
+            return { id: 'START', name: '城市中心（近似）', lat: cityMeta.center_lat, lon: cityMeta.center_lon, dur: '起点' };
         }
 
         function openSelectorModal() {
@@ -778,13 +833,9 @@
             closeModal('selectorModal');
             document.getElementById('planDays').value = Math.ceil(pool.length / 4); // 自动回填天数
             
-            const startVal = document.getElementById('startPointSelector').value;
-            let startNode = { id: 'START', name: cityMeta.main_station_name || '市中心原点', lat: cityMeta.center_lat, lon: cityMeta.center_lon, dur: '起点' };
-            if(startVal !== 'default') {
-                const target = spots.find(x => x.id === startVal);
-                if(target) startNode = { id: target.id, name: target.name, lat: target.lat, lon: target.lon, dur: '起点' };
-            }
-            
+            const startNode = resolveStartPoint('custom');
+            if (!startNode) return;
+
             renderTimelineRoute(pool, pool.length, Math.ceil(pool.length / 4), '🚩 专属定制矩阵路线', startNode);
         }
 
@@ -812,39 +863,71 @@
             const targetCount = Math.min(Math.ceil(days * 4), pool.length);
             if(targetCount === 0) return alert('未匹配到符合您严苛偏好的景点，请放宽条件。');
             
-            let startNode = { id: 'START', name: cityMeta.main_station_name || '市中心原点', lat: cityMeta.center_lat, lon: cityMeta.center_lon, dur: '起点' };
+            const startNode = resolveStartPoint('smart');
+            if (!startNode) return;
             renderTimelineRoute(pool, targetCount, days, `🤖 智能 N 日路线 (${days}天)`, startNode);
         }
 
         // --- 路线渲染引擎 (时间轴) ---
-        function renderTimelineRoute(pool, targetCount, days, title, startNode) {
-            let route = [];
-            route.push(startNode);
-            
-            let current = startNode;
-            let availablePool = [...pool];
-            availablePool = availablePool.filter(p => p.id !== startNode.id);
+        // 以固定起点对开放路径做最近邻构造，再使用 2-opt 消除地理折返。
+        function optimizeOpenRoute(origin, nodes) {
+            const remaining = [...nodes], ordered = [];
+            let current = origin;
+            const dist = (a, b) => getDistance(a.lat, a.lon, b.lat, b.lon);
+            while (remaining.length) {
+                let nearest = 0;
+                for (let i = 1; i < remaining.length; i++) {
+                    if (dist(current, remaining[i]) < dist(current, remaining[nearest])) nearest = i;
+                }
+                current = remaining.splice(nearest, 1)[0];
+                ordered.push(current);
+            }
+            for (let pass = 0; pass < Math.min(80, nodes.length * 5); pass++) {
+                let improved = false;
+                for (let i = 0; i < ordered.length - 1 && !improved; i++) {
+                    for (let j = i + 1; j < ordered.length; j++) {
+                        const predecessor = i === 0 ? origin : ordered[i-1];
+                        const successor = j + 1 < ordered.length ? ordered[j+1] : null;
+                        const oldCost = dist(predecessor, ordered[i]) + (successor ? dist(ordered[j], successor) : 0);
+                        const newCost = dist(predecessor, ordered[j]) + (successor ? dist(ordered[i], successor) : 0);
+                        if (newCost + 1e-8 < oldCost) {
+                            ordered.splice(i, j-i+1, ...ordered.slice(i,j+1).reverse());
+                            improved = true;
+                            break;
+                        }
+                    }
+                }
+                if (!improved) break;
+            }
+            return ordered;
+        }
 
-            for(let i = 0; i < targetCount; i++) {
-                if(availablePool.length === 0) break;
-                availablePool.sort((a,b) => getDistance(current.lat, current.lon, a.lat, a.lon) - getDistance(current.lat, current.lon, b.lat, b.lon));
-                current = availablePool[0];
-                route.push(current);
-                availablePool.shift(); 
+        function renderTimelineRoute(pool, targetCount, days, title, startNode) {
+            const unique = new Map(pool.filter(p => p.id !== startNode.id).map(p => [p.id, p]));
+            const remaining = [...unique.values()];
+            const count = Math.min(targetCount, remaining.length);
+            const dayCount = Math.max(1, Math.ceil(days));
+            const perDay = Math.ceil(count / dayCount);
+            const dayRoutes = [];
+            let allocated = 0;
+            // 将相邻景点放在同一日，每天都以用户选择的起点出发。
+            for (let day = 0; day < dayCount && allocated < count; day++) {
+                const take = Math.min(perDay, count - allocated);
+                const selected = [];
+                for (let i = 0; i < take; i++) {
+                    const from = selected.length ? selected[selected.length - 1] : startNode;
+                    remaining.sort((a,b) => getDistance(from.lat,from.lon,a.lat,a.lon) - getDistance(from.lat,from.lon,b.lat,b.lon));
+                    selected.push(remaining.shift());
+                }
+                dayRoutes.push(optimizeOpenRoute(startNode, selected));
+                allocated += selected.length;
             }
 
             let html = `<div style="border-top: 3px solid var(--bh-black); padding-top:25px; margin-top:25px;">
                         <h3 style="margin-top:0; font-size:20px;">✅ ${title}</h3>`;
             
-            let actualSpotsCount = route.length - 1;
-            let spotsPerDay = Math.ceil(actualSpotsCount / days) || 1;
-            
-            for(let d = 0; d < Math.ceil(days); d++) {
-                let sliceStartIdx = d === 0 ? 0 : (d * spotsPerDay);
-                let sliceEndIdx = sliceStartIdx + spotsPerDay + 1;
-                let dayNodes = route.slice(sliceStartIdx, sliceEndIdx);
-                if(dayNodes.length <= 1) break; 
-                
+            for (let d = 0; d < dayRoutes.length; d++) {
+                const dayNodes = [startNode, ...dayRoutes[d]];
                 html += `<div style="margin-bottom: 25px; background: #fff; padding: 20px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.03);">`;
                 html += `<div style="font-weight: 700; font-size: 16px; color: var(--bh-blue); border-bottom: 1px dashed #ddd; padding-bottom: 10px; margin-bottom: 15px;">🗓️ Day ${d+1} 行程</div>`;
                 html += `<div class="timeline">`;
