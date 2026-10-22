@@ -1,0 +1,33 @@
+name: City Data Validation
+
+on:
+  push:
+    paths:
+      - 'cities/**'
+      - 'Omn.html'
+      - 'scripts/validate-cities.cjs'
+      - '.github/workflows/city-data-validation.yml'
+  pull_request:
+    paths:
+      - 'cities/**'
+      - 'Omn.html'
+      - 'scripts/validate-cities.cjs'
+      - '.github/workflows/city-data-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Check all registered city files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Omn city registry and data
+        run: node scripts/validate-cities.cjs
