@@ -58,7 +58,7 @@ window.CITY_DATA = {
       "season": ["春", "夏", "秋", "冬"],
       "act": ["城市游览", "科技与艺术"],
       "lat": 51.2082,
-      "lon": 3.269 /* fix: 3.2269 */,
+      "lon": 3.2269,
       "desc_long": "【历史解码】城堡广场（Burg）是布鲁日最古老的行政与宗教中心，历史上曾是一座受防御工事保护的Flemish城堡所在地。广场四周汇聚了多种不同历史时期的建筑杰作，包括布鲁日市政厅、圣血教堂以及旧民事登记处，见证了布鲁日从中世纪到文艺复兴的政治权力变迁。<br><br>【亮点】布鲁日历史最悠久的政治权力核心广场、融合多种建筑风格的历史群落",
       "ticket": "🎫 广场全天免费开放",
       "rest": "Brasserie Forestière"
@@ -596,7 +596,7 @@ window.CITY_DATA = {
       "rest": "Brasserie Forestière"
     },
     {
-      "id": "bru_43" /* fix id format: brg_43 */,
+      "id": "brg_43",
       "name": "蒂莱赫姆森林 (Tillegembos)",
       "dur": "2.5小时",
       "nav": "Tillegembos, Assebroek",
