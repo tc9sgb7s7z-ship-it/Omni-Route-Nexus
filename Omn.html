@@ -487,7 +487,11 @@
 
             const script = document.createElement('script');
             script.id = 'dynamicCityScript';
-            script.src = fileName;
+            // 为每次城市数据请求生成独立 URL，避免 GitHub Pages / 浏览器使用已损坏的旧缓存。
+            // 城市目录路径和 window.CITY_DATA 数据接口保持不变。
+            const cityUrl = new URL(fileName, document.baseURI);
+            cityUrl.searchParams.set('_city_reload', String(Date.now()) + '-' + requestId);
+            script.src = cityUrl.href;
 
             function failCityLoad(message) {
                 if (requestId !== cityLoadSequence) return;
