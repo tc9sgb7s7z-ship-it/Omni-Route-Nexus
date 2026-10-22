@@ -638,7 +638,7 @@ window.CITY_DATA = {
       "rest": "Café de Posthoorn"
     },
     {
-      "id": "ndh_46" /* fix id format: the_46 */,
+      "id": "the_46",
       "name": "海牙日落观景台 (Scheveningen Pier Sunset View)",
       "dur": "1小时",
       "nav": "Scheveningen Pier Viewpoint",
