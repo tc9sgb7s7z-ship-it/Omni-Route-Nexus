@@ -444,7 +444,7 @@ window.CITY_DATA = {
     {
       "id": "dus_32",
       "name": "莱茵草甸 (Rheinwiesen Oberkassel)",
-      "dus_dur": "2小时",
+      "dur": "2小时",
       "nav": "Rheinwiesen",
       "dist": "5公里内",
       "season": ["春", "夏", "秋"],
