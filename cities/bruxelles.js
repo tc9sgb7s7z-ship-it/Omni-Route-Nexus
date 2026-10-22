@@ -178,7 +178,7 @@ window.CITY_DATA = {
     {
       "id": "bru_13",
       "name": "萨布隆圣母教堂 (Église Notre-Dame du Sablon)",
-      5dur: "1小时",
+      "dur": "1小时",
       "dur": "1小时",
       "nav": "Church of Our Lady of the Sablon",
       "dist": "2公里内",
