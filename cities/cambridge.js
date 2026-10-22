@@ -23,9 +23,7 @@ window.CITY_DATA = {
     },
     {
       "id": "cam_2",
-      "name": "三一学院 (Trinity College)",
-      2: "2小时",
-      "dur": "2小时",
+      "name": "三一学院 (Trinity College)",      "dur": "2小时",
       "nav": "Trinity College, Cambridge",
       "dist": "2公里内",
       "season": ["春", "夏", "秋", "冬"],
@@ -500,9 +498,7 @@ window.CITY_DATA = {
     },
     {
       "id": "cam_36",
-      "name": "格兰切斯特草甸 (Grantchester Meadows)",
-      2: "3小时",
-      "dur": "3小时",
+      "name": "格兰切斯特草甸 (Grantchester Meadows)",      "dur": "3小时",
       "nav": "Grantchester Meadows, Cambridge",
       "dist": "5公里内",
       "season": ["春", "夏", "秋", "冬"],
