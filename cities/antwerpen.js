@@ -206,7 +206,7 @@ window.CITY_DATA = {
     {
       "id": "ant_15",
       "name": "米德尔海姆露天雕塑博物馆 (Middelheim Open-Air Sculpture Museum)",
-      5dur: "2.5小时",
+      "dur": "2.5小时",
       "dur": "2.5小时",
       "nav": "Middelheim Museum",
       "dist": "5公里内",
