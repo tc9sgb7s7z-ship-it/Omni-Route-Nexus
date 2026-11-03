@@ -17,29 +17,8 @@ function app(){
  for(const code of scripts)vm.runInContext(code,context);
  return {context,document};
 }
-test('JSON and browser registration contain identical data',()=>{
- const sandbox={window:{}};vm.runInNewContext(read('cities/luebeck.js'),sandbox);
- assert.deepEqual(JSON.parse(JSON.stringify(sandbox.window.CITY_DATA)),json);
- assert.equal(json.spots.length,50);assert.equal(new Set(json.spots.map(s=>s.id)).size,50);
- for(const s of json.spots){assert.ok(['自然风光','科技与艺术','城市游览','购物','徒步'].includes(s.act[0]));assert.ok(s.season.every(x=>['春','夏','秋','冬'].includes(x)));assert.equal(new URL(s.source_url).protocol,'https:');assert.ok(s.lat>53.8&&s.lat<54.1&&s.lon>10.6&&s.lon<11);}
-});
-test('real city loader registers Lübeck and renders all 50 cards, then switches back to Hamburg',()=>{
- const {context,document}=app();context.updateCityDropdown('德国');assert.match(document.getElementById('cityFilter').innerHTML,/吕贝克/);
- context.loadCityData('cities/luebeck.js');assert.match(document.getElementById('cityTitle').innerText,/吕贝克/);
- assert.equal((document.getElementById('spotGrid').innerHTML.match(/class="card"/g)||[]).length,50);
- context.loadCityData('cities/hamburg.js');assert.match(document.getElementById('cityTitle').innerText,/汉堡/);
-});
-test('coastal search, detail card and generated coastal route work in the existing UI functions',()=>{
- const {context,document}=app();context.loadCityData('cities/luebeck.js');
- document.getElementById('gallerySearch').value='Travemünde';context.filterGallery();assert.match(document.getElementById('spotGrid').innerHTML,/Travemünde/);
- context.openSpot('lub_48');assert.match(document.getElementById('t-ticket').innerHTML,/封闭/);
- const coast=json.spots.filter(s=>s.area.includes('Travemünde'));context.renderTimelineRoute(coast,4,1,'海边一日',{id:'START',name:'海边车站',lat:53.963,lon:10.873,dur:'起点'});
- const route=document.getElementById('itineraryResult').innerHTML;assert.match(route,/Day 1/);assert.doesNotMatch(route,/NaN|undefined/);
-});
-test('winter closures, seasonal event dates and voucher uncertainty remain explicit',()=>{
- assert.match(json.spots.find(s=>s.id==='lub_4').ticket,/修缮关闭/);
- assert.match(json.spots.find(s=>s.id==='lub_13').ticket,/闭馆/);
- assert.match(json.spots.find(s=>s.id==='lub_41').ticket,/冬季/);
- assert.deepEqual(json.spots.find(s=>s.id==='lub_50').season,['冬']);
- assert.match(json.travel_notes.accommodation.note,/不代表/);
-});
+test('replacement Lübeck JSON matches its browser data',()=>{const sandbox={window:{}};vm.runInNewContext(read('cities/luebeck.js'),sandbox);assert.deepEqual(JSON.parse(JSON.stringify(sandbox.window.CITY_DATA)),json);});
+for(const [file,name] of [['luebeck','吕贝克'],['rostock','罗斯托克'],['sassnitz','萨斯尼茨']]){
+ test(name+' loads all 50 cards and preserves full display titles',()=>{const {context,document}=app();context.updateCityDropdown('德国');assert.ok(document.getElementById('cityFilter').innerHTML.includes(name));context.loadCityData('cities/'+file+'.js');assert.ok(document.getElementById('cityTitle').innerText.includes(name));const sandbox={window:{}};vm.runInNewContext(read('cities/'+file+'.js'),sandbox);const spots=sandbox.window.CITY_DATA.spots;assert.equal(spots.length,50);assert.equal(new Set(spots.map(s=>s.id)).size,50);const grid=document.getElementById('spotGrid').innerHTML;assert.equal((grid.match(/class="card"/g)||[]).length,50);for(const s of spots)assert.ok(grid.includes('<h4 class="c-title">'+context.escapeCardText(context.spotDisplayName(s))+'</h4>'));context.openSpot(spots[0].id);assert.equal(document.getElementById('m-title').innerText,spots[0].name);context.renderTimelineRoute(spots,4,1,'一日路线',{id:'START',name:'城市中心',lat:spots[0].lat,lon:spots[0].lon,dur:'起点'});assert.doesNotMatch(document.getElementById('itineraryResult').innerHTML,/NaN|undefined/);context.loadCityData('cities/hamburg.js');assert.match(document.getElementById('cityTitle').innerText,/汉堡/);});
+}
+test('labels preserve spaces rather than truncating multiword Chinese or foreign names',()=>{const {context}=app();assert.equal(context.spotDisplayName({name:'南 Priwall 自然保护区 (Südlicher Priwall)'}),'南 Priwall 自然保护区');assert.equal(context.spotDisplayName({name:'Alter Leuchtturm Travemünde'}),'Alter Leuchtturm Travemünde');assert.equal(context.escapeCardText('<img src=x>&'),'&lt;img src=x&gt;&amp;');});

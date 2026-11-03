@@ -281,13 +281,15 @@
         // 结构化城市数据库：随着以后扩充到 100 个城市，只需要在这里继续往数组里加条目即可！
         // 结构化城市数据库：包含 100 个欧洲热门旅游城市
         const cityDatabase = [
-            // 🇩🇪 德国 (16)
+            // 🇩🇪 德国 (18)
             { name: "慕尼黑 (München)", country: "德国", file: "cities/city_data.js" },
             { name: "卡尔斯鲁厄 (Karlsruhe)", country: "德国", file: "cities/karlsruhe.js" },
             { name: "柏林 (Berlin)", country: "德国", file: "cities/berlin.js" },
             { name: "法兰克福 (Frankfurt)", country: "德国", file: "cities/frankfurt.js" },
             { name: "汉堡 (Hamburg)", country: "德国", file: "cities/hamburg.js" },
             { name: "吕贝克 (Lübeck)", country: "德国", file: "cities/luebeck.js" },
+            { name: "罗斯托克 (Rostock)", country: "德国", file: "cities/rostock.js" },
+            { name: "萨斯尼茨 (Sassnitz)", country: "德国", file: "cities/sassnitz.js" },
             { name: "科隆 (Köln)", country: "德国", file: "cities/koeln.js" },
             { name: "斯图加特 (Stuttgart)", country: "德国", file: "cities/stuttgart.js" },
             { name: "杜塞尔多夫 (Düsseldorf)", country: "德国", file: "cities/duesseldorf.js" },
@@ -585,15 +587,24 @@
         }
 
         // --- 画廊渲染与搜索 ---
+        function escapeCardText(text) {
+            return String(text ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[ch]));
+        }
+
+        function spotDisplayName(spot) {
+            // Only remove a trailing translated alias; spaces are part of a place name.
+            return String(spot.name || '').replace(/\s*[（(][^）)]*[）)]\s*$/, '').trim();
+        }
+
         function renderGrid(dataToRender) {
             const grid = document.getElementById('spotGrid');
             grid.innerHTML = dataToRender.map(s => {
                 const tagHtml = (Array.isArray(s.act) ? s.act : [s.act]).map(t => `<span class="s-tag">${t}</span>`).join('');
                 return `
                 <div class="card" onclick="openSpot('${s.id}')">
-                    <h4 class="c-title">${s.name.split(' ')[0]}</h4>
+                    <h4 class="c-title">${escapeCardText(spotDisplayName(s))}</h4>
                     <div class="c-tags">${tagHtml}<span class="s-tag" style="background:#eaf0fc; color:var(--bh-blue);">${s.dur}</span></div>
-                    <div class="c-desc">${s.desc_long.replace(/<[^>]+>/g, '')}</div>
+                    <div class="c-desc">${escapeCardText(s.summary || s.desc_long.replace(/<[^>]+>/g, ''))}</div>
                 </div>`;
             }).join('');
         }
@@ -693,7 +704,7 @@
                 const yPercent = 100 - (((s.lat - minLat) / (maxLat - minLat)) * 90 + 5); 
                 box.innerHTML += `
                     <div class="dot" style="left: ${xPercent}%; top: ${yPercent}%;" onclick="window.open('https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lon}')">
-                        <div class="dot-label">${s.name.split(' ')[0]}</div>
+                        <div class="dot-label">${escapeCardText(spotDisplayName(s))}</div>
                     </div>`;
             });
             document.getElementById('radarModal').classList.add('active');

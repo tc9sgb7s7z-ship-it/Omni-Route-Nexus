@@ -2,21 +2,16 @@
   "city_meta": {
     "city_name": "吕贝克",
     "country": "德国",
-    "main_station_name": "Lübeck Hauptbahnhof",
-    "center_lat": 53.8675,
-    "center_lon": 10.6866,
-    "main_station_lat": 53.8676,
-    "main_station_lon": 10.6699,
-    "last_verified": "2026-11-03",
-    "coordinate_note": "坐标为景点或街区中心的近似定位，非精确入口；路径、渡轮与步行时间请用地图复核。",
-    "planning_note": "老城和Travemünde是两个游览片区，海边单列一天，城际与住宿不由本城市文件自动预订。"
+    "main_station_name": "Lübeck Hauptbahnhof (吕贝克中央火车站)",
+    "center_lat": 53.8654,
+    "center_lon": 10.6865
   },
   "spots": [
     {
       "id": "lub_1",
-      "name": "霍尔斯滕门 (Holstentor)",
-      "dur": "1小时",
-      "nav": "Holstentor, Lübeck, Germany",
+      "name": "荷尔斯泰因门 (Holstentor)",
+      "dur": "1.5小时",
+      "nav": "Holstentor, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -25,22 +20,20 @@
         "冬"
       ],
       "act": [
+        "科技与艺术",
         "城市游览"
       ],
       "lat": 53.8662,
-      "lon": 10.6798,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】老城西侧的双塔城门是吕贝克汉萨城市形象的代表，城门内另设城市历史博物馆。先在草坪和桥边看两侧立面，再决定是否入馆，不必把免费外观和付费展览当作两次必去项目。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://museum-holstentor.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "外观免费；博物馆票价、周一及圣诞开放时间查官网。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://museum-holstentor.de",
-      "verified_at": "2026-11-03"
+      "lon": 10.6797,
+      "desc_long": "【历史解码】荷尔斯泰因门是吕贝克最著名的地标，也是德国最著名的中世纪城门之一。它建于1464年至1478年间，是吕贝克古城防御工事的重要组成部分，代表了汉萨同盟鼎盛时期的经济实力与无上骄傲。其两座宏伟的圆锥形红砖塔楼因地基下沉而微微向内倾斜，不仅极具视觉冲击力，更成为了德国红砖哥特式建筑的巅峰之作和吕贝克世界文化遗产的象征。<br><br>【亮点】德国标志性中世纪红砖城门、独特的倾斜双塔结构、城门内部的历史博物馆",
+      "ticket": "🎫 外部全天免费观赏，内部博物馆成人票约8.00欧元",
+      "rest": "Schiffergesellschaft"
     },
     {
       "id": "lub_2",
-      "name": "盐仓 (Salzspeicher)",
-      "dur": "0.5小时",
-      "nav": "Salzspeicher, Lübeck, Germany",
+      "name": "圣玛丽教堂 (St. Marien zu Lübeck)",
+      "dur": "1.5小时",
+      "nav": "St. Marien Kirche, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -49,70 +42,64 @@
         "冬"
       ],
       "act": [
-        "城市游览"
-      ],
-      "lat": 53.8657,
-      "lon": 10.6805,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】特拉沃河边成排的山墙仓库记录了盐贸易与汉萨商业网络。适合接在霍尔斯滕门之后，从桥边看红砖倒影和仓库轮廓；这些建筑不是可以随意进入的公共展馆。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共岸边免费；仓库内部不作为常规参观安排。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_3",
-      "name": "吕贝克市政厅 (Rathaus)",
-      "dur": "0.5小时",
-      "nav": "Rathaus, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "城市游览"
-      ],
-      "lat": 53.8669,
-      "lon": 10.685,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】市政厅建筑群与市场广场共同构成老城中心，深色砖墙、拱廊和装饰立面很有辨识度。外观适合与圣玛利亚教堂串联，内部导览是另一种活动，需按官方预约和开放安排决定。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "外观免费；内部仅按实际导览安排入场。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_4",
-      "name": "圣玛利亚教堂·外观 (St. Marien)",
-      "dur": "0.5小时",
-      "nav": "St. Marien, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
+        "科技与艺术",
         "城市游览"
       ],
       "lat": 53.8681,
-      "lon": 10.6855,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】双塔是老城天际线的重要组成部分。教区已公告2026年11月开始室内修缮，本次冬季攻略按外围观赏安排，不承诺能进入教堂看钟或参加室内游览。将广场和周边街巷作为主要停留内容。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.kirche-ll.de/nachrichten/aktuelles/details/st-marien-schliesst-im-november-startet-die-sanierung.html\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "2026年冬季室内修缮关闭；仅在允许区域看外观。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.kirche-ll.de/nachrichten/aktuelles/details/st-marien-schliesst-im-november-startet-die-sanierung.html",
-      "verified_at": "2026-11-03"
+      "lon": 10.6849,
+      "desc_long": "【历史解码】圣玛丽教堂建于1250年至1350年间，是德国第三大教堂，也是波罗的海地区所有红砖哥特式教堂的母堂和典范。其高达38.5米的宏伟中殿拱顶是世界上最高的砖砌拱顶结构。二战期间教堂在空袭中严重受损，如今坠落在地面的破碎钟鼎作为和平纪念碑原样保留在教堂南塔下方，警示着战争的残酷。<br><br>【亮点】世界最高的砖砌中殿拱顶、波罗的海红砖哥特式建筑母堂、震撼的二战坠钟遗址",
+      "ticket": "🎫 成人门票约4.00欧元（维护捐款）",
+      "rest": "Ratskeller zu Lübeck"
+    },
+    {
+      "id": "lub_3",
+      "name": "吕贝克市政厅 (Lübecker Rathaus)",
+      "dur": "1小时",
+      "nav": "Lübecker Rathaus",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "科技与艺术",
+        "城市游览"
+      ],
+      "lat": 53.8668,
+      "lon": 10.6853,
+      "desc_long": "【历史解码】吕贝克市政厅被公认为德国最古老、最美丽的市政厅之一。其建筑始建于13世纪，融合了红砖哥特式和文艺复兴时期的独特风格。深色的釉面砖墙、独特的圆形风洞墙以及精美的文艺复兴式外廊，使其在集市广场上格外醒目。这里曾是汉萨同盟举行重要会议的政治中心。<br><br>【亮点】德国最美丽的红砖哥特与文艺复兴混合市政厅、独特的防风洞外墙结构",
+      "ticket": "🎫 广场免费参观，内部导览成人约4.00欧元",
+      "rest": "Café Niederegger"
+    },
+    {
+      "id": "lub_4",
+      "name": "尼德雷格杏仁糖沙龙 (Café Niederegger)",
+      "dur": "1.5小时",
+      "nav": "Café Niederegger - Stammhaus",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "购物",
+        "城市游览"
+      ],
+      "lat": 53.8665,
+      "lon": 10.686,
+      "desc_long": "【历史解码】吕贝克被誉为“世界杏仁糖之都”，而创立于1806年的尼德雷格（Niederegger）则是这顶皇冠上的明珠。位于市政厅对面的总店不仅提供传统的杏仁糖咖啡和蛋糕，二楼更设有一座免费的杏仁糖博物馆，展示了用杏仁糖精雕细琢的十二座真人大小的历史名人雕像。<br><br>【亮点】世界顶级杏仁糖品牌发源地、免费的杏仁糖雕塑博物馆、品尝正宗杏仁糖蛋糕",
+      "ticket": "🎫 咖啡馆免费进入（餐饮自费），二楼博物馆免费",
+      "rest": "Café Niederegger (直接在店内享用糕点与咖啡)"
     },
     {
       "id": "lub_5",
-      "name": "圣彼得教堂观景台 (St. Petri)",
+      "name": "圣灵医院 (Heiligen-Geist-Hospital)",
       "dur": "1小时",
-      "nav": "St. Petri, Lübeck, Germany",
+      "nav": "Heiligen-Geist-Hospital, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -121,22 +108,20 @@
         "冬"
       ],
       "act": [
+        "科技与艺术",
         "城市游览"
       ],
-      "lat": 53.8658,
-      "lon": 10.6831,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】这座教堂的观景塔可帮助理解老城岛、河道与城市入口的位置关系。适合天气清朗时安排；登塔与教堂空间活动可能采用不同开放安排，不能仅因教堂外门开着就认为观景台也开放。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.st-petri-luebeck.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "观景台另购票；天气与当日开放情况以官网为准。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.st-petri-luebeck.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8715,
+      "lon": 10.6895,
+      "desc_long": "【历史解码】圣灵医院建于1286年，是欧洲现存最古老的社会福利机构之一。这座宏伟的红砖哥特式建筑最初由富有的吕贝克商人捐资建造，用于收容病患与老人。其引人入胜的木制隔间（Kabäuschen）保留了19世纪初老人们的生活原貌，每年冬季这里的圣诞市场更是闻名遐迩。<br><br>【亮点】欧洲最古老的社会福利建筑遗址、保存完好的19世纪木制居住隔间",
+      "ticket": "🎫 门厅和历史长廊全天免费开放参观",
+      "rest": "Kartoffel Keller"
     },
     {
       "id": "lub_6",
-      "name": "KOLK 17 木偶剧场与博物馆",
+      "name": "布登勃洛克之屋 (Buddenbrookhaus)",
       "dur": "1.5小时",
-      "nav": "KOLK 17 木偶剧场与博物馆, Lübeck, Germany",
+      "nav": "Buddenbrookhaus, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -145,190 +130,174 @@
         "冬"
       ],
       "act": [
-        "科技与艺术"
-      ],
-      "lat": 53.8658,
-      "lon": 10.6826,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】位于老城Kolk街巷的木偶艺术机构，将表演、收藏和展览结合。适合寒冷下雨的半天，与河边及圣彼得教堂步行衔接。看展和看演出分别购票，演出并非随时到场都有。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.kolk17.de/de/besuchen\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "博物馆通常周二至周日10-17时；圣诞另查，建议预约时段。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.kolk17.de/de/besuchen",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_7",
-      "name": "吕贝克大教堂 (Dom zu Lübeck)",
-      "dur": "1小时",
-      "nav": "Dom zu Lübeck, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "城市游览"
-      ],
-      "lat": 53.8607,
-      "lon": 10.6858,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】老城南端的双塔教堂与周围绿地、池塘形成安静的一片区域，适合放在南部步行线中。参观应避开礼拜与宗教活动，冬天也可以只安排外观，再到室内休息。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.domzuluebeck.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "礼拜及参观时段另查；活动期间遵从现场安排。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.domzuluebeck.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_8",
-      "name": "圣安妮博物馆区 (Museumsquartier St. Annen)",
-      "dur": "2小时",
-      "nav": "Museumsquartier St. Annen, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "科技与艺术"
-      ],
-      "lat": 53.8624,
-      "lon": 10.6896,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】旧修道院空间内可了解吕贝克中世纪艺术及城市文化，现代艺术展厅则提供另一种体验。雨天可留足两小时，不把同一博物馆区拆成多个必逛节点；具体展览和票种按当期安排选择。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://st-annen-museum.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "付费博物馆；展览、票种和节假日开放时间查官网。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://st-annen-museum.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_9",
-      "name": "自然与环境博物馆 (Museum für Natur und Umwelt)",
-      "dur": "1.5小时",
-      "nav": "Museum für Natur und Umwelt, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "科技与艺术"
-      ],
-      "lat": 53.8608,
-      "lon": 10.6868,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】大教堂旁的自然史博物馆关注吕贝克地区的自然环境，适合想了解当地河流、海岸与动物世界的人。可与教堂外观组合成雨天或低温备选，具体展厅开放以运营方公告为准。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://museum-fuer-natur-und-umwelt.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "付费参观；节假日与展厅开放另查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://museum-fuer-natur-und-umwelt.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_10",
-      "name": "贝恩豪斯美术馆 (Museum Behnhaus Drägerhaus)",
-      "dur": "1.5小时",
-      "nav": "Museum Behnhaus Drägerhaus, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "科技与艺术"
-      ],
-      "lat": 53.8712,
-      "lon": 10.6896,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】在历史城市宅邸中看19世纪艺术和经典现代艺术，也能感受商人家庭的居住空间。Behnhaus已重新开放，但Drägerhaus部分仍处于施工阶段；不要把整个建筑群描述为全部恢复。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://luebecker-museen.de/presse-fotos\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "按当前开放区域购票；Drägerhaus部分施工至2027年，复查公告。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://luebecker-museen.de/presse-fotos",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_11",
-      "name": "君特·格拉斯故居馆 (Günter Grass-Haus)",
-      "dur": "1.5小时",
-      "nav": "Günter Grass-Haus, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "科技与艺术"
-      ],
-      "lat": 53.87,
-      "lon": 10.6911,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】馆舍把文学、绘画和雕塑联系起来，适合对格拉斯作品感兴趣的人。它位于老城东侧文化街区，可与附近院落和维利·勃兰特之家组成一条步行线，而非跨城折返。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://grass-haus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "付费参观；临时展览与节日时间查官网。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://grass-haus.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_12",
-      "name": "维利·勃兰特之家 (Willy-Brandt-Haus Lübeck)",
-      "dur": "1.5小时",
-      "nav": "Willy-Brandt-Haus Lübeck, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "科技与艺术"
-      ],
-      "lat": 53.8706,
-      "lon": 10.6905,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】以出生于吕贝克的维利·勃兰特为线索，了解民主、流亡和德国当代史。与老城建筑相比是内容更集中的室内一站；建议留出阅读展板的时间，不只把它当作门口拍照点。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://willy-brandt.de/ausstellungen/standorte/haus-luebeck/\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "入场政策及节日开放按基金会官网确认。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://willy-brandt.de/ausstellungen/standorte/haus-luebeck/",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_13",
-      "name": "布登勃洛克之家·施工期外观 (Buddenbrookhaus)",
-      "dur": "0.5小时",
-      "nav": "Buddenbrookhaus, Lübeck, Germany",
-      "dist": "2公里内",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
+        "科技与艺术",
         "城市游览"
       ],
       "lat": 53.8685,
-      "lon": 10.6862,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】孟街的文学地标与曼家族和小说《布登勃洛克一家》相关。馆舍目前因改建关闭，官方预计到2030年前后，现场也可能有围挡。仅作短暂停留，展览请寻找官网列出的临时场地。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://buddenbrookhaus.de/besuch\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "闭馆改建中，不安排室内参观；外围也可能受施工影响。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://buddenbrookhaus.de/besuch",
-      "verified_at": "2026-11-03"
+      "lon": 10.686,
+      "desc_long": "【历史解码】这座建于1758年的优雅白色洛可可风格宅邸，曾是诺贝尔文学奖得主托马斯·曼（Thomas Mann）祖父母的家。它正是世界名著《布登勃洛克一家》中家族大宅的现实原型。博物馆内沉浸式展示了曼氏家族的文学成就和小说中的19世纪吕贝克资产阶级生活场景。<br><br>【亮点】诺贝尔文学奖巨著《布登勃洛克一家》现实原型、托马斯·曼家族文学纪念馆",
+      "ticket": "🎫 成人门票约8.00欧元（注意：由于翻修工程，请确认临时展馆位置）",
+      "rest": "Schiffergesellschaft"
+    },
+    {
+      "id": "lub_7",
+      "name": "吕贝克大教堂 (Lübecker Dom)",
+      "dur": "1.5小时",
+      "nav": "Lübecker Dom",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "科技与艺术",
+        "城市游览"
+      ],
+      "lat": 53.8605,
+      "lon": 10.685,
+      "desc_long": "【历史解码】吕贝克大教堂由狮子亨利于1173年奠基，是吕贝克最古老的古迹。最初采用罗马式风格，后于1330年代改建为宏伟的红砖哥特式大厅教堂。内部最令人震撼的是由木雕大师贝尔恩特·诺特克在1477年创作的17米高的巨大木雕胜利十字架，是中世纪木雕艺术的巅峰之作。<br><br>【亮点】吕贝克最古老的教堂、17米高的中世纪木雕胜利十字架",
+      "ticket": "🎫 免费参观（欢迎自愿捐款）",
+      "rest": "Miera Restaurant"
+    },
+    {
+      "id": "lub_8",
+      "name": "欧洲汉萨博物馆 (Europäisches Hansemuseum)",
+      "dur": "2.5小时",
+      "nav": "Europäisches Hansemuseum",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "科技与艺术",
+        "城市游览"
+      ],
+      "lat": 53.8732,
+      "lon": 10.689,
+      "desc_long": "【历史解码】作为全球最大的专门展示汉萨同盟历史的博物馆，欧洲汉萨博物馆于2015年开放。它建在昔日城堡修道院的遗址上，通过尖端的互动技术、逼真的历史场景复原和丰富的出土文物，生动重现了吕贝克作为“汉萨女王”统治波罗的海贸易网络的数百年辉煌历史。<br><br>【亮点】全球最大的汉萨同盟历史博物馆、尖端多媒体互动展示、融合中世纪修道院遗迹",
+      "ticket": "🎫 成人门票约14.00欧元",
+      "rest": "Restaurant Nord (博物馆自带高分景观餐厅)"
+    },
+    {
+      "id": "lub_9",
+      "name": "船员行会 (Schiffergesellschaft)",
+      "dur": "1小时",
+      "nav": "Schiffergesellschaft, Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "城市游览",
+        "科技与艺术"
+      ],
+      "lat": 53.8705,
+      "lon": 10.6872,
+      "desc_long": "【历史解码】船员行会建于1535年，曾是吕贝克船长和商人们集会与商议航海事务的专属俱乐部。如今，这座宏伟的文艺复兴式阶梯山墙建筑已被改建为一家充满历史底蕴的顶级传统餐厅。其内部天花板上悬挂着巨大的中世纪帆船模型，长木桌和橡木护墙板完美保留了500年前的航海风貌。<br><br>【亮点】16世纪的船长行会旧址、悬挂中世纪古帆船模型的极致复古餐厅环境",
+      "ticket": "🎫 作为餐厅正常营业，内部免费参观（建议用餐消费）",
+      "rest": "Schiffergesellschaft (本体即是著名高分餐厅)"
+    },
+    {
+      "id": "lub_10",
+      "name": "吕贝克盐仓 (Salzspeicher)",
+      "dur": "0.5小时",
+      "nav": "Salzspeicher, Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "城市游览",
+        "摄影"
+      ],
+      "lat": 53.8655,
+      "lon": 10.6792,
+      "desc_long": "【历史解码】紧邻荷尔斯泰因门的特拉维河畔，矗立着六座建于16至18世纪的宏伟红砖盐仓建筑群。在汉萨同盟时代，盐被称为“白金”，这些盐仓用于储存从吕讷堡运来的珍贵盐砖，随后出口至北欧换取鲱鱼等物资，是吕贝克财富的重要象征。这里也是经典恐怖电影《诺斯费拉图》的取景地。<br><br>【亮点】16世纪红砖阶梯山墙建筑群、汉萨同盟“白金”财富的象征、电影《诺斯费拉图》取景地",
+      "ticket": "🎫 仅限外部参观与河畔摄影",
+      "rest": "Brauberger zu Lübeck"
+    },
+    {
+      "id": "lub_11",
+      "name": "圣彼得教堂观景塔 (St. Petri zu Lübeck)",
+      "dur": "1小时",
+      "nav": "St. Petri Kirche, Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "城市游览",
+        "科技与艺术"
+      ],
+      "lat": 53.8658,
+      "lon": 10.6835,
+      "desc_long": "【历史解码】圣彼得教堂建于13世纪，二战严重受损后被修复，如今不再作为传统礼拜场所，而是用作艺术展览和城市活动中心。其最大的亮点是高达50米的观景平台（配有现代电梯），登顶可以360度俯瞰整个吕贝克七塔老城全景，天气晴好时甚至能眺望到波罗的海。<br><br>【亮点】乘坐电梯直达50米高空、360度俯瞰吕贝克世界遗产老城七塔全景",
+      "ticket": "🎫 教堂一楼免费，登塔成人票约5.00欧元",
+      "rest": "Ratskeller zu Lübeck"
+    },
+    {
+      "id": "lub_12",
+      "name": "君特·格拉斯故居 (Günter Grass-Haus)",
+      "dur": "1.5小时",
+      "nav": "Günter Grass-Haus",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "科技与艺术",
+        "城市游览"
+      ],
+      "lat": 53.869,
+      "lon": 10.689,
+      "desc_long": "【历史解码】这里是诺贝尔文学奖得主、《铁皮鼓》作者君特·格拉斯的纪念馆。博物馆不仅展示了格拉斯作为世界级作家的文学手稿，还深入挖掘了他作为雕塑家和画家的卓越艺术天赋。庭院内陈列着他亲自创作的雕塑作品，全面展示了这位多元艺术大师的创作生涯。<br><br>【亮点】诺贝尔奖得主君特·格拉斯的文学与艺术成就全景展示、幽静的雕塑庭院",
+      "ticket": "🎫 成人门票约8.00欧元",
+      "rest": "Wullenwever (吕贝克米其林高分餐厅)"
+    },
+    {
+      "id": "lub_13",
+      "name": "圣雅各教堂 (St. Jakobi Kirche)",
+      "dur": "1小时",
+      "nav": "St. Jakobi Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "科技与艺术",
+        "城市游览"
+      ],
+      "lat": 53.8705,
+      "lon": 10.688,
+      "desc_long": "【历史解码】圣雅各教堂建于1334年，是吕贝克传统的水手与航海家之堂。幸运地躲过了二战的轰炸，教堂内完好保留了华丽的历史风琴、中世纪壁画和古老的船员席位。北侧小礼拜堂内安放着一艘从1957年沉没的帕米尔号帆船上打捞出的救生艇，作为全球遇难海员的纪念碑。<br><br>【亮点】未受二战破坏的原始哥特风貌、水手专属教堂、帕米尔号沉船纪念救生艇",
+      "ticket": "🎫 免费参观（欢迎自愿捐款）",
+      "rest": "Schiffergesellschaft"
     },
     {
       "id": "lub_14",
-      "name": "圣凯瑟琳教堂 (Katharinenkirche)",
-      "dur": "0.5小时",
-      "nav": "Katharinenkirche, Lübeck, Germany",
+      "name": "本豪斯·德雷尔豪斯博物馆 (Museum Behnhaus Drägerhaus)",
+      "dur": "2小时",
+      "nav": "Museum Behnhaus Drägerhaus",
       "dist": "2公里内",
       "season": [
         "春",
@@ -337,22 +306,20 @@
         "冬"
       ],
       "act": [
-        "科技与艺术"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8699,
-      "lon": 10.6893,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】这座历史教堂如今也是博物馆体系的一部分，可从外部观察红砖立面与街巷关系。内部采取季节性或活动开放，不保证冬季可以进入，适合与附近文学艺术馆顺路组合。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://luebecker-museen.de/allgemeine-informationen\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "冬季按外观安排；内部季节性开放须复查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://luebecker-museen.de/allgemeine-informationen",
-      "verified_at": "2026-11-03"
+      "lat": 53.8705,
+      "lon": 10.69,
+      "desc_long": "【历史解码】这座博物馆由两座富丽堂皇的18世纪城市贵族宅邸合并而成，生动展示了吕贝克上流社会的古典主义和浪漫主义生活方式。馆内不仅拥有精美的历史房间复原，还收藏了大量19世纪至古典现代主义的精美画作，包括卡斯帕·大卫·弗里德里希和爱德华·蒙克的真迹。<br><br>【亮点】18世纪宏伟古典宅邸风貌、蒙克与浪漫主义风景画大师的珍贵油画馆藏",
+      "ticket": "🎫 成人门票约8.00欧元",
+      "rest": "Restaurant Wullenwever"
     },
     {
       "id": "lub_15",
-      "name": "圣灵医院 (Heiligen-Geist-Hospital)",
+      "name": "城堡门 (Burgtor)",
       "dur": "0.5小时",
-      "nav": "Heiligen-Geist-Hospital, Lübeck, Germany",
+      "nav": "Burgtor, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -361,22 +328,20 @@
         "冬"
       ],
       "act": [
-        "城市游览"
+        "城市游览",
+        "摄影"
       ],
-      "lat": 53.8725,
-      "lon": 10.6898,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】位于Koberg广场的历史慈善建筑体现了城市公共救济传统，长屋与山墙很有辨识度。院内不同空间并非始终对游客开放；不要把十二月较早结束的工艺集市误当作圣诞后仍在举行。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "外观免费；内部及特殊活动另查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8738,
+      "lon": 10.6905,
+      "desc_long": "【历史解码】城堡门是吕贝克现存两座中世纪城门之一（另一座为荷尔斯泰因门），守卫着古城的北面入口。它建于1444年，采用黑红相间的砖块砌筑，顶部带有极具特色的巴洛克式青铜圆顶。相比荷尔斯泰因门，城堡门更加高耸挺拔，与周围的古城墙遗址融为一体。<br><br>【亮点】吕贝克古城北大门、精美的中世纪红砖拱门与晚期巴洛克青铜屋顶",
+      "ticket": "🎫 外部全天免费观赏与穿行",
+      "rest": "Europäisches Hansemuseum 附设餐厅"
     },
     {
       "id": "lub_16",
-      "name": "圣雅各教堂 (St. Jakobi)",
+      "name": "吕贝克秘密庭院：菲希廷庭院 (Füchtingshof)",
       "dur": "0.5小时",
-      "nav": "St. Jakobi, Lübeck, Germany",
+      "nav": "Füchtingshof, Glockengießerstraße",
       "dist": "2公里内",
       "season": [
         "春",
@@ -385,22 +350,20 @@
         "冬"
       ],
       "act": [
-        "城市游览"
+        "城市游览",
+        "徒步"
       ],
-      "lat": 53.872,
-      "lon": 10.6888,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】靠近Koberg与航海传统街区，可把教堂建筑和周边船员文化放在一起理解。是否进入应以礼拜、音乐活动和实际开放时间为准，圣诞期间尤其应尊重宗教活动安排。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.st-jakobi-luebeck.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "外观免费；入内、音乐会与节日时段另查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.st-jakobi-luebeck.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.869,
+      "lon": 10.692,
+      "desc_long": "【历史解码】吕贝克老城内隐藏着近90个中世纪秘密庭院（Gänge und Höfe），其中建于1639年的菲希廷庭院是规模最大、最华丽的之一。最初由市议员遗赠用于收容寡妇，穿过低矮的街面通道，内部豁然开朗，宁静的巴洛克红砖建筑、繁茂的花草与外部喧闹的街道形成了迷人的对比。<br><br>【亮点】吕贝克最华丽的秘密庭院、探索中世纪寡妇救济福利建筑的隐秘之美",
+      "ticket": "🎫 白天免费开放参观（请保持安静，内部为私人住宅区）",
+      "rest": "Hüx Restaurant"
     },
     {
       "id": "lub_17",
-      "name": "船员公会餐厅 (Schiffergesellschaft)",
-      "dur": "1.5小时",
-      "nav": "Schiffergesellschaft, Lübeck, Germany",
+      "name": "维利·勃兰特故居 (Willy-Brandt-Haus Lübeck)",
+      "dur": "1小时",
+      "nav": "Willy-Brandt-Haus Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -409,22 +372,20 @@
         "冬"
       ],
       "act": [
+        "科技与艺术",
         "城市游览"
       ],
-      "lat": 53.8723,
-      "lon": 10.6883,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】历史船员公会建筑如今设有餐厅，是理解吕贝克航海文化的一处场所。若想看室内，应按餐厅用餐和接待规则预约，不把营业餐厅当作免费博物馆；预算也需按菜单单独计算。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://schiffergesellschaft.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "餐饮按菜单消费，节日建议预约，不保证临时有位。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://schiffergesellschaft.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8675,
+      "lon": 10.6895,
+      "desc_long": "【历史解码】这是为了纪念出生在吕贝克的前西德总理、1971年诺贝尔和平奖得主维利·勃兰特而设立的纪念馆。博物馆通过多媒体展览，详细回顾了勃兰特从反抗纳粹统治的青年时代，到推行“东方政策”并历史性地“华沙之跪”的波澜壮阔的政治生涯。<br><br>【亮点】诺贝尔和平奖得主、德国伟大总理维利·勃兰特的生平政治轨迹与历史档案",
+      "ticket": "🎫 全天免费对公众开放",
+      "rest": "Lübecker Kartoffelkeller"
     },
     {
       "id": "lub_18",
-      "name": "欧洲汉萨博物馆与城堡修道院 (Europäisches Hansemuseum)",
-      "dur": "3小时",
-      "nav": "Europäisches Hansemuseum, Lübeck, Germany",
+      "name": "圣吉尔斯教堂 (St. Aegidien)",
+      "dur": "1小时",
+      "nav": "St. Aegidien, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -433,22 +394,20 @@
         "冬"
       ],
       "act": [
-        "科技与艺术"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8739,
-      "lon": 10.6916,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】在老城北端集中了解汉萨贸易网络、商人组织与欧洲城市交流。博物馆及城堡修道院可作为同一片区安排，不必拆成两段跨城路线；历史信息较多，建议留出完整半天。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.hansemuseum.eu\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "付费参观，建议提前选时段；圣诞及展区开放另查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.hansemuseum.eu",
-      "verified_at": "2026-11-03"
+      "lat": 53.8645,
+      "lon": 10.6905,
+      "desc_long": "【历史解码】圣吉尔斯教堂是吕贝克内城七塔五堂中最小、最安静的一座教堂。它坐落在手工业者聚集区，建于14世纪，幸免于二战的战火。内部拥有华丽的文艺复兴风格木雕歌集台、精美的巴洛克管风琴以及静谧的中世纪礼拜堂，是体验吕贝克宁静一面的绝佳去处。<br><br>【亮点】吕贝克七塔中最宁静的手工艺区教堂、精美未受损的文艺复兴木雕合唱台",
+      "ticket": "🎫 免费参观（欢迎自愿捐款）",
+      "rest": "Miera Restaurant"
     },
     {
       "id": "lub_19",
-      "name": "城堡门 (Burgtor)",
-      "dur": "0.5小时",
-      "nav": "Burgtor, Lübeck, Germany",
+      "name": "圣安妮美术馆与博物馆 (St. Annen-Museum)",
+      "dur": "2小时",
+      "nav": "St. Annen-Museum",
       "dist": "2公里内",
       "season": [
         "春",
@@ -457,22 +416,20 @@
         "冬"
       ],
       "act": [
+        "科技与艺术",
         "城市游览"
       ],
-      "lat": 53.8739,
-      "lon": 10.693,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】老城北侧的红砖城门是另一处历史入口，与西侧霍尔斯滕门形成不同的街景。适合从汉萨博物馆步行过来，再沿大城堡街向南进入老城；常规行程以门外与街道观赏为主。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共街道外观免费。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8625,
+      "lon": 10.6885,
+      "desc_long": "【历史解码】圣安妮博物馆坐落在建于1502年的奥斯定会修女修道院内。这里拥有德国最重要的中世纪神圣艺术收藏之一，包括著名艺术家汉斯·梅姆林（Hans Memling）创作的震撼人心的祭坛画。修道院宁静的回廊和庭院完美烘托了中世纪木雕与油画的神圣氛围。<br><br>【亮点】前中世纪女修道院建筑、世界级的中世纪祭坛画与基督教神圣木雕艺术馆藏",
+      "ticket": "🎫 成人门票约8.00欧元",
+      "rest": "Café im St. Annen-Museum"
     },
     {
       "id": "lub_20",
-      "name": "博物馆港 (Museumshafen)",
-      "dur": "1小时",
-      "nav": "Museumshafen, Lübeck, Germany",
+      "name": "特拉维河畔长廊 (Obertrave)",
+      "dur": "1.5小时",
+      "nav": "An der Obertrave",
       "dist": "2公里内",
       "season": [
         "春",
@@ -481,22 +438,21 @@
         "冬"
       ],
       "act": [
-        "城市游览"
+        "自然风光",
+        "城市游览",
+        "徒步"
       ],
-      "lat": 53.8724,
-      "lon": 10.6838,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】特拉沃河畔停泊的传统船只和木桅构成汉萨城市的水岸画面。沿岸步行与实际登船参观是两件事，船只位置、维修和开放可能变化，冬天按公共岸边观赏规划更稳妥。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.museumshafen-luebeck.org\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共岸边免费；登船项目另查运营方。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.museumshafen-luebeck.org",
-      "verified_at": "2026-11-03"
+      "lat": 53.8635,
+      "lon": 10.679,
+      "desc_long": "【历史解码】Obertrave（上特拉维河畔）是吕贝克老城最浪漫、最具风情的水滨漫步道。沿着河岸，一侧是波光粼粼的特拉维河与停泊的古典小船，另一侧是排列整齐、古色古香的红砖山墙房屋。这里远离主街喧嚣，是在夕阳下散步并眺望荷尔斯泰因门背影的完美地点。<br><br>【亮点】吕贝克最美的古城河畔漫步道、古老的砖墙建筑倒影与浪漫水滨风光",
+      "ticket": "🎫 河畔步道全天免费开放",
+      "rest": "Fangfrisch Lübeck (高分海鲜餐厅)"
     },
     {
       "id": "lub_21",
-      "name": "旋转桥 (Drehbrücke)",
-      "dur": "0.5小时",
-      "nav": "Drehbrücke, Lübeck, Germany",
+      "name": "圣凯瑟琳教堂 (Katharinenkirche)",
+      "dur": "1小时",
+      "nav": "Katharinenkirche, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -505,22 +461,20 @@
         "冬"
       ],
       "act": [
+        "科技与艺术",
         "城市游览"
       ],
-      "lat": 53.8729,
-      "lon": 10.6844,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】连接老城与河岸区域的桥梁带有港口工程气质，适合与博物馆港、下特拉沃河岸串联。日常是交通空间，拍照时留意自行车与机动车，不保证到访时恰好有桥梁开启。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共区域免费，服从交通及维修安排。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8695,
+      "lon": 10.6885,
+      "desc_long": "【历史解码】圣凯瑟琳教堂曾经是方济各会修道院的中心，是吕贝克唯一一座没有塔楼的中世纪大厅教堂。其西立面的壁龛中陈列着由现代雕塑大师恩斯特·巴拉赫（Ernst Barlach）等创作的一组震撼人心的现代陶土人物雕像。由于光线幽暗且充满哥特式神秘气息，这里常被称为吕贝克最迷人的内部空间。<br><br>【亮点】独特的无塔楼方济各会教堂、外墙上令人深思的现代雕塑群像",
+      "ticket": "🎫 成人门票约2.00欧元（注意季节性开放时间）",
+      "rest": "Kaffeehaus Lübeck"
     },
     {
       "id": "lub_22",
-      "name": "天使巷街景 (Engelsgrube)",
-      "dur": "0.5小时",
-      "nav": "Engelsgrube, Lübeck, Germany",
+      "name": "吕贝克木偶剧院与博物馆 (Puppentheater & Museum Lübeck)",
+      "dur": "1.5小时",
+      "nav": "Theaterfigurenmuseum Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -529,22 +483,20 @@
         "冬"
       ],
       "act": [
-        "徒步"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8716,
-      "lon": 10.686,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】从老城高处向河边下降的街巷保留了吕贝克独有的城市尺度。山墙、坡度和横向小巷适合慢走观察；沿途不少门洞通向居民住所，只进入明确允许公众通行的部分。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共街道免费；私人院落以门牌及开放时间为准。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8645,
+      "lon": 10.6805,
+      "desc_long": "【历史解码】隐匿在古老的科尔克（Kolk）狭窄街巷中，这座奇妙的博物馆拥有世界上规模最大的木偶收藏之一。成千上万来自欧洲、亚洲和非洲的提线木偶、皮影和手偶在此展出，展现了数个世纪以来全球不同文化中的戏剧魅力与精湛手工艺。<br><br>【亮点】全球规模罕见的世界木偶与皮影艺术宝库、深藏于中世纪隐秘窄巷中的童话世界",
+      "ticket": "🎫 成人门票约8.00欧元",
+      "rest": "Brauberger zu Lübeck"
     },
     {
       "id": "lub_23",
-      "name": "Engelswisch 老街",
-      "dur": "0.5小时",
-      "nav": "Engelswisch 老街, Lübeck, Germany",
+      "name": "城堡修道院 (Burgkloster)",
+      "dur": "1.5小时",
+      "nav": "Burgkloster, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -553,22 +505,20 @@
         "冬"
       ],
       "act": [
-        "徒步"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8722,
-      "lon": 10.6865,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】这条老城北侧街道与天使巷和博物馆港相邻，适合在汉萨博物馆之后步行游览。它的看点是连续的住宅立面和小尺度巷道，属于居民生活区，游览时保持安静。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共街道免费。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.874,
+      "lon": 10.6895,
+      "desc_long": "【历史解码】城堡修道院建于1229年，是北德地区保存最完好的多明我会修道院遗址之一。其精美的哥特式回廊和拱顶壁画令人叹为观止。在纳粹时期，这里曾被黑暗地用作监狱和审讯室，如今它已并入欧洲汉萨博物馆，成为见证吕贝克光辉与阴暗历史的重要建筑遗存。<br><br>【亮点】北德保存最完整的中世纪多明我会修道院回廊、沉重的近代历史监狱遗址",
+      "ticket": "🎫 包含在欧洲汉萨博物馆门票内",
+      "rest": "Restaurant Nord"
     },
     {
       "id": "lub_24",
-      "name": "菲希廷庭院 (Füchtingshof)",
-      "dur": "0.5小时",
-      "nav": "Füchtingshof, Lübeck, Germany",
+      "name": "吕贝克剧院 (Theater Lübeck)",
+      "dur": "1.5小时",
+      "nav": "Theater Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -577,22 +527,20 @@
         "冬"
       ],
       "act": [
-        "徒步"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8696,
-      "lon": 10.6923,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】由慈善居住传统形成的历史院落，是了解老城背街空间的一处代表。今天仍与居住生活相连，入口、院门和开放时段都应遵守现场提示，不进入关闭门洞或住宅内部。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://cms.luebeck.de/de/stadtleben/tourismus/luebeck/sehenswuerdigkeiten/gaenge-und-hoefe/index.html\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "允许开放时段内参观；若关闭仅看入口，不强行进入。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://cms.luebeck.de/de/stadtleben/tourismus/luebeck/sehenswuerdigkeiten/gaenge-und-hoefe/index.html",
-      "verified_at": "2026-11-03"
+      "lat": 53.8685,
+      "lon": 10.6835,
+      "desc_long": "【历史解码】吕贝克剧院坐落在宽阔的贝克尔凹槽街（Beckergrube），建于1908年，是一座气势宏伟的青年风格（Jugendstil）建筑。这里不仅是戏剧、芭蕾舞和交响乐演出的文化殿堂，其内部装饰依然保留着20世纪初华丽典雅的设计细节，托马斯·曼的小说中也曾多次提及该剧院的文化氛围。<br><br>【亮点】宏伟的20世纪初青年风格建筑杰作、体验吕贝克高水平交响乐与戏剧的文化中心",
+      "ticket": "🎫 外部免费欣赏，演出门票视具体剧目而定",
+      "rest": "Ratskeller zu Lübeck"
     },
     {
       "id": "lub_25",
-      "name": "格兰多普庭院 (Glandorps Hof)",
+      "name": "吕贝克秘密庭院：格兰多普庭院 (Glandorps Hof)",
       "dur": "0.5小时",
-      "nav": "Glandorps Hof, Lübeck, Germany",
+      "nav": "Glandorps Hof, Glockengießerstraße",
       "dist": "2公里内",
       "season": [
         "春",
@@ -601,71 +549,63 @@
         "冬"
       ],
       "act": [
+        "城市游览",
         "徒步"
       ],
-      "lat": 53.8698,
-      "lon": 10.6934,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】这片历史慈善住宅由沿街建筑、院内排屋与小通道组成，能看见老城商业街背后的日常尺度。参观以允许开放的庭院为限，不保证旁边每一条通道都能贯通。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://standesamt.luebeck.de/de/stadtleben/tourismus/luebeck/sehenswuerdigkeiten/gaenge-und-hoefe/glandorps-gang-glandorps-hof-und-illhornstift.html\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "开放由现场管理决定；私人部分不可进入。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://standesamt.luebeck.de/de/stadtleben/tourismus/luebeck/sehenswuerdigkeiten/gaenge-und-hoefe/glandorps-gang-glandorps-hof-und-illhornstift.html",
-      "verified_at": "2026-11-03"
+      "lat": 53.8695,
+      "lon": 10.693,
+      "desc_long": "【历史解码】与著名的菲希廷庭院相邻，格兰多普庭院建于1612年，是吕贝克另一个典型的由富商捐助设立的慈善住宅区。庭院内有一排排精巧如玩具屋般的小红砖房屋，几百年来一直为贫困遗孀提供避风港。走入其中，仿佛时间静止，完美保留了17世纪市民慈善体系的历史原貌。<br><br>【亮点】17世纪富商捐助的迷你慈善砖房群、感受吕贝克老城庭院的极致宁静与时光停滞",
+      "ticket": "🎫 白天免费开放参观（内部为私宅，请保持绝对安静）",
+      "rest": "Hüx Restaurant"
     },
     {
       "id": "lub_26",
-      "name": "哈森庭院 (Haasenhof)",
-      "dur": "0.5小时",
-      "nav": "Haasenhof, Lübeck, Germany",
-      "dist": "2公里内",
+      "name": "特拉沃明德海滩 (Travemünde Strand)",
+      "dur": "3小时",
+      "nav": "Travemünde Strand",
+      "dist": "10公里以上",
       "season": [
         "春",
         "夏",
-        "秋",
-        "冬"
+        "秋"
       ],
       "act": [
-        "徒步"
+        "自然风光",
+        "城市游览"
       ],
-      "lat": 53.8713,
-      "lon": 10.6931,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】位于老城东北部的历史居住院落适合与Glockengießerstraße周边一起慢走。它不是随时开放的商业景点，能否进入以门口信息为准；如果关闭，可继续沿公共街道观察周边建筑。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "以现场开放时段为准，不进入私人住宅。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.963,
+      "lon": 10.8805,
+      "desc_long": "【历史解码】特拉沃明德被誉为“吕贝克美丽的女儿”，早在1802年便成为了著名的海滨度假胜地。这里拥有绵延宽阔的细腻白沙滩和标志性的带篷沙滩椅（Strandkorb）。在这条波罗的海海岸线上，你可以看着巨大的跨国滚装轮船缓缓驶入特拉维河口，体验最纯粹的北德海滨度假风情。<br><br>【亮点】北德传统的带篷沙滩椅风情、波罗的海绝佳的宽阔白沙滩与巨轮进港奇观",
+      "ticket": "🎫 海滩全天免费开放（夏季沙滩椅租赁另计，可能收取小额海滨度假税）",
+      "rest": "Gosch Sylt Travemünde (知名海鲜餐厅)"
     },
     {
       "id": "lub_27",
-      "name": "大彼得街 (Große Petersgrube)",
-      "dur": "0.5小时",
-      "nav": "Große Petersgrube, Lübeck, Germany",
-      "dist": "2公里内",
+      "name": "帕萨特号四桅帆船 (Viermastbark Passat)",
+      "dur": "1.5小时",
+      "nav": "Viermastbark Passat",
+      "dist": "10公里以上",
       "season": [
         "春",
         "夏",
-        "秋",
-        "冬"
+        "秋"
       ],
       "act": [
-        "徒步"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8654,
-      "lon": 10.6843,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】这条向河岸下降的老街集中展现不同年代的商人宅邸立面。适合从圣彼得教堂走向上特拉沃河岸，观察山墙、门窗与街道坡度，不需要为每栋住宅另设参观时间。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共街道免费；建筑内部通常不对游客开放。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.9575,
+      "lon": 10.8785,
+      "desc_long": "【历史解码】帕萨特号建于1911年，是世界上仅存的几艘传奇“飞行P系列”（Flying P-Liner）四桅钢质帆船之一。她曾多次穿越合恩角往返于欧洲与南美之间运送硝石和谷物，经受过狂风巨浪的洗礼。如今作为博物馆船永久停泊在特拉沃明德港口，是航海时代的辉煌纪念碑。<br><br>【亮点】世界罕见的百年巨型四桅钢帆船、沉浸式探索早期越洋航海者的艰苦生活",
+      "ticket": "🎫 登船参观成人票约7.00欧元（注意冬季关闭）",
+      "rest": "Marina Restaurant Travemünde"
     },
     {
       "id": "lub_28",
-      "name": "画家角 (Malerwinkel)",
-      "dur": "0.5小时",
-      "nav": "Malerwinkel, Lübeck, Germany",
-      "dist": "2公里内",
+      "name": "特拉沃明德老灯塔 (Alter Leuchtturm Travemünde)",
+      "dur": "1小时",
+      "nav": "Alter Leuchtturm Travemünde",
+      "dist": "10公里以上",
       "season": [
         "春",
         "夏",
@@ -673,22 +613,20 @@
         "冬"
       ],
       "act": [
-        "自然风光"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8627,
-      "lon": 10.6826,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】从河岸绿地望向老城屋顶和教堂，是适合看水面倒影与城市轮廓的停留点。冬季风大时缩短停留，岸边可能湿滑；与大教堂和上特拉沃河岸串成轻松步行线即可。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共绿地免费；遵守临时封闭与岸边提示。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.9605,
+      "lon": 10.88,
+      "desc_long": "【历史解码】这座历史悠久的红砖灯塔始建于1539年，是德国海岸线上现存最古老的灯塔。它高约31米，数百年来一直为驶入特拉维河口的商船指明方向。如今它被改建为一个航海博物馆，攀登八层陡峭的楼梯到达顶部的观景台，可以饱览特拉沃明德海湾和吕贝克湾的壮丽全景。<br><br>【亮点】德国最古老的海岸红砖灯塔、登顶俯瞰波罗的海的绝佳全景海风露台",
+      "ticket": "🎫 登塔成人票约2.00欧元",
+      "rest": "Restaurant Lübbers"
     },
     {
       "id": "lub_29",
-      "name": "上特拉沃河岸 (An der Obertrave)",
+      "name": "肉匠大街 (Fleischhauerstraße)",
       "dur": "1小时",
-      "nav": "An der Obertrave, Lübeck, Germany",
+      "nav": "Fleischhauerstraße, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -697,22 +635,20 @@
         "冬"
       ],
       "act": [
-        "徒步"
+        "购物",
+        "城市游览"
       ],
-      "lat": 53.8644,
-      "lon": 10.6824,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】沿着老城西南侧水岸步行，可串起盐仓、桥梁、历史宅邸与画家角。适合少量多次停留，不必整段走完；冬季以白天观景为主，晚上可按天气缩短户外时间。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共步道免费。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.867,
+      "lon": 10.688,
+      "desc_long": "【历史解码】Fleischhauerstraße（肉匠大街）是吕贝克老城中最具活力的东西向街道之一。曾经这里是肉类贸易的中心，如今则布满了色彩柔和的历史山墙房屋，聚集了众多独立精品店、手工艺作坊、黑胶唱片店和独特的咖啡馆，是体会吕贝克年轻与创意生活气息的绝佳去处。<br><br>【亮点】密布独立创意店铺与咖啡馆的活力长街、极具中世纪建筑色彩风貌的城市街景",
+      "ticket": "🎫 街道全天免费逛买",
+      "rest": "Café Affenbrot"
     },
     {
       "id": "lub_30",
-      "name": "磨坊池 (Mühlenteich)",
-      "dur": "1小时",
-      "nav": "Mühlenteich, Lübeck, Germany",
+      "name": "许克斯大街 (Hüxstraße)",
+      "dur": "1.5小时",
+      "nav": "Hüxstraße, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -721,22 +657,20 @@
         "冬"
       ],
       "act": [
-        "自然风光"
+        "购物",
+        "城市游览"
       ],
-      "lat": 53.8587,
-      "lon": 10.687,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】老城南端池塘与大教堂形成安静的水边景观。适合午后散步、拍摄倒影，和博物馆、教堂外观相结合；冬季不要踏上结冰水面，路线按实际步道开放情况选择。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共岸边免费，不进入冰面。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.866,
+      "lon": 10.6875,
+      "desc_long": "【历史解码】Hüxstraße被誉为吕贝克最美、最热闹的购物街。狭窄的街道两侧拥挤着超过100家独立经营的专卖店、精致的小酒馆和餐厅。没有千篇一律的大型连锁店，只有独特的服装、家居设计、书籍和葡萄酒商店，充满了地道的北德商业生活与小资情调。<br><br>【亮点】吕贝克最美、最迷人的独立购物街、体验没有连锁店的纯粹本土高品质商业文化",
+      "ticket": "🎫 街道全天免费逛买",
+      "rest": "Hüx Restaurant"
     },
     {
       "id": "lub_31",
-      "name": "乌鸦池 (Krähenteich)",
-      "dur": "0.5小时",
-      "nav": "Krähenteich, Lübeck, Germany",
+      "name": "自然与环境博物馆 (Museum für Natur und Umwelt)",
+      "dur": "1.5小时",
+      "nav": "Museum für Natur und Umwelt Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -745,23 +679,21 @@
         "冬"
       ],
       "act": [
-        "自然风光"
+        "科技与艺术",
+        "城市游览"
       ],
-      "lat": 53.8602,
-      "lon": 10.6915,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】老城东南侧的小型水域把住宅、绿地和旧城轮廓联系起来。它适合路过时短暂停留，不是必须专程前往的海滨景点；冬季以岸边散步为主，不安排水上或游泳活动。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共岸边免费；游泳设施的营业另查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8605,
+      "lon": 10.6865,
+      "desc_long": "【历史解码】位于大教堂旁边，这座博物馆详细记录了石勒苏益格-荷尔斯泰因州独特的自然历史与地质演变。其镇馆之宝是在吕贝克附近出土的罕见中新世抹香鲸骨架（长达14米）化石。此外，馆内还生动展示了波罗的海生态系统及吕贝克周边的动植物群落。<br><br>【亮点】14米长史前抹香鲸骨架化石、深入了解波罗的海与北德自然生态系统",
+      "ticket": "🎫 成人门票约6.00欧元",
+      "rest": "Miera Restaurant"
     },
     {
       "id": "lub_32",
-      "name": "许克斯街 (Hüxstraße)",
-      "dur": "1小时",
-      "nav": "Hüxstraße, Lübeck, Germany",
-      "dist": "2公里内",
+      "name": "特拉沃明德渔港 (Fischereihafen Travemünde)",
+      "dur": "1.5小时",
+      "nav": "Fischereihafen Travemünde",
+      "dist": "10公里以上",
       "season": [
         "春",
         "夏",
@@ -769,46 +701,42 @@
         "冬"
       ],
       "act": [
-        "购物"
+        "自然风光",
+        "购物",
+        "城市游览"
       ],
-      "lat": 53.8653,
-      "lon": 10.691,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】独立商店、小型餐饮与历史立面使这条街适合慢逛。圣诞节、周日和节日前后商店营业差异较大，不能因为街道可通行就预设全部商铺开门，购物与用餐应分开确认。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "步行免费，购物餐饮另计；节日营业时间各店不同。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.9555,
+      "lon": 10.8725,
+      "desc_long": "【历史解码】在特拉沃明德老城区的深处，隐藏着依然活跃的传统渔港。每天早晨，渔船在此卸下新鲜捕捞的波罗的海鳕鱼、鲱鱼和比目鱼。港口周围林立着众多提供地道“Fischbrötchen”（夹鲜鱼块的面包卷）的简朴摊位，是品尝原汁原味北德海洋风味的绝佳地点。<br><br>【亮点】充满市井气息的波罗的海传统活渔港、品尝极度新鲜地道的北德鱼汉堡美食",
+      "ticket": "🎫 渔港全天免费游览",
+      "rest": "Fisch Paul (渔港知名鲜鱼快餐)"
     },
     {
       "id": "lub_33",
-      "name": "肉商街 (Fleischhauerstraße)",
-      "dur": "1小时",
-      "nav": "Fleischhauerstraße, Lübeck, Germany",
-      "dist": "2公里内",
+      "name": "布罗德滕陡岸 (Brodtener Steilufer)",
+      "dur": "2.5小时",
+      "nav": "Brodtener Steilufer",
+      "dist": "10公里以上",
       "season": [
         "春",
         "夏",
-        "秋",
-        "冬"
+        "秋"
       ],
       "act": [
-        "购物"
+        "自然风光",
+        "徒步"
       ],
-      "lat": 53.8672,
-      "lon": 10.6913,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】连接老城商业核心与东侧街区的历史街道，适合浏览独立店铺和咖啡馆。可以接在市政厅之后安排，不必为购物单独跨城折返；节日以店家实际营业为准。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共街道免费，消费另计。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.9785,
+      "lon": 10.8815,
+      "desc_long": "【历史解码】沿着特拉沃明德海岸线向北延伸，是一段长达数公里的壮丽自然悬崖——布罗德滕陡岸。高达20米的悬崖受海水不断侵蚀，呈现出狂野的原始地貌。崖顶上有一条极其优美的徒步与骑行小径（通往Niendorf），一边是茂密的森林，一边是波澜壮阔的波罗的海。<br><br>【亮点】狂野壮丽的波罗的海悬崖海岸风光、极佳的悬崖顶海景徒步与自行车路线",
+      "ticket": "🎫 自然景区及步道全天免费开放",
+      "rest": "Hermannshöhe (悬崖绝佳海景餐厅)"
     },
     {
       "id": "lub_34",
-      "name": "尼德雷格杏仁糖店 (Café Niederegger)",
+      "name": "集市广场 (Markt Lübeck)",
       "dur": "1小时",
-      "nav": "Café Niederegger, Lübeck, Germany",
+      "nav": "Markt, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -817,22 +745,20 @@
         "冬"
       ],
       "act": [
+        "城市游览",
         "购物"
       ],
-      "lat": 53.8666,
-      "lon": 10.6856,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】这家位于市政厅附近的杏仁糖品牌店适合选购伴手礼或坐下喝咖啡。商品、咖啡馆及展示空间可能有不同营业安排，圣诞期间先查门店公告，不承诺无需排队或一定有座位。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.niederegger.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "购物及餐饮按菜单消费；展示区开放另查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.niederegger.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8665,
+      "lon": 10.685,
+      "desc_long": "【历史解码】自吕贝克建城以来，市政厅前方的集市广场就是城市贸易和节庆的绝对中心。周围被庄严的市政厅和尼德雷格咖啡馆环绕，广场中心矗立着古老的Kaak（中世纪颈手枷遗址区）。每逢周一和周四的农夫市集，以及闻名欧洲的吕贝克圣诞市场，这里总是人声鼎沸，生机勃勃。<br><br>【亮点】汉萨同盟古城的历史跳动心脏、感受传统农夫市集与中世纪圣诞市场氛围",
+      "ticket": "🎫 广场全天免费漫步",
+      "rest": "Ratskeller zu Lübeck"
     },
     {
       "id": "lub_35",
-      "name": "吕贝克剧院 (Theater Lübeck)",
-      "dur": "2.5小时",
-      "nav": "Theater Lübeck, Lübeck, Germany",
+      "name": "吕贝克旋转桥 (Drehbrücke)",
+      "dur": "0.5小时",
+      "nav": "Drehbrücke, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -841,22 +767,20 @@
         "冬"
       ],
       "act": [
+        "城市游览",
         "科技与艺术"
       ],
-      "lat": 53.8702,
-      "lon": 10.686,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】位于老城北部的剧院可作为晚间室内活动，与白天街巷游览形成不同体验。是否有合适演出取决于日期、语言和票务，建议先看节目单再安排晚餐，不将外观游览等同观演。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.theaterluebeck.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "仅按实际演出购票；无演出时可看外观。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.theaterluebeck.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8712,
+      "lon": 10.682,
+      "desc_long": "【历史解码】建于1892年的Drehbrücke（旋转桥）是吕贝克港口工业时代的重要工程遗迹。这座钢铁结构的液压旋转桥连接着吕贝克老城与城北区域。当有较高桅杆的帆船需要通过特拉维河时，整座重达数百吨的钢铁桥面会平缓地旋转90度让出航道，是充满工业机械美感的壮观场景。<br><br>【亮点】19世纪末罕见的重型液压钢铁旋转桥、观看桥梁整体旋转让船舶通行的工业奇景",
+      "ticket": "🎫 桥梁免费通行与观看",
+      "rest": "Fangfrisch Lübeck"
     },
     {
       "id": "lub_36",
-      "name": "德雷格公园 (Drägerpark)",
-      "dur": "1.5小时",
-      "nav": "Drägerpark, Lübeck, Germany",
+      "name": "皇帝门遗址公园 (Kaisertor)",
+      "dur": "1小时",
+      "nav": "Kaisertor, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -865,23 +789,21 @@
         "冬"
       ],
       "act": [
-        "自然风光"
+        "自然风光",
+        "徒步"
       ],
-      "lat": 53.8684,
-      "lon": 10.7143,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】位于老城以东、靠近Wakenitz水域的绿地，适合希望离开密集老城街道的人。冬季选择白天较短路线即可，不把夏季水上活动或草坪休憩直接套用到十二月底。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共绿地免费，园内设施营业另查。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8585,
+      "lon": 10.6855,
+      "desc_long": "【历史解码】Kaisertor位于吕贝克老城南端的护城河畔。这里原本是古城墙防御体系的一部分，虽然城门本体已在19世纪被拆除以扩张城市，但留下的宏大土制堡垒和水道已被改造为美丽的绿色带公园。沿着河畔的古城墙土堤漫步，可以远离游客区，感受本地居民的闲适生活。<br><br>【亮点】由中世纪护城河及防御土堆改造的宁静城市绿化带、眺望大教堂绝佳背影",
+      "ticket": "🎫 公园遗址全天免费开放",
+      "rest": "Miera Restaurant"
     },
     {
       "id": "lub_37",
-      "name": "圣埃吉迪教堂 (St. Aegidien)",
-      "dur": "0.5小时",
-      "nav": "St. Aegidien, Lübeck, Germany",
-      "dist": "2公里内",
+      "name": "特拉沃明德海滨长廊 (Strandpromenade Travemünde)",
+      "dur": "2小时",
+      "nav": "Strandpromenade Travemünde",
+      "dist": "10公里以上",
       "season": [
         "春",
         "夏",
@@ -889,22 +811,20 @@
         "冬"
       ],
       "act": [
-        "城市游览"
+        "自然风光",
+        "徒步"
       ],
-      "lat": 53.8637,
-      "lon": 10.6913,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】老城东南部的红砖教堂与附近较安静的住宅街区相连，适合和圣安妮博物馆、Hüxstraße组合。礼拜与音乐活动可能改变入内安排，冬季可保留外观作为短暂停留。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.aegidien-kirche-luebeck.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "外观免费，入内与活动按教会安排。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.aegidien-kirche-luebeck.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.962,
+      "lon": 10.881,
+      "desc_long": "【历史解码】经过现代化改造的特拉沃明德海滨长廊（Strandpromenade）宽阔而优雅，一边是无际的波罗的海沙滩，一边是充满古典风情的海滨度假酒店（如著名的库尔豪斯Kurhaus大酒店）。长廊一直延伸至北侧的悬崖起点，是日落时分散步、轮滑及观赏万吨巨轮进港的绝佳路线。<br><br>【亮点】波罗的海畔宽阔平坦的现代化观景长廊、欣赏豪华邮轮与波罗的海落日",
+      "ticket": "🎫 长廊全天免费开放漫步",
+      "rest": "Gosch Sylt"
     },
     {
       "id": "lub_38",
-      "name": "学校花园 (Schulgarten Lübeck)",
-      "dur": "1小时",
-      "nav": "Schulgarten Lübeck, Lübeck, Germany",
+      "name": "克鲁格港 (Klughafen)",
+      "dur": "1.5小时",
+      "nav": "Klughafen, Lübeck",
       "dist": "2公里内",
       "season": [
         "春",
@@ -912,23 +832,21 @@
         "秋"
       ],
       "act": [
-        "自然风光"
+        "自然风光",
+        "徒步"
       ],
-      "lat": 53.8692,
-      "lon": 10.7022,
-      "desc_long": "【区域】吕贝克老城及近郊<br><br>【游览说明】老城东侧的花园和水岸环境适合在春夏观察植物，秋季也可短途散步。冬季花境并非主要看点，不能期待温室、咖啡馆或所有设施照常开放，建议按当季园方说明选择。<br><br>【规划提示】老城街巷以步行为主；室内场馆、宗教空间和私人院落需确认当日开放。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共花园开放与设施季节安排以现场为准。",
-      "rest": "按当天营业选择附近餐馆；市中心可查看 Café Niederegger 或 Schiffergesellschaft，价格与预约另查。",
-      "area": "吕贝克老城及近郊",
-      "source_url": "https://www.luebeck-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8745,
+      "lon": 10.6955,
+      "desc_long": "【历史解码】克鲁格港位于吕贝克老城岛的东侧，前身是瓦克尼茨河（Wakenitz）与特拉维河交汇的防御水域。如今，这段安静的内港水域停泊着大量老式木帆船和现代私人游艇。沿岸散布着历史悠久的红砖仓库，非常适合在清晨或黄昏沿着水边步道静静欣赏水城倒影。<br><br>【亮点】停泊着古典帆船与游艇的静谧内港水域、远离喧嚣的水上吕贝克倒影景观",
+      "ticket": "🎫 港口步道全天免费开放",
+      "rest": "Brauberger zu Lübeck"
     },
     {
       "id": "lub_39",
-      "name": "Travemünde 老城与前排街 (Vorderreihe)",
+      "name": "乌鸦街与历史街巷 (Krähenstraße)",
       "dur": "1小时",
-      "nav": "Vorderreihe, Lübeck, Germany",
-      "dist": "10公里以上",
+      "nav": "Krähenstraße, Lübeck",
+      "dist": "2公里内",
       "season": [
         "春",
         "夏",
@@ -936,23 +854,21 @@
         "冬"
       ],
       "act": [
-        "城市游览"
+        "城市游览",
+        "徒步"
       ],
-      "lat": 53.9574,
-      "lon": 10.8664,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】沿特拉沃河口的老城街道可看船只、渔港气氛和沿岸房屋，与真正的海滩区域有一定距离。适合作为海边一日游的午餐与热饮停留区，冬季沿街商户按各自公告营业。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共街道免费，餐饮另计。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.8645,
+      "lon": 10.6925,
+      "desc_long": "【历史解码】Krähenstraße（乌鸦街）位于老城东南部，是二战期间少数免遭破坏的原汁原味中世纪街巷之一。这里街道弯曲狭窄，两侧排列着极具特色的中世纪山墙砖房和文艺复兴风格的半木结构建筑，走入其中仿佛穿越回了数百年前的汉萨同盟手工业者聚集区。<br><br>【亮点】未受二战破坏的原汁原味中世纪弯曲小巷、密布阶梯山墙与半木结构古宅",
+      "ticket": "🎫 街区全天免费漫步游览",
+      "rest": "Ristorante Roberto"
     },
     {
       "id": "lub_40",
-      "name": "Travemünde 老灯塔 (Alter Leuchtturm)",
+      "name": "科贝格广场 (Koberg)",
       "dur": "1小时",
-      "nav": "Alter Leuchtturm, Lübeck, Germany",
-      "dist": "10公里以上",
+      "nav": "Koberg, Lübeck",
+      "dist": "2公里内",
       "season": [
         "春",
         "夏",
@@ -960,23 +876,21 @@
         "冬"
       ],
       "act": [
-        "城市游览"
+        "城市游览",
+        "科技与艺术"
       ],
-      "lat": 53.9609,
-      "lon": 10.8798,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】历史灯塔内设海事主题展示，观景层可以俯瞰河口与海岸。外观可和海滨步道串联，登塔则需要确认冬季开放日和风况；不要把远处高楼上的现代航标与老灯塔混淆。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de/unser-seebad/alter-leuchtturm\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "外观免费；登塔付费及冬季时段另查。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de/unser-seebad/alter-leuchtturm",
-      "verified_at": "2026-11-03"
+      "lat": 53.8705,
+      "lon": 10.6895,
+      "desc_long": "【历史解码】Koberg（科贝格广场）是吕贝克北侧的第二大重要城市广场。它被多座重量级的历史建筑紧紧环绕，包括圣雅各教堂、圣灵医院以及文艺复兴风格的船员行会。作为世界遗产核心区的重要节点，这片铺满中世纪鹅卵石的广场见证了吕贝克北部城区的繁荣与沧桑。<br><br>【亮点】被多座顶级汉萨同盟红砖哥特古迹紧密包围的世界遗产广场、中世纪鹅卵石风情",
+      "ticket": "🎫 广场全天免费漫步观赏",
+      "rest": "Schiffergesellschaft"
     },
     {
       "id": "lub_41",
-      "name": "Passat 四桅帆船·冬季外观 (Viermastbark PASSAT)",
+      "name": "吕贝克中央火车站 (Lübeck Hauptbahnhof)",
       "dur": "0.5小时",
-      "nav": "Viermastbark PASSAT, Lübeck, Germany",
-      "dist": "10公里以上",
+      "nav": "Lübeck Hauptbahnhof",
+      "dist": "2公里内",
       "season": [
         "春",
         "夏",
@@ -984,22 +898,20 @@
         "冬"
       ],
       "act": [
-        "城市游览"
+        "城市游览",
+        "科技与艺术"
       ],
-      "lat": 53.9583,
-      "lon": 10.8858,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】停泊在Priwall一侧的历史帆船可从不同岸边观赏，是河口航海景观的重要组成。秋冬常规登船受限，团体导览需事先预约；十二月底默认安排岸边看船，不默认可以买票上船。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck.de/de/stadtleben/tourismus/travemuende/sehenswuerdigkeiten-travemuende/viermastbark-passat/fragen-und-antworten\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "冬季按外观安排；团体预约导览另询，常规开放季成人7欧。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.luebeck.de/de/stadtleben/tourismus/travemuende/sehenswuerdigkeiten-travemuende/viermastbark-passat/fragen-und-antworten",
-      "verified_at": "2026-11-03"
+      "lat": 53.8675,
+      "lon": 10.6695,
+      "desc_long": "【历史解码】吕贝克中央火车站于1908年投入使用，取代了原先拥挤的老车站。这座建筑由建筑师弗里茨·克林霍尔兹设计，是一座宏伟的青年风格（Jugendstil）红砖建筑，完美地将现代铁路工程与吕贝克传统的砖砌哥特历史风貌融合在一起，其巨大的单跨钢质列车大厅极具气势。<br><br>【亮点】宏伟的青年风格与红砖哥特融合的铁路大门、气势磅礴的钢铁列车大厅穹顶",
+      "ticket": "🎫 车站大厅及候车区全天开放",
+      "rest": "Lübecker Kartoffelkeller (需步行过桥进入老城)"
     },
     {
       "id": "lub_42",
-      "name": "Travemünde 主海滩 (Kurstrand)",
-      "dur": "1.5小时",
-      "nav": "Kurstrand, Lübeck, Germany",
+      "name": "卡尔斯草莓体验村 (Karls Erlebnis-Dorf Warnsdorf)",
+      "dur": "3小时",
+      "nav": "Karls Erlebnis-Dorf Warnsdorf",
       "dist": "10公里以上",
       "season": [
         "春",
@@ -1008,142 +920,20 @@
         "冬"
       ],
       "act": [
+        "购物",
         "自然风光"
       ],
-      "lat": 53.967,
-      "lon": 10.8815,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】宽阔海滩面向吕贝克湾，适合看冬季波罗的海、散步和拍照。它与汉堡河港体验不同，风大时应缩短停留，十二月底不安排游泳或沙滩设施体验。与车站、咖啡馆衔接比长时间徒步更实用。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "冬季海滩准入及旅游税政策查当地公告；不保证各季均免费。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.9665,
+      "lon": 10.8255,
+      "desc_long": "【历史解码】位于特拉沃明德近郊的卡尔斯草莓体验村是北德极受欢迎的乡村主题乐园。以农庄和草莓农业起家，这里不仅设有大量极具巧思的巨型滑梯、拖拉机游乐设施，还展示了手工制作糖果、果酱与面包的传统手工艺过程，是家庭游玩和体验北德乡村农业文化的绝佳乐园。<br><br>【亮点】北德极具人气的巨型草莓乡村农庄乐园、观看传统手工糖果与果酱的制作过程",
+      "ticket": "🎫 园区免费进入，部分游乐设施收费或购买一日通票（约15欧元）",
+      "rest": "Pfannkuchen-Schmiede (园区内的特色煎饼餐厅)"
     },
     {
       "id": "lub_43",
-      "name": "海滨长廊 (Strandpromenade Travemünde)",
-      "dur": "1.5小时",
-      "nav": "Strandpromenade Travemünde, Lübeck, Germany",
-      "dist": "10公里以上",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "徒步"
-      ],
-      "lat": 53.9663,
-      "lon": 10.8798,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】沿沙滩上方的铺装长廊适合不想一直踩沙的人，海景与休息点可按风况灵活选择。冬天在靠近室内餐饮的区段往返即可，不必为了走完全程而赶在天黑后继续前进。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共步道通常无需门票；临时活动与海滩准入另计。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_44",
-      "name": "绿海滩 (Grünstrand)",
-      "dur": "1小时",
-      "nav": "Grünstrand, Lübeck, Germany",
-      "dist": "10公里以上",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "自然风光"
-      ],
-      "lat": 53.975,
-      "lon": 10.8839,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】海滨长廊北端的草地海岸呈现更开阔的湾景，适合天气平稳时从主海滩继续走一小段。这里比老城商街更暴露在海风中，冬天按体感决定是否延伸，不把它设为必须完成的终点。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共区域准入以现场提示为准，注意天气。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_45",
-      "name": "Priwall 海滩 (Priwallstrand)",
-      "dur": "1.5小时",
-      "nav": "Priwallstrand, Lübeck, Germany",
-      "dist": "10公里以上",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "自然风光"
-      ],
-      "lat": 53.959,
-      "lon": 10.8944,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】位于河口另一侧的沙滩与Passat附近海港景观可组合游览，抵达方式可能涉及渡轮或绕行。冬天往返要把过河时间计入，不把乘渡轮当作已经包含在铁路月票中。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "海滩政策另查；若乘渡轮，票价及月票适用性需单独确认。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_46",
-      "name": "南 Priwall 自然保护区 (Südlicher Priwall)",
+      "name": "黑梅尔斯多夫湖 (Hemmelsdorfer See)",
       "dur": "2小时",
-      "nav": "Südlicher Priwall, Lübeck, Germany",
-      "dist": "10公里以上",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "徒步"
-      ],
-      "lat": 53.9457,
-      "lon": 10.8849,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】半岛南部的自然区域可观察河口生态，与热闹海滨长廊形成对比。冬天只走开放的标记步道，避免进入敏感生境；返程交通与日照时间必须提前规划，不能把直线距离当步行距离。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "开放步道按自然保护规定通行，遵守封闭与禁入标志。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_47",
-      "name": "海滨历史博物馆 (Seebadmuseum Travemünde)",
-      "dur": "1小时",
-      "nav": "Seebadmuseum Travemünde, Lübeck, Germany",
-      "dist": "10公里以上",
-      "season": [
-        "春",
-        "夏",
-        "秋",
-        "冬"
-      ],
-      "act": [
-        "科技与艺术"
-      ],
-      "lat": 53.9562,
-      "lon": 10.8634,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】以海滨度假、航运和地方生活为主题的小型博物馆，适合天气不好时了解这座海滨小镇。它不等同于海边全天开放的游客中心，节日和冬季时段需先确认再专程前往。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.heimatverein-travemuende.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "入场与冬季开放按运营方公告确认。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.heimatverein-travemuende.de",
-      "verified_at": "2026-11-03"
-    },
-    {
-      "id": "lub_48",
-      "name": "Brodten 悬崖海岸·开放段 (Brodtener Steilufer)",
-      "dur": "2小时",
-      "nav": "Brodtener Steilufer, Lübeck, Germany",
+      "nav": "Hemmelsdorfer See",
       "dist": "10公里以上",
       "season": [
         "春",
@@ -1151,22 +941,41 @@
         "秋"
       ],
       "act": [
+        "自然风光",
         "徒步"
       ],
-      "lat": 53.9885,
-      "lon": 10.881,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】这段波罗的海岸以高处海景著称，但旅游局目前提示原Haus Seeblick附近步道因岸崖坍塌封闭。只能按开放路线短程往返，不规划完整穿越或沿崖下绕行，冬季强风时直接改海滨长廊。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de/erleben/im-gruenen/brodtener-steilufer\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "部分路段封闭；出发前复查官方，禁止绕过围挡或靠近崖缘。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de/erleben/im-gruenen/brodtener-steilufer",
-      "verified_at": "2026-11-03"
+      "lat": 53.978,
+      "lon": 10.812,
+      "desc_long": "【历史解码】黑梅尔斯多夫湖位于吕贝克与蒂门多弗沙滩之间，原本是波罗的海的一个海湾，后因冰川活动形成内陆湖。该湖北部有一个深达39.5米的洼地，是德国地理上的最低点。湖泊被芦苇荡和森林环绕，宁静幽美，沿湖设有水上栈道和传统熏鱼小屋，是绝佳的徒步和观鸟胜地。<br><br>【亮点】德国地理最低点所在地、芦苇荡环绕的静谧冰川湖泊与传统熏鱼文化",
+      "ticket": "🎫 湖区步道全天免费开放徒步",
+      "rest": "Fischereihafen Restaurant (靠近湖边的高分熏鱼餐厅)"
     },
     {
-      "id": "lub_49",
-      "name": "戈德温德公园 (Godewindpark)",
-      "dur": "0.5小时",
-      "nav": "Godewindpark, Lübeck, Germany",
+      "id": "lub_44",
+      "name": "杜默斯多夫河岸自然保护区 (Dummersdorfer Ufer)",
+      "dur": "2.5小时",
+      "nav": "Naturschutzgebiet Dummersdorfer Ufer",
+      "dist": "10公里以上",
+      "season": [
+        "春",
+        "夏",
+        "秋"
+      ],
+      "act": [
+        "自然风光",
+        "徒步"
+      ],
+      "lat": 53.9165,
+      "lon": 10.8335,
+      "desc_long": "【历史解码】杜默斯多夫河岸是沿着特拉维河下游的一片绵延荒野，是石勒苏益格-荷尔斯泰因州极其珍贵的自然保护区。这里拥有独特的高耸陡坡地貌、稀有的石楠草甸和广袤的橡树混交林。在这里徒步，不仅能欣赏原始生态，还能眺望巨大的商船缓缓驶过狭窄的特拉维河道。<br><br>【亮点】特拉维河沿岸陡峭的原始自然生态悬崖、在石楠花草甸中观看巨轮驶过的奇景",
+      "ticket": "🎫 保护区步道全天免费开放",
+      "rest": "Ristorante Il Gabbiano (邻近社区餐厅)"
+    },
+    {
+      "id": "lub_45",
+      "name": "普里瓦尔半岛 (Priwall)",
+      "dur": "2.5小时",
+      "nav": "Priwall, Travemünde",
       "dist": "10公里以上",
       "season": [
         "春",
@@ -1175,63 +984,124 @@
         "冬"
       ],
       "act": [
-        "自然风光"
+        "自然风光",
+        "徒步"
       ],
-      "lat": 53.9657,
-      "lon": 10.8726,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】靠近Travemünde Strand车站的绿地与池塘适合作为往返海边途中的短暂停留。它提供与开阔海滩不同的环境，但不是能保证遮风的室内备选，冬天路面结冰时应缩短步行。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.travemuende-tourismus.de\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "公共公园免费，遵守现场步道提示。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.travemuende-tourismus.de",
-      "verified_at": "2026-11-03"
+      "lat": 53.9555,
+      "lon": 10.8855,
+      "desc_long": "【历史解码】普里瓦尔半岛位于特拉维河口的东岸，从特拉沃明德乘坐短途轮渡即可抵达。半岛上拥有未经破坏的广阔自然海滩和沙丘保护区。在冷战时期，这里曾经是东德与西德的边界（紧靠铁幕），如今则成为了野生动植物的天堂和享受波罗的海纯净大自然的宁静避风港。<br><br>【亮点】特拉维河东岸的纯净自然沙丘海滩、冷战时期的前德国内部边境历史印记",
+      "ticket": "🎫 景区免费，需支付约1.50欧元的短途轮渡费",
+      "rest": "Ahoi Steffen Henssler Travemünde"
     },
     {
-      "id": "lub_50",
-      "name": "海边冬日花园 (Neujahrsgarten im Brügmanngarten)",
+      "id": "lub_46",
+      "name": "吕贝克古城墙遗址 (Stadtmaueranlagen)",
       "dur": "1.5小时",
-      "nav": "Neujahrsgarten im Brügmanngarten, Lübeck, Germany",
-      "dist": "10公里以上",
+      "nav": "Lübecker Stadtmauer",
+      "dist": "2公里内",
       "season": [
+        "春",
+        "夏",
+        "秋",
         "冬"
       ],
       "act": [
+        "自然风光",
+        "徒步"
+      ],
+      "lat": 53.8615,
+      "lon": 10.68,
+      "desc_long": "【历史解码】中世纪时，吕贝克被一圈坚不可摧的巨大城墙与护城河死死保卫。虽然大部分城墙在19世纪被拆除，但老城南部和西部的城墙土墩和水系保留了下来，并改造成为一条风景如画的环城绿色步道带。沿着这些残存的防御工事遗址漫步，可以清晰感受到这座汉萨城邦昔日的固若金汤。<br><br>【亮点】环绕汉萨古城的中世纪防御城墙绿化带遗址、宁静清幽的护城河畔漫步体验",
+      "ticket": "🎫 沿河遗址步道全天免费开放",
+      "rest": "Restaurant Vai"
+    },
+    {
+      "id": "lub_47",
+      "name": "勃拉姆斯研究所 (Brahms-Institut)",
+      "dur": "1小时",
+      "nav": "Brahms-Institut an der Musikhochschule Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "科技与艺术",
         "城市游览"
       ],
-      "lat": 53.9642,
-      "lon": 10.8762,
-      "desc_long": "【区域】Travemünde / 波罗的海<br><br>【游览说明】Brügmanngarten在2026年12月25日至2027年1月3日安排冬季活动，适合作为看海后的热饮和傍晚停留点。这是有日期限制的节庆节点，不代表公园全年都有摊位或演出。<br><br>【规划提示】从吕贝克乘区域列车或公交去海边，查当天接续；返程不以夏季直达列车或夏季船班为依据。<br><br>【定位】街区中心近似坐标，实际入口请按地图核对。<br><br>【资料来源】<a href=\"https://www.luebeck.de/de/stadtleben/freizeit/weihnachtsmaerkte/weihnachtsmaerkte\" target=\"_blank\" rel=\"noopener noreferrer\">官方说明</a>（核对：2026-11-03）",
-      "ticket": "活动日期2026-12-25至2027-01-03；具体时间、节目和消费按主办方公告。",
-      "rest": "Vorderreihe 一带选择营业的餐馆或咖啡馆；节日期间先查营业与菜单。",
-      "area": "Travemünde / 波罗的海",
-      "source_url": "https://www.luebeck.de/de/stadtleben/freizeit/weihnachtsmaerkte/weihnachtsmaerkte",
-      "verified_at": "2026-11-03"
-    }
-  ],
-  "travel_notes": {
-    "accommodation": {
-      "hotels": [
-        {
-          "name": "Premier Inn Lübeck City Centre",
-          "address": "Beim Retteich 20, 23558 Lübeck"
-        },
-        {
-          "name": "Premier Inn Lübeck City Stadtgraben",
-          "address": "Moislinger Allee 9, 23558 Lübeck"
-        }
+      "lat": 53.8745,
+      "lon": 10.6785,
+      "desc_long": "【历史解码】勃拉姆斯研究所位于老城外一座名为Villa Eschenburg的古典主义别墅内。这里不仅是重要的学术机构，还拥有世界上最大的关于伟大古典主义作曲家约翰内斯·勃拉姆斯的私人藏品，包括珍贵的手稿、信件和首版乐谱。别墅周围的英式花园为这里增添了浓厚的艺术氛围。<br><br>【亮点】全球最丰富的勃拉姆斯珍贵乐谱与信件珍藏馆、风景优雅的古典主义别墅与英式花园",
+      "ticket": "🎫 展览开放日免费入内（需提前确认开放时间）",
+      "rest": "Macis Lübeck"
+    },
+    {
+      "id": "lub_48",
+      "name": "圣劳伦茨教堂 (St. Lorenz Kirche)",
+      "dur": "0.5小时",
+      "nav": "St. Lorenz, Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
       ],
-      "source_url": "https://www.premierinn.com/de/de/hotels.html",
-      "note": "酒店目录信息，不代表指定日期有房、价格已核实或参与ALDI住宿券。"
+      "act": [
+        "科技与艺术",
+        "城市游览"
+      ],
+      "lat": 53.869,
+      "lon": 10.6655,
+      "desc_long": "【历史解码】位于中央火车站附近的圣劳伦茨教堂建于1659年，原址是一所中世纪应对黑死病瘟疫的医院礼拜堂。这座小巧精美的建筑在19世纪被赋予了独特的新哥特式塔楼。它虽然不在老城岛的“七塔”之列，但却是见证吕贝克城外平民区发展和瘟疫医疗历史的珍贵宗教建筑。<br><br>【亮点】见证吕贝克中世纪黑死病历史的教堂旧址、独特的新哥特式城外地标",
+      "ticket": "🎫 免费参观（注意开放时间）",
+      "rest": "Restaurant Highlight"
     },
-    "winter_2026": {
-      "old_town_markets": "传统圣诞集市到2026-12-30，12/24-25关闭；Koberg海事集市等到12/29，历史集市到12/23。各市场具体时间另查。",
-      "source_url": "https://www.luebeck.de/de/stadtleben/freizeit/weihnachtsmaerkte/weihnachtsmaerkte"
+    {
+      "id": "lub_49",
+      "name": "爱吉迪恩区 (Aegidienviertel)",
+      "dur": "1.5小时",
+      "nav": "Aegidienviertel, Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "城市游览",
+        "徒步"
+      ],
+      "lat": 53.8635,
+      "lon": 10.6915,
+      "desc_long": "【历史解码】爱吉迪恩区位于老城的东南角，以圣吉尔斯教堂为中心。这里曾是手工业者、工匠和贫苦市民居住的区域，因此保留了大量低矮、紧凑且极具风情的彩色砖木老屋，也是吕贝克秘密庭院（Höfe）最密集的区域之一。避开主干道的喧嚣，漫步于此能体会到最原汁原味的汉萨市井生活。<br><br>【亮点】吕贝克秘密庭院最密集的手工业者老街区、色彩斑斓的袖珍历史民居与静谧氛围",
+      "ticket": "🎫 历史街区全天免费漫步",
+      "rest": "Miera Restaurant"
     },
-    "transport": "Deutschlandticket适用于符合条件的普通区域列车和公交；不据此承诺ICE、IC、RJ、旅游游船或Priwall渡轮免费。",
-    "suggested_split": [
-      "第1天：霍尔斯滕门、盐仓、市政厅、老城街巷。",
-      "第2天：按兴趣选汉萨博物馆或艺术馆，余下时间河岸与购物。",
-      "第3天：Travemünde，按天气选择海滨长廊、前排街与冬季活动。"
-    ]
-  }
+    {
+      "id": "lub_50",
+      "name": "特拉维河滨水绿地 (Wallhalbinsel)",
+      "dur": "1.5小时",
+      "nav": "Wallhalbinsel, Lübeck",
+      "dist": "2公里内",
+      "season": [
+        "春",
+        "夏",
+        "秋",
+        "冬"
+      ],
+      "act": [
+        "自然风光",
+        "城市游览"
+      ],
+      "lat": 53.8735,
+      "lon": 10.6785,
+      "desc_long": "【历史解码】Wallhalbinsel（城墙半岛）位于老城西侧的特拉维河港区。这片曾是繁忙铁路货场和红砖仓库的工业半岛，如今在保留其粗犷工业港口建筑（如旧砖仓和废弃轨道）的同时，逐步被改造成了一片充满时尚与文化气息的水滨活动区，是连接汉萨时代辉煌与现代吕贝克创新的桥梁。<br><br>【亮点】充满红砖仓库废土与工业风的河畔半岛遗址、现代文化活动与古老水港交织的前卫地带",
+      "ticket": "🎫 户外水滨步道及工业遗迹区全天免费开放",
+      "rest": "Strandsalon (深受年轻人喜爱的水滨沙滩酒吧)"
+    }
+  ]
 }
